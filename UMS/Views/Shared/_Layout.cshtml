@@ -1,0 +1,242 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <title>University Management System</title>
+
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/AT-pro-logo.png" />
+
+    <!-- Import lib -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <!-- End import lib -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" asp-append-version="true">
+</head>
+<body class="overlay-scrollbar">
+    <!-- navbar -->
+    <div class="navbar-wrapper">
+        <!-- nav left -->
+        <ul class="navbar-nav">
+            <li class="navbar-item">
+                <a class="navbar-link">
+                    <i class="fas fa-bars" onclick="collapseSidebar()"></i>
+                </a>
+            </li>
+            <li class="navbar-item">
+                <img src="~/Images/logo.jpg" alt="ATPro logo" class="logo logo-light">
+            </li>
+        </ul>
+
+        <ul class="navbar-nav nav-right">
+            <li class="navbar-item avt-wrapper">
+                <div class="avt dropdown-wrapper">
+                    <img src="~/Images/profile.jpg" alt="User image" class="dropdown-toggle-nav" data-toggle="user-menu">
+                    <ul id="user-menu" class="dropdown-menu-nav">
+                        <li class="dropdown-menu-item">
+                            <a class="dropdown-menu-link">
+                                <div>
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                        <li class="dropdown-menu-item">
+                            <a href="#" class="dropdown-menu-link">
+                                <div>
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <span>Settings</span>
+                            </a>
+                        </li>
+                        <li class="dropdown-menu-item">
+                            <a href="#" class="dropdown-menu-link">
+                                <div>
+                                    <i class="far fa-credit-card"></i>
+                                </div>
+                                <span>Payments</span>
+                            </a>
+                        </li>
+                        <li class="dropdown-menu-item">
+                            <a href="#" class="dropdown-menu-link">
+                                <div>
+                                    <i class="fas fa-spinner"></i>
+                                </div>
+                                <span>Projects</span>
+                            </a>
+                        </li>
+                        <li class="dropdown-menu-item">
+                            <a href="#" class="dropdown-menu-link">
+                                <div>
+                                    <i class="fas fa-sign-out-alt"></i>
+                                </div>
+                                <span>Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+    <div class="sidebar">
+        <ul class="sidebar-nav">
+            <li class="sidebar-nav-item sidebar-active">
+                <a href="#" class="sidebar-nav-link ">
+                    <div>
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <span>
+                        Dashboard
+                    </span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a asp-action="Index" asp-controller="Department" asp-area="Admin" class="sidebar-nav-link">
+                    <div>
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <span>Department</span>
+                </a>
+            </li>
+
+            <li class="sidebar-nav-item">
+                <a asp-action="Index" asp-controller="CourseType" asp-area="Admin" class="sidebar-nav-link">
+                    <div>
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <span>CourseType</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a asp-action="Index" asp-controller="CourseProtoType" asp-area="Admin" class="sidebar-nav-link">
+                    <div>
+                        <i class="fas fa-spinner"></i>
+                    </div>
+                    <span>CourseProtoType</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a asp-action="Index" asp-controller="Course"asp-area="Admin" class="sidebar-nav-link">
+                    <div>
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <span>Courses</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#" class="sidebar-nav-link">
+                    <div>
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <span>Pellentesque</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#" class="sidebar-nav-link">
+                    <div>
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <span>Pellentesque</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#" class="sidebar-nav-link">
+                    <div>
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <span>Pellentesque</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#" class="sidebar-nav-link">
+                    <div>
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <span>Pellentesque</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#" class="sidebar-nav-link">
+                    <div>
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <span>Pellentesque</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#" class="sidebar-nav-link">
+                    <div>
+                        <i class="fas fa-bug"></i>
+                    </div>
+                    <span>Morbi</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#" class="sidebar-nav-link">
+                    <div>
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span>Praesent</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#" class="sidebar-nav-link ">
+                    <div>
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <span>Pellentesque</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#" class="sidebar-nav-link">
+                    <div>
+                        <i class="fas fa-adjust"></i>
+                    </div>
+                    <span>Morbi</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#" class="sidebar-nav-link">
+                    <div>
+                        <i class="fab fa-algolia"></i>
+                    </div>
+                    <span>Praesent</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="#" class="sidebar-nav-link">
+                    <div>
+                        <i class="fas fa-audio-description"></i>
+                    </div>
+                    <span>Pellentesque</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="wrapper mb-5 ">
+        <main role="main" class="pb-3 px-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-white bg-primary text-center  ">
+        &copy; @DateTime.Now.Year - UMS All Rights Reserved
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://kit.fontawesome.com/e19c476714.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    <!-- end import script -->
+</body>
+</html>

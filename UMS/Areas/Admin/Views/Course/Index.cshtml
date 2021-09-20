@@ -1,0 +1,105 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<span id="messageBox" class="d-none">@TempData["message"]</span>
+<h2 class="text-primary text-center border-bottom">Course Types</h2>
+<div class="row pt-4">
+    <div class="col-6">
+        <div class="input-group">
+            <input class="form-control" placeholder="Search..." id="search" />
+            <div class="input-group-prepend">
+                <div class="input-group-text"><i class="fas fa-search"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <select class="form-control" id="departmentId">
+            <option selected disabled value="">----Select Department----</option>
+            @foreach (var department in ViewBag.DepartmentList)
+            {
+                <option value="@department.Id">@department.Name</option>
+            }
+        </select>
+    </div>
+    <div class="col-4">
+        <input class="btn btn-info form-control" type="submit" value="Search" id="searchBtn" />
+    </div>
+    <div class="col-4">
+        <input class="btn btn-primary form-control" type="submit" value="Reset" id="resetBtn" />
+    </div>
+    <div class="col-4">
+        <a class="btn btn-success form-control" asp-action="Upsert"><i class="fas fa-plus"></i> Create New</a>
+    </div>
+    <div id="table-container" class="col-12">
+
+    </div>
+</div>
+<label id="department"></label>
+@section Scripts{
+
+    <script>
+
+        $(document).ready(function () {
+            getData();
+        });
+        function getData() {
+            $.ajax({
+                url: '@Url.Action("CourseTable", "Course")',
+                type: "GET"
+            }).done(function (response) {
+                $("#table-container").html(response);
+            }).fail(function (xhr) {
+                toastr.error("Something went wrong");
+            })
+        }
+        $("#searchBtn").click(function () {
+            var searchValue = $("#search").val();
+            var departmentId = $("#departmentId").val();
+            $("#department").html(departmentId);
+            if (searchValue != "" || departmentId != "") {
+                $.ajax({
+                    url: '@Url.Action("CourseTable", "Course")',
+                    type: "GET",
+                    data: {
+                        searchValue: searchValue,
+                        departmentId: departmentId
+                    }
+                }).done(function (response) {
+                    $("#table-container").html(response);
+                }).fail(function (xhr) {
+                    toastr.error("Something went error");
+                })
+            }
+            else {
+                toastr.error("Nothing to Search");
+            }
+
+        });
+
+        var messageText = $("#messageBox").text();
+        if (messageText != "") {
+            toastr.success(messageText);
+            $("#messageBox").text('');
+        }
+
+        $("#resetBtn").click(function () {
+            var searchValue = $("#search").val();
+            var departmentId = $("#departmentId").val();
+            if (searchValue != "" || departmentId != "") {
+                $.ajax({
+                    url: '@Url.Action("CourseTable", "Course")',
+                    type: "GET"
+                }).done(function (response) {
+                    $("#table-container").html(response);
+                }).fail(function (xhr) {
+                    toastr.error("Something went error");
+                })
+            }
+            else {
+                toastr.error("You can not reset at this time");
+            }
+
+        });
+    </script>
+}

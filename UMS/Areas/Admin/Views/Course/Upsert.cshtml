@@ -1,0 +1,204 @@
+﻿@model UMS.Models.ViewModels.CourseUpsertVM
+@{
+    var title = "Create Course";
+    ViewData["Title"] = "Upsert";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-12">
+                @if (!Model.Course.Id.Equals(Guid.Empty))
+                {
+                    title = "Edit Course";
+                    <input asp-for="Course.Id" hidden />
+                }
+                <h3 class="text-primary">@title</h3>
+            </div>          
+         
+            <div class="col-12  mt-4">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6 col-md-6 mb-3">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Course Name</label>
+                            </div>
+                            <div class="col-8">
+                                <input class="form-control" asp-for="Course.Name" id="name" autocomplete="off" />
+                                <span asp-validation-for="Course.Name" class="text-danger"></span>
+                                <label id="name-span" class="text-danger"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-3">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Course Initial</label>
+                            </div>
+                            <div class="col-8">
+                                <input class="form-control" asp-for="Course.Initial" id="initial" autocomplete="off" />
+                                <span asp-validation-for="Course.Initial" class="text-danger"></span>
+                                <label id="initial-span" class="text-danger"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Department</label>
+                            </div>
+                            <div class="col-8">
+                                <select class="form-control" asp-for="Course.DepartmentId" asp-items="Model.DepartmentList">
+                                    <option selected disabled value="">--Select Department--</option>
+                                </select>
+                                <span asp-validation-for="Course.DepartmentId" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Course Type</label>
+                            </div>
+                            <div class="col-8">
+                                <select class="form-control" asp-for="Course.CourseTypeId" asp-items="Model.CourseTypeList">
+                                    <option selected disabled value="">--Select Course Type--</option>
+                                </select>
+                                <span asp-validation-for="Course.CourseTypeId" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Course ProtoType</label>
+                            </div>
+                            <div class="col-8">
+                                <select class="form-control" asp-for="Course.CourseProtoTypeId" asp-items="Model.CourseProtoTypeList">
+                                    <option selected disabled value="">--Select Course ProtoType--</option>
+                                </select>
+                                <span asp-validation-for="Course.CourseProtoTypeId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Prerequiresite Course</label>
+                            </div>
+                            <div class="col-8">
+                                <select class="form-control" asp-items="Model.CourseList">
+                                    <option selected disabled value="">--Select Course Prerequiresite--</option>
+                                </select>                            
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row col-8 form-group offset-2 my-3">
+                        <div class="col-6">
+                            @if (!Model.Course.Id.Equals(Guid.Empty))
+                            {
+                                <input type="submit" value="Update" id="submitBtn" class="form-control btn btn-success" />
+                            }
+                            else
+                            {
+                                <input type="submit" value="Submit" id="submitBtn" class="form-control btn btn-success" />
+                            }
+                        </div>
+                        <div class="col-6">
+                            <a class="form-control btn btn-primary" asp-action="Index"><i class="fas fa-arrow-left"></i> Back to List</a>
+                        </div>
+                    </div>
+                </div>        
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{ 
+    <partial name="_ValidationScriptsPartial"/>   
+    <script>
+
+        $(document).ready(function () {
+
+            $("#name").keyup(function () {
+                var alphabaticString = new RegExp("^[a-zA-Z ]+$");
+                var name = $("#name").val();
+                $.ajax({
+                    url: '@Url.Action("ExistName", "Course")',
+                    type: "GET",
+                    data: {
+                        name: name
+                    },
+                    success: function (data) {
+                        if (data.success == true) {
+                            if (alphabaticString.test(name)) {
+                                $("#name-span").text("CourseType Name Available");
+                                $("#name-span").removeClass("text-danger");
+                                $("#name-span").addClass("text-success");
+                                $("#submitBtn").attr("disabled", false);
+                            }
+                            else {
+                                $("#name-span").text("CourseType Name Must be Alphabetical");
+                                $("#name-span").removeClass("text-success");
+                                $("#name-span").addClass("text-danger");
+                                $("#submitBtn").attr("disabled", true);
+                            }
+                        }
+                        else{
+                            $("#name-span").text("CourseType Name is not Available");
+                            $("#name-span").removeClass("text-success");
+                            $("#name-span").addClass("text-danger");
+                            $("#submitBtn").attr("disabled", true);
+                        }
+                    }
+                })
+            });
+
+
+            $("#initial").keyup(function () {
+                var alphabaticString = new RegExp("^[a-zA-Z0-9 ]+$");
+                var initial = $("#name").val();
+                $.ajax({
+                    url: '@Url.Action("ExistInitial", "Course")',
+                    type: "GET",
+                    data: {
+                        initial: initial
+                    },
+                    success: function (data) {
+                        if (data.success == true) {
+                            if (alphabaticString.test(initial)) {
+                                $("#initial-span").text("CourseType Name Available");
+                                $("#initial-span").removeClass("text-danger");
+                                $("#initial-span").addClass("text-success");
+                                $("#submitBtn").attr("disabled", false);
+                            }
+                            else {
+                                $("#initial-span").text("CourseType Name Must be Alphabetical");
+                                $("#initial-span").removeClass("text-success");
+                                $("#initial-span").addClass("text-danger");
+                                $("#submitBtn").attr("disabled", true);
+                            }
+                        }
+                        else{
+                            $("#initial-span").text("CourseType Name is not Available");
+                            $("#initial-span").removeClass("text-success");
+                            $("#initial-span").addClass("text-danger");
+                            $("#submitBtn").attr("disabled", true);
+                        }
+                    }
+                })
+            });
+
+
+        });
+    </script>
+}
