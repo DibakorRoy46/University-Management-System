@@ -120,19 +120,20 @@
                 </a>
             </li>
             <li class="sidebar-nav-item">
-                <a asp-action="Index" asp-controller="Course"asp-area="Admin" class="sidebar-nav-link">
+                <a asp-action="Index" asp-controller="Course" asp-area="Admin" class="sidebar-nav-link">
                     <div>
                         <i class="fas fa-check-circle"></i>
                     </div>
                     <span>Courses</span>
                 </a>
             </li>
+           
             <li class="sidebar-nav-item">
-                <a href="#" class="sidebar-nav-link">
+                <a asp-action="Index" asp-controller="CoursePre"asp-area="Admin" class="sidebar-nav-link">
                     <div>
                         <i class="fas fa-check-circle"></i>
                     </div>
-                    <span>Pellentesque</span>
+                    <span>CourePrerequisite</span>
                 </a>
             </li>
             <li class="sidebar-nav-item">
@@ -218,7 +219,7 @@
         </ul>
     </div>
 
-    <div class="wrapper mb-5 ">
+    <div class="wrapper">
         <main role="main" class="pb-3 px-3">
             @RenderBody()
         </main>

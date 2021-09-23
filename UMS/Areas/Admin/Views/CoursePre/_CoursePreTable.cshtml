@@ -1,37 +1,25 @@
-﻿@model UMS.Models.ViewModels.CourseVM
+﻿@model UMS.Models.ViewModels.CoursePreVM
 
 <table class="table table-secondary">
     <thead class="table-secondary ">
         <tr class="col-12">
+            
             <th>Name</th>
             <th>Initial</th>
-            <th>Department</th>
-            <th>Prerequisites</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        @if(Model.CourseList.Count()>0)
+        @if(Model.CoursePreList.Count()>0)
         {
-            foreach (var course in Model.CourseList)
+            foreach (var course in Model.CoursePreList)
             {
                 <tr>
                     <td>@course.Name</td>
-                    <td>@course.Initial</td>
-                    <td>@course.Department.Name</td>
-                                      
+                    <td>@course.InitialName</td>
+                                    
                     <td>
-                        @foreach (var coursePre in course.CourseToCoursePrerequisites)
-                        {
-                            @(coursePre.CoursePrerequisite.InitialName)
-                            if(course.CourseToCoursePrerequisites.Count()>1)
-                            {
-                                <span>,</span>
-                            }
-                        }
-                    <td>                  
-                    <td>
-                        <a class="btn btn-primary" asp-action="Upsert" asp-route-id="@course.Id"><i class="fas fa-edit"></i></a>
+                     
                         <button class="btn btn-danger" id="deleteBtn" data-id="@course.Id" ><i class="fas fa-trash-alt"></i></button>
                     </td>
                 </tr>
@@ -40,12 +28,12 @@
         else
         {
             <tr>
-                   <td></td>
+                   
                    <td></td>
                    
                    <td class="text-danger">No Course  Available</td>
                   
-                   <td ></td>
+                  
                    <td></td>
             </tr>
         }
@@ -86,7 +74,7 @@
             }).then((willDelete) => {
                 if (willDelete) {
                     $.ajax({
-                        url: '@Url.Action("Delete", "Course")',
+                        url: '@Url.Action("Delete", "CoursePre")',
                         type: "POST",
                         data: {
                             id: $(this).attr("data-id")
@@ -105,11 +93,11 @@
 
         $(".page-buttons").click(function () {
             $.ajax({
-                url: '@Url.Action("CourseTable", "Course")',
+                url: '@Url.Action("CoursePreTable", "CoursePre")',
                 data: {
                     pageNo: $(this).attr("data-pageNo"),
                     searchValue: '@Model.Search',
-                    departmentId: '@Model.DepartmentId'
+                   
                 }
             }).done(function (response) {
                 $("#table-container").html(response);

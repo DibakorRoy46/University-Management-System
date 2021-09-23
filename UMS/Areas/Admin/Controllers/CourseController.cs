@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UMS.Data.Data;
 using UMS.Data.IRepository;
 using UMS.Models.Models;
 using UMS.Models.ViewModels;
@@ -15,9 +16,11 @@ namespace UMS.Areas.Admin.Controllers
     public class CourseController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public CourseController(IUnitOfWork unitOfWork)
+        private readonly ApplicationDbContext _db;
+        public CourseController(IUnitOfWork unitOfWork,ApplicationDbContext db)
         {
             _unitOfWork = unitOfWork;
+            _db = db;
         }
         #region Index
         public async Task<IActionResult> Index()
@@ -57,7 +60,7 @@ namespace UMS.Areas.Admin.Controllers
                 var courseTypeList = await _unitOfWork.CourseType.GetAllAsync();
                 var courseProtoType = await _unitOfWork.CourseProtoType.GetAllAsync();
                 var departmentList = await _unitOfWork.Department.GetAllAsync();
-                var preCourseList = await _unitOfWork.CoursePrerequisite.GetAllAsync();
+                var preCourseList = await _unitOfWork.CoursePrerequisite.GetAllAsync(x=>x.Id!=id);
                 CourseUpsertVM courseUpsertVM = new CourseUpsertVM()
                 {
                     Course = new Course(),
@@ -88,9 +91,10 @@ namespace UMS.Areas.Admin.Controllers
                     return View(courseUpsertVM);
                 }
                 else
-                {
+                {                   
                     courseUpsertVM.Course = await _unitOfWork.Course.FirstOrDefaultAsync(x => x.Id.Equals(id));
-                    if(courseUpsertVM.Course==null)
+                    courseUpsertVM.Course.CoursePreId = await _unitOfWork.CourseToCoursePrerequisite.GetCoursePreId(id);
+                    if (courseUpsertVM.Course==null)
                     {
                         return NotFound();
                     }
@@ -113,32 +117,45 @@ namespace UMS.Areas.Admin.Controllers
                 {
                     if (courseUpsertVM.Course.Id.Equals(Guid.Empty))
                     {
-                        //Course course = new Course();
-                        //course.Name = courseUpsertVM.Course.Name;
-                        //course.Initial = courseUpsertVM.Course.Initial;
-                        //course.DepartmentId = courseUpsertVM.Course.DepartmentId;
-                        //course.CourseProtoTypeId = courseUpsertVM.Course.CourseProtoTypeId;
-                        //course.CourseType = courseUpsertVM.Course.CourseType;
                         await _unitOfWork.Course.AddAsync(courseUpsertVM.Course);
                         await _unitOfWork.SaveAsync();
-                        CoursePrerequisite coursePre = new CoursePrerequisite();
-                        coursePre.Name = courseUpsertVM.Course.Name;
-                        coursePre.InitialName = courseUpsertVM.Course.Initial;
-                        await _unitOfWork.CoursePrerequisite.AddAsync(coursePre);
+                        CoursePrerequisite couresePreObj = new CoursePrerequisite();
+                        couresePreObj.Id = courseUpsertVM.Course.Id;
+                        couresePreObj.Name = courseUpsertVM.Course.Name;
+                        couresePreObj.InitialName = courseUpsertVM.Course.Initial;
+                        await _unitOfWork.CoursePrerequisite.AddAsync(couresePreObj);
                         await _unitOfWork.SaveAsync();
-                        CourseToCoursePrerequisite courseToCoursePre = new CourseToCoursePrerequisite();
-                        courseToCoursePre.CourseId = courseUpsertVM.Course.Id;
-                        courseToCoursePre.CoursePreId = coursePre.Id;
-                        await _unitOfWork.SaveAsync();
-                        TempData["message"] = "Successfully Created";
-
+                        if (courseUpsertVM.Course.CoursePreId!=null)
+                        {
+                            foreach (var course in courseUpsertVM.Course.CoursePreId)
+                            {
+                                CourseToCoursePrerequisite courseToCoursePre = new CourseToCoursePrerequisite();
+                                courseToCoursePre.CourseId = courseUpsertVM.Course.Id;
+                                courseToCoursePre.CoursePreId = course;
+                                await _unitOfWork.CourseToCoursePrerequisite.AddAsync(courseToCoursePre);
+                                await _unitOfWork.SaveAsync();
+                            }                         
+                        }                                   
+                        TempData["message"] = "Successfully Created";                       
                     }
                     else
                     {
                         await _unitOfWork.Course.UpdateAsync(courseUpsertVM.Course);
+                        
+                        if (!courseUpsertVM.Course.CoursePreId.Equals(Guid.Empty))
+                        {
+                            foreach (var course in courseUpsertVM.Course.CoursePreId)
+                            {
+                                CourseToCoursePrerequisite courseToCoursePre = new CourseToCoursePrerequisite();
+                                courseToCoursePre.CourseId = courseUpsertVM.Course.Id;
+                                courseToCoursePre.CoursePreId = course;
+                                await _unitOfWork.CourseToCoursePrerequisite.AddAsync(courseToCoursePre);
+                                await _unitOfWork.SaveAsync();
+                            }
+                        }
                         TempData["message"] = "Successfully Updated";
                         await _unitOfWork.SaveAsync();
-                    }
+                    }         
                     return RedirectToAction(nameof(Index));
                 }
                 else
@@ -185,6 +202,13 @@ namespace UMS.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+        }
+        #endregion
+        #region Cascade
+        public async Task<IEnumerable<Course>> GetCourseList(Guid id,Guid courseId)
+        {
+            var couseList= await _unitOfWork.Course.GetCourseByDepartment(id,courseId);
+            return couseList;
         }
         #endregion
 

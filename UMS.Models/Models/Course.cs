@@ -27,6 +27,8 @@ namespace UMS.Models.Models
         public Guid CourseProtoTypeId { get; set; }
         [ForeignKey("CourseProtoTypeId")]
         public CourseProtoType CourseProtoType { get; set; }
+        [NotMapped]      
+        public IEnumerable<Guid> CoursePreId { get; set; }
         public IEnumerable<CourseToCoursePrerequisite> CourseToCoursePrerequisites { get; set; }
     }
 }

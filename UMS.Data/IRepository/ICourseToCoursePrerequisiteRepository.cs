@@ -9,5 +9,7 @@ namespace UMS.Data.IRepository
 {
     public interface ICourseToCoursePrerequisiteRepository:IRepository<CourseToCoursePrerequisite>
     {
+        Task<IEnumerable<Guid>> GetCourseId(Guid coursePreId);
+        Task<IEnumerable<Guid>> GetCoursePreId(Guid courseId);
     }
 }

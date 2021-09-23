@@ -20,11 +20,15 @@ namespace UMS.Data.Repository
         public async Task<int> CountAsync(string searchValue, Guid depaertmentId)
         {
             IEnumerable<Course> couseList = await _db.Courses.Include(x => x.CourseType).
-                Include(x => x.CourseProtoType).Include(x => x.Department).ToListAsync();
+                Include(x => x.CourseProtoType).Include(x => x.Department).
+                Include(x=>x.CourseToCoursePrerequisites).ThenInclude(x=>x.CoursePrerequisite)
+                .ToListAsync();
             if(!String.IsNullOrEmpty(searchValue))
             {
                 couseList = await _db.Courses.Include(X=>X.Department).
                     Include(x=>x.CourseType).Include(x=>x.CourseProtoType).
+                    Include(x=>x.CourseToCoursePrerequisites).
+                    ThenInclude(x=>x.CoursePrerequisite).
                     Where(x => ((x.Name.ToLower().Equals(searchValue.ToLower())))||
                     (x.Initial.ToLower().Equals(searchValue.ToLower()))||
                     (x.Department.Name.ToLower().Equals(searchValue.ToLower()))||
@@ -47,15 +51,39 @@ namespace UMS.Data.Repository
             return couseList.Count();
         }
 
+        public async Task<IEnumerable<Course>> GetCourseByDepartment(Guid id, Guid courseId)
+        {
+            if (!id.Equals(Guid.Empty))
+            {
+                var courseList = await _db.Courses.Where(x => x.DepartmentId.Equals(id)).ToListAsync();
+
+                if (!courseId.Equals(Guid.Empty))
+                {
+                    courseList = await _db.Courses.Where(x => x.DepartmentId.Equals(id) && x.Id != courseId).ToListAsync();
+                }
+                return (IEnumerable<Course>)courseList;
+            }
+            return null;
+        }
+            //var courseList = await (from p in _db.CoursePrerequisites
+            //                        join cpc in _db.CourseToCoursePrerequisites on p.Id equals cpc.CoursePreId into mcpc
+            //                        from cpct in mcpc.DefaultIfEmpty()
+            //                        join c in _db.Courses on cpct.CourseId equals c.Id into cctp
+            //                        from f in cctp.DefaultIfEmpty()    
+            //                        select p).Where(x=>x.CourseToCoursePrerequisites.Any(x=>x.Course.DepartmentId==id)).ToListAsync();
         public async Task<IEnumerable<Course>> SearchAsync(string searchValue, Guid depaertmentId, int pageNo, int pageSize)
         {
 
             IEnumerable<Course> couseList = await _db.Courses.Include(x => x.CourseType).
-                Include(x => x.CourseProtoType).Include(x => x.Department).ToListAsync();
+                Include(x => x.CourseProtoType).Include(x => x.Department).
+                Include(x=>x.CourseToCoursePrerequisites).ThenInclude(x=>x.CoursePrerequisite)
+                .ToListAsync();
             if (!String.IsNullOrEmpty(searchValue))
             {
                 couseList = await _db.Courses.Include(X => X.Department).
                     Include(x => x.CourseType).Include(x => x.CourseProtoType).
+                    Include(x => x.CourseToCoursePrerequisites).
+                    ThenInclude(x=>x.CoursePrerequisite).
                     Where(x => ((x.Name.ToLower().Equals(searchValue.ToLower()))) ||
                     (x.Initial.ToLower().Equals(searchValue.ToLower())) ||
                     (x.Department.Name.ToLower().Equals(searchValue.ToLower())) ||

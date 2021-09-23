@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
+<div class="container ">
     <form method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col-12">
@@ -51,7 +51,7 @@
                                 <label>Department</label>
                             </div>
                             <div class="col-8">
-                                <select class="form-control" asp-for="Course.DepartmentId" asp-items="Model.DepartmentList">
+                                <select class="form-control" id="department" asp-for="Course.DepartmentId" asp-items="Model.DepartmentList">
                                     <option selected disabled value="">--Select Department--</option>
                                 </select>
                                 <span asp-validation-for="Course.DepartmentId" class="text-danger"></span>
@@ -96,8 +96,8 @@
                                 <label>Prerequiresite Course</label>
                             </div>
                             <div class="col-8">
-                                <select class="form-control" asp-items="Model.CourseList">
-                                    <option selected disabled value="">--Select Course Prerequiresite--</option>
+                                <select class="form-control" id="course" asp-for="Course.CoursePreId" asp-items="Model.CourseList" multiple>
+                                    <option selected disabled value="@Guid.Empty">--Select Course Prerequiresite--</option>
                                 </select>                            
                             </div>
                         </div>
@@ -166,7 +166,7 @@
 
             $("#initial").keyup(function () {
                 var alphabaticString = new RegExp("^[a-zA-Z0-9 ]+$");
-                var initial = $("#name").val();
+                var initial = $("#initial").val();
                 $.ajax({
                     url: '@Url.Action("ExistInitial", "Course")',
                     type: "GET",
@@ -199,6 +199,56 @@
             });
 
 
+
+           var department = $("#department");
+           var course = $("#course");
+
+            if ('@Model.Course.Id' == '@Guid.Empty') {
+                course.prop('disabled', true);
+                $("#department").change(function () {
+                    if ($(this).val() == 0) {
+                        course.prop('disabled', true);
+                   }
+                   else {
+                       $.ajax({
+                           url: '@Url.Action("GetCourseList", "Course")',
+                           type: "GET",
+                           data: {
+                               id: $(this).val(),
+                               courseId: '@Guid.Empty'
+                           },
+                           success: function (data) {
+                               course.prop('disabled', false);
+                               course.empty();
+                               course.append($('<option>').val('@Guid.Empty').text("--Select Course--").prop("disabled", true).prop("selected", true));
+                              
+                               $.each(data, function (key, value) {
+                                   $("#course").append('<option value="' + value.id + '">' + value.name + '</option>');
+                               })
+                           }
+                       });
+                   }
+               });
+           }
+           else {
+               $("#department").change(function () {
+                   $.ajax({
+                       url: '@Url.Action("GetCourseList", "Course")',
+                       type: "GET",
+                       data: {
+                           id: $(this).val(),
+                           courseId: '@Model.Course.Id'
+                       },
+                       success: function (data) {
+                           course.empty();
+                          course.append($('<option>').val('@Guid.Empty').text("--Select Course--").prop("disabled", true).prop("selected", true));
+                           $.each(data, function (key, value) {
+                               $("#course").append('<option value="' + value.id + '">' + value.name + '</option>');
+                           })
+                       }
+                   });
+               });
+           }
         });
     </script>
 }

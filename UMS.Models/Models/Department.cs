@@ -20,5 +20,9 @@ namespace UMS.Models.Models
         public int RequiredCreditToComplete { get; set; }
         public int RequireCourseToComplete { get; set; }
         public IEnumerable<Course> Courses { get; set; }
+      
+       
+        
+        
     }
 }

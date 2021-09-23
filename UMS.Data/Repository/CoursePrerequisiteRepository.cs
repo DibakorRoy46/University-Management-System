@@ -19,14 +19,17 @@ namespace UMS.Data.Repository
         }
         public async Task<int> CountAsync(string searchValue)
         {
-            IEnumerable<CoursePrerequisite> coursePrerequisiteList = await _db.CoursePrerequisites.
-                Where(x => (x.Name.ToLower().Equals(searchValue.ToLower())) ||
-                (x.InitialName.ToLower().Equals(searchValue.ToLower()))).ToListAsync();
+            IEnumerable<CoursePrerequisite> coursePrerequisiteList = await _db.CoursePrerequisites.ToListAsync();
+                
             if(!String.IsNullOrEmpty(searchValue))
             {
                 coursePrerequisiteList = await _db.CoursePrerequisites.
                 Where(x => (x.Name.ToLower().Equals(searchValue.ToLower())) ||
                 (x.InitialName.ToLower().Equals(searchValue.ToLower()))).ToListAsync();
+            }
+            else
+            {
+                coursePrerequisiteList = coursePrerequisiteList.ToList();
             }
             return coursePrerequisiteList.Count();
         }
@@ -34,8 +37,7 @@ namespace UMS.Data.Repository
         public async Task<IEnumerable<CoursePrerequisite>> SearchAsync(string searchValue, int pageNo, int pageSize)
         {
             IEnumerable<CoursePrerequisite> coursePrerequisiteList = await _db.CoursePrerequisites.
-                Where(x => (x.Name.ToLower().Equals(searchValue.ToLower())) ||
-                (x.InitialName.ToLower().Equals(searchValue.ToLower()))).ToListAsync();
+             ToListAsync();
             if (!String.IsNullOrEmpty(searchValue))
             {
                 coursePrerequisiteList = await _db.CoursePrerequisites.
@@ -53,6 +55,7 @@ namespace UMS.Data.Repository
             {
                 coursePrerequisiteObj.Name = coursePrerequisite.Name;
                 coursePrerequisiteObj.InitialName = coursePrerequisite.InitialName;
+               
             }
         }
     }

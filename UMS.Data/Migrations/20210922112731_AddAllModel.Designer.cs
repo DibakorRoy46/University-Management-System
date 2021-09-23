@@ -10,8 +10,8 @@ using UMS.Data.Data;
 namespace UMS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210920030640_AddRequireCourseToCompleteToDepartment")]
-    partial class AddRequireCourseToCompleteToDepartment
+    [Migration("20210922112731_AddAllModel")]
+    partial class AddAllModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -221,11 +221,67 @@ namespace UMS.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("UMS.Models.Models.Course", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseProtoTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CourseTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DepartmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Initial")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseProtoTypeId");
+
+                    b.HasIndex("CourseTypeId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("UMS.Models.Models.CoursePrerequisite", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("InitialName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CoursePrerequisites");
+                });
+
             modelBuilder.Entity("UMS.Models.Models.CourseProtoType", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Credit")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -234,6 +290,21 @@ namespace UMS.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CourseProtoTypes");
+                });
+
+            modelBuilder.Entity("UMS.Models.Models.CourseToCoursePrerequisite", b =>
+                {
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CoursePreId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CourseId", "CoursePreId");
+
+                    b.HasIndex("CoursePreId");
+
+                    b.ToTable("CourseToCoursePrerequisites");
                 });
 
             modelBuilder.Entity("UMS.Models.Models.CourseType", b =>
@@ -325,6 +396,67 @@ namespace UMS.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("UMS.Models.Models.Course", b =>
+                {
+                    b.HasOne("UMS.Models.Models.CourseProtoType", "CourseProtoType")
+                        .WithMany()
+                        .HasForeignKey("CourseProtoTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UMS.Models.Models.CourseType", "CourseType")
+                        .WithMany()
+                        .HasForeignKey("CourseTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UMS.Models.Models.Department", "Department")
+                        .WithMany("Courses")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CourseProtoType");
+
+                    b.Navigation("CourseType");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("UMS.Models.Models.CourseToCoursePrerequisite", b =>
+                {
+                    b.HasOne("UMS.Models.Models.Course", "Course")
+                        .WithMany("CourseToCoursePrerequisites")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UMS.Models.Models.CoursePrerequisite", "CoursePrerequisite")
+                        .WithMany("CourseToCoursePrerequisites")
+                        .HasForeignKey("CoursePreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("CoursePrerequisite");
+                });
+
+            modelBuilder.Entity("UMS.Models.Models.Course", b =>
+                {
+                    b.Navigation("CourseToCoursePrerequisites");
+                });
+
+            modelBuilder.Entity("UMS.Models.Models.CoursePrerequisite", b =>
+                {
+                    b.Navigation("CourseToCoursePrerequisites");
+                });
+
+            modelBuilder.Entity("UMS.Models.Models.Department", b =>
+                {
+                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

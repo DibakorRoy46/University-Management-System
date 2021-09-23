@@ -16,5 +16,15 @@ namespace UMS.Data.Repository
         {
             _db = db;
         }
-    }
+
+        public async Task<IEnumerable<Guid>> GetCourseId(Guid coursePreId)
+        {
+            return  _db.CourseToCoursePrerequisites.Where(x => x.CoursePreId.Equals(coursePreId)).Select(x => x.CourseId).ToList();
+        }
+
+        public async Task<IEnumerable<Guid>> GetCoursePreId(Guid courseId)
+        { 
+            return  _db.CourseToCoursePrerequisites.Where(x => x.CourseId.Equals(courseId)).Select(x => x.CoursePreId).ToList();
+        }
+}
 }

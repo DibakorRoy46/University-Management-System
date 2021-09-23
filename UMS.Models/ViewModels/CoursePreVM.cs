@@ -8,12 +8,10 @@ using UMS.Utility;
 
 namespace UMS.Models.ViewModels
 {
-    public class CourseVM
+    public class CoursePreVM
     {
-        public IEnumerable<Course> CourseList { get; set; }
-      
+        public IEnumerable<CoursePrerequisite> CoursePreList { get; set; }
         public string Search { get; set; }
-        public Guid DepartmentId { get; set; }
         public Pager Pager { get; set; }
     }
 }

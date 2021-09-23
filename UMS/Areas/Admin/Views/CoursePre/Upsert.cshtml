@@ -1,0 +1,105 @@
+﻿@model UMS.Models.ViewModels.CoursePreUpsertVM
+@{
+    var title = "Create Course";
+    ViewData["Title"] = "Upsert";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container pt-5 mt-5">
+    <form method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="text-primary">@title</h3>
+            </div>          
+         
+            <div class="col-12  mt-4">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Departments</label>
+                            </div>
+                            <div class="col-8">
+                                <select class="form-control" id="department" asp-for="CoursePrerequisite.DepartmentId" asp-items="Model.DepartmentList">
+                                    <option selected disabled value="">--Select Department--</option>
+                                </select>
+                                <span asp-validation-for="CoursePrerequisite.DepartmentId" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Courses</label>
+                            </div>
+                            <div class="col-8">
+                                <select class="form-control" id="course" asp-for="CoursePrerequisite.CourseId" asp-items="Model.CourseList">
+                                    <option selected disabled value="">--Select Course Type--</option>
+                                </select>
+                                <span asp-validation-for="CoursePrerequisite.CourseId" class="text-danger"></span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                   
+
+                    
+                    <div class="row col-8 form-group offset-2 my-3">
+                        <div class="col-6">
+                           
+                                <input type="submit" value="Submit" id="submitBtn" class="form-control btn btn-success" />
+                           
+                        </div>
+                        <div class="col-6">
+                            <a class="form-control btn btn-primary" asp-action="Index"><i class="fas fa-arrow-left"></i> Back to List</a>
+                        </div>
+                    </div>
+                </div>        
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{ 
+    <partial name="_ValidationScriptsPartial"/>   
+    <script>
+
+        $(document).ready(function () {
+
+           var department = $("#department");
+           var course = $("#course");
+
+           
+                course.prop('disabled', true);
+                $("#department").change(function () {
+                    if ($(this).val() == 0) {
+                        course.prop('disabled', true);
+                   }
+                   else {
+                       $.ajax({
+                           url: '@Url.Action("GetCourse", "CoursePre")',
+                           type: "GET",
+                           data: {
+                               id: $(this).val(),
+                               courseId: '@Guid.Empty'
+                           },
+                           success: function (data) {
+                               course.prop('disabled', false);
+                               course.empty();
+                               course.append($('<option>').val('@Guid.Empty').text("--Select Course--").prop("disabled", true).prop("selected", true));
+                              
+                               $.each(data, function (key, value) {
+                                   $("#course").append('<option value="' + value.id + '">' + value.name + '</option>');
+                               })
+                           }
+                       });
+                   }
+               });
+                     
+        });
+    </script>
+}
