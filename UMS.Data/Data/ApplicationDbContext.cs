@@ -19,6 +19,7 @@ namespace UMS.Data.Data
         public DbSet<Course> Courses { get; set; }
         public DbSet<CoursePrerequisite> CoursePrerequisites { get; set; }
         public DbSet<CourseToCoursePrerequisite> CourseToCoursePrerequisites { get; set; }
+        public DbSet<Semester> Semesters { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

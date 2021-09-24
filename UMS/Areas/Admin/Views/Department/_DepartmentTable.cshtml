@@ -1,70 +1,76 @@
 ﻿@model UMS.Models.ViewModels.DepartmentVM
 
-<table class="table table-secondary">
-    <thead class="table-secondary">
-        <tr>
-            <th>Name</th>
-            <th>Initail</th>
-            <th>Require Credit to Complete</th>
-            <th>Require Course to Complete</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if(Model.DepartmentList.Count()>0)
-        {
-            foreach (var department in Model.DepartmentList)
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-secondary">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Initail</th>
+                <th>Require Credit to Complete</th>
+                <th>Require Course to Complete</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.DepartmentList.Count() > 0)
+            {
+                int i = 0;
+                foreach (var department in Model.DepartmentList)
+                {
+                    i++;
+                    <tr>
+                        <td>@(i)</td>
+                        <td>@department.Name</td>
+                        <td>@department.Initial</td>
+                        <td>@department.RequiredCreditToComplete</td>
+                        <td>@department.RequireCourseToComplete</td>
+                        <td>
+                            <a class="btn btn-primary" asp-action="Upsert" asp-route-id="@department.Id"><i class="fas fa-edit"></i></a>
+                            <button class="btn btn-danger deleteBtn" data-id="@department.Id"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td>@department.Name</td>
-                    <td>@department.Initial</td>
-                    <td>@department.RequiredCreditToComplete</td>
-                    <td>@department.RequireCourseToComplete</td>
-                    <td>
-                        <a class="btn btn-primary" asp-action="Upsert" asp-route-id="@department.Id"><i class="fas fa-edit"></i></a>
-                        <button class="btn btn-danger" id="deleteBtn" data-id="@department.Id" ><i class="fas fa-trash-alt"></i></button>
-                    </td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-danger">No Department Available</td>
+                    <td class="text-danger"></td>
+                    <td></td>
                 </tr>
             }
-        }
-        else
-        {
-            <tr>
-                <td></td>
-                <td></td>
-                <td class="text-danger">No Department Available</td>
-                <td class="text-danger"></td>
-                <td></td>
-            </tr>
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
 
-<div class="text-center">
-    @if (Model.Pager != null && Model.Pager.TotalPages > 1)
-    {
-        @if (Model.Pager.CurrentPage > 1)
+    <div class="text-center">
+        @if (Model.Pager != null && Model.Pager.TotalPages > 1)
         {
-            <button class="btn btn-outline-info page-buttons" data-pageNo="1">First</button>
-            <button class="btn btn-outline-info page-buttons" data-pageNo="@(Model.Pager.CurrentPage+1)">Next</button>
+            @if (Model.Pager.CurrentPage > 1)
+            {
+                <button class="btn btn-outline-info page-buttons" data-pageNo="1">First</button>
+                <button class="btn btn-outline-info page-buttons" data-pageNo="@(Model.Pager.CurrentPage+1)">Next</button>
+            }
+            for (int page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+            {
+                string activeClass = Model.Pager.CurrentPage == page ? "active bg-info" : "";
+                <button class="btn btn-outline-info page-buttons @activeClass" data-pageNo="@(page)">@(page)</button>
+            }
+            if (Model.Pager.CurrentPage < Model.Pager.EndPage)
+            {
+                <button class="btn btn-outline-info page-buttons" data-pageNo="@(Model.Pager.CurrentPage+1)">Next</button>
+                <button class="btn btn-outline-info page-buttons" data-pageNo="@(Model.Pager.EndPage)">Last</button>
+            }
         }
-        for (int page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
-        {
-            string activeClass = Model.Pager.CurrentPage == page ? "active bg-info" : "";
-            <button class="btn btn-outline-info page-buttons @activeClass" data-pageNo="@(page)">@(page)</button>
-        }
-        if (Model.Pager.CurrentPage < Model.Pager.EndPage)
-        {
-            <button class="btn btn-outline-info page-buttons" data-pageNo="@(Model.Pager.CurrentPage+1)">Next</button>
-            <button class="btn btn-outline-info page-buttons" data-pageNo="@(Model.Pager.EndPage)">Last</button>
-        }
-    }
+    </div>
 </div>
 
 <script>
     $(document).ready(function () {
 
-        $("#deleteBtn").click(function () {
+        $(".deleteBtn").click(function () {
             swal({
                 title: "Are you sure that you want to delete this data",
                 text: "If you once delete this you can not restore it!",

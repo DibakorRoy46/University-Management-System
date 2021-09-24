@@ -11,5 +11,8 @@ namespace UMS.Data.IRepository
     {
         Task<IEnumerable<Guid>> GetCourseId(Guid coursePreId);
         Task<IEnumerable<Guid>> GetCoursePreId(Guid courseId);
+        Task<Guid> GetDepartmentId(Guid courseId);
+        Task<int> CountAsync(string searchValue,Guid? departmentId,Guid? courseId, Guid? coursePreId);
+        Task<IEnumerable<CourseToCoursePrerequisite>>SearchAsync(string searchValue,Guid? departmentId,Guid? courseId,Guid? coursePreId,int pageNo,int pageSize );
     }
 }

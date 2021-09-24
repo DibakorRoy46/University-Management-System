@@ -1,0 +1,104 @@
+﻿@model UMS.Models.ViewModels.AssignCourseVM
+<div class="container " id="main-container">
+    <h2 class="text-center border-bottom text-primary mb-4">Assign Prerequisite Courses</h2>
+    <div class="row">
+        <div class="col-lg-6 col-sm-12 form-group">
+            <div class="row">
+
+                <input type="hidden" id="courseId" asp-for="Course.Id" />
+
+                <input type="hidden" asp-for="CourseToCoursePrerequisite.CourseId" />
+
+                <div class="col-4 mb-4">
+                    <label>Course</label>
+                </div>
+                <div class="col-8 mb-4">
+                    <input type="text" asp-for="Course.Name" class="form-control" disabled />
+                </div>
+
+
+
+                <div class="col-4 mb-4">
+                    <label>Department</label>
+                </div>
+                <div class="col-8 mb-4">
+                    <input type="text" asp-for="Course.Department.Name" class="form-control" disabled />
+                </div>
+
+
+                <div class="col-4 mb-4">
+                    <label>Prerequisite</label>
+                </div>
+                <div class="col-8 mb-4">
+
+                    <select class="form-control" id="preCourseId"
+                            asp-items="Model.CoursePreList" >
+                        <option value="@Guid.Empty" disabled selected>---Select Course---</option>
+                    </select>
+                </div>
+
+                <div class="col-4 offset-4 mt-5">
+                    <button type="submit" class="btn btn-primary form-control" id="submitBtn">Submit</button>
+                </div>
+                <div class="col-4 mt-5">
+                    <a asp-action="Index" class="btn btn-success form-control">Back to List</a>
+                </div>
+            </div>
+        </div>
+        <label id="label1"></label>
+        <label id="label2"></label>
+        <div class="col-lg-6 col-sm-12 " id="courseList">
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $(document).ready(function () {
+            getData();
+        });
+
+        function getData() {
+            var courseId = $("#courseId").val();
+            $.ajax({
+                    url: '@Url.Action("PreCourseTable", "Course")',
+                    type: "GET",
+                     data: {
+                             id: courseId
+                    }
+                }).done(function (response) {
+                    $("#courseList").html(response);
+                }).fail(function (xhr) {
+                    toastr.error("Something Went Wrong");
+                })
+        }
+     
+      
+        $("#submitBtn").click(function () {
+            var courseId = $("#courseId").val();
+            var preCourseId = $('#preCourseId :selected').val();
+            if (preCourseId != '@Guid.Empty') {
+                $.ajax({
+                    url: '@Url.Action("ManagePrerequisite", "Course")',
+                    type: "POST",
+                    data: {
+                        courseId: courseId,
+                        preCourseId: preCourseId
+                    }
+                }).done(function (response) {
+                    $("#courseList").html(response);
+                }).fail(function (xhr) {
+                    toastr.error("Course Already in PrerequisiteList");
+                })
+            }
+            else {
+                toastr.error(" Select Any Prerequisite Course");             
+            }
+        });
+        
+    </script>
+}

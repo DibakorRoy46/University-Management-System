@@ -1,39 +1,46 @@
 ﻿@model UMS.Models.ViewModels.CourseProtoTypeVM
 
-<table class="table table-secondary">
-    <thead class="table-secondary">
-        <tr>
-            <th>Name</th>
-            <th>Credit</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if(Model.CourseProtoTypeList.Count()>0)
-        {
-            foreach (var courseProtoType in Model.CourseProtoTypeList)
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-secondary">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Credit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.CourseProtoTypeList.Count() > 0)
+            {
+                int i = 0;
+                foreach (var courseProtoType in Model.CourseProtoTypeList)
+                {
+                    i++;
+
+                    <tr>
+                        <td>@(i)</td>
+                        <td>@courseProtoType.Name</td>
+                        <td>@courseProtoType.Credit</td>
+
+                        <td>
+                            <a class="btn btn-primary" asp-action="Upsert" asp-route-id="@courseProtoType.Id"><i class="fas fa-edit"></i></a>
+                            <button class="btn btn-danger deleteBtn" data-id="@courseProtoType.Id"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td>@courseProtoType.Name</td>
-                    <td>@courseProtoType.Credit</td>
-                    
-                    <td>
-                        <a class="btn btn-primary" asp-action="Upsert" asp-route-id="@courseProtoType.Id"><i class="fas fa-edit"></i></a>
-                        <button class="btn btn-danger" id="deleteBtn" data-id="@courseProtoType.Id" ><i class="fas fa-trash-alt"></i></button>
-                    </td>
+                    <td></td>
+                    <td class="text-danger">No Course Proto Type Available</td>
+                    <td></td>
                 </tr>
             }
-        }
-        else
-        {
-            <tr>
-                <td></td>
-                <td class="text-danger">No Course Proto Type Available</td>
-                <td></td>
-            </tr>
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 
 <div class="text-center">
     @if (Model.Pager != null && Model.Pager.TotalPages > 1)
@@ -59,7 +66,7 @@
 <script>
     $(document).ready(function () {
 
-        $("#deleteBtn").click(function () {
+        $(".deleteBtn").click(function () {
             swal({
                 title: "Are you sure that you want to delete this data",
                 text: "If you once delete this you can not restore it!",

@@ -275,7 +275,7 @@ body {
 .navbar-wrapper {
     display: flex;
     flex-direction: row;
-    background: var(--main-bg-color);
+    background: white;
     color: var(--main-color);
     position: fixed;
     padding: 0 9px;
@@ -570,14 +570,15 @@ body {
         display: list-item;
     }
 
-    .navbar-search {
-        display: none;
+   
+    #main-container{
+        margin-top:100px;
+        margin-bottom:100px;
     }
-
     .dropdown-menu-nav {
         max-width: 300px;
     }
-
+    
     [class*="col-"] {
         width: 100%
     }

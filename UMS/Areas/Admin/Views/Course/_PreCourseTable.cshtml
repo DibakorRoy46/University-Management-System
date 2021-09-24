@@ -1,0 +1,55 @@
+﻿@model UMS.Models.ViewModels.PrerequisiteCourseVM
+
+
+<div class="row text-right ">
+    <div class="col-12 text-center h4 text-primary">
+        Course Prerequisites of this Course
+    </div>
+</div>
+@if (Model.PrerequisiteCourseList.Count() > 0)
+{
+    @foreach (var course in Model.PrerequisiteCourseList)
+    {
+        <div class="row pb-2">
+            <div class="col-8 text-right" style="font-size:23px;">@course.CoursePrerequisite.Name</div>
+            <div class="col-4">
+                <button class="btn btn-danger deleteBtn" data-id="@course.CoursePreId"><i class="fas fa-trash-alt"></i></button>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <label class="text-danger text-center p-5" >No Prerequisite Course is Assign to this Course</label>
+}
+
+
+<script>
+    $(".deleteBtn").click(function () {
+            swal({
+                title: "Are you sure that you want to delete this data",
+                text: "If you once delete this you can not restore it!",
+                icon: "warning",
+                dangerMode: true,
+                buttons: true
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: '@Url.Action("DeletePreCourse", "Course")',
+                        type: "POST",
+                        data: {
+                            coursePreId: $(this).attr("data-id"),
+                            courseId: '@Model.CourseId'
+                        }
+                    }).done(function (response) {
+                        swal("Successfully Deleted", {
+                            icon: "success"
+                        });
+                        $("#courseList").html(response);
+                    }).fail(function (xhr) {
+                        toastr.error("Something went wrong");
+                    })
+                }
+            })
+        });
+</script>

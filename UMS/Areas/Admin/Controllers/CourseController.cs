@@ -33,7 +33,7 @@ namespace UMS.Areas.Admin.Controllers
             try
             {
                 pageNo = pageNo != 0 ? pageNo : 1;
-                pageSize = 1;
+                pageSize = 10;
                 var numberOfCourse = await _unitOfWork.Course.CountAsync(searchValue, departmentId);
                 CourseVM courseVM = new CourseVM()
                 {
@@ -91,9 +91,17 @@ namespace UMS.Areas.Admin.Controllers
                     return View(courseUpsertVM);
                 }
                 else
-                {                   
+                {    
+                    
                     courseUpsertVM.Course = await _unitOfWork.Course.FirstOrDefaultAsync(x => x.Id.Equals(id));
+                    var courseList = await _unitOfWork.Course.GetAllAsync(x => x.DepartmentId.Equals(courseUpsertVM.Course.DepartmentId));
+                    var finalCourseList = courseList.Where(x => !x.Id.Equals(id)).ToList();
                     courseUpsertVM.Course.CoursePreId = await _unitOfWork.CourseToCoursePrerequisite.GetCoursePreId(id);
+                    courseUpsertVM.CourseList = finalCourseList.Select(x => new SelectListItem()
+                    {
+                        Text = x.Name,
+                        Value = x.Id.ToString()
+                    }) ;
                     if (courseUpsertVM.Course==null)
                     {
                         return NotFound();
@@ -230,7 +238,7 @@ namespace UMS.Areas.Admin.Controllers
                 await _unitOfWork.CoursePrerequisite.RemoveAsync(coursePreObj);
                 await _unitOfWork.SaveAsync();
                 int pageNo = 1;
-                int pageSize = 1;
+                int pageSize = 10;
                 var numberOfCourse = await _unitOfWork.Course.CountAsync(null,Guid.Empty);
                 CourseVM courseVM = new CourseVM()
                 {
@@ -281,6 +289,107 @@ namespace UMS.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+        }
+        #endregion
+
+        #region AssginPrerequisite
+        public async Task<IActionResult> ManagePrerequisite(Guid id)
+        {
+            try
+            {
+                var departmentList = await _unitOfWork.Department.GetAllAsync();
+                AssignCourseVM assignCourseVM = new AssignCourseVM()
+                {
+                    Course = await _unitOfWork.Course.FirstOrDefaultAsync(x => x.Id.Equals(id)),
+                    CourseToCoursePrerequisite = new CourseToCoursePrerequisite()
+                    {
+                        CourseId = id
+                    },
+                    CourseToCoursePrerequisiteList = await _unitOfWork.CourseToCoursePrerequisite.
+                    GetAllAsync(x => x.CourseId.Equals(id), includeProperties: "Course,CoursePrerequisite")
+                };
+                List<Guid> assignPrerequisite = assignCourseVM.CourseToCoursePrerequisiteList.
+                    Select(x => x.CoursePreId).ToList();
+                var tempPreList = await _unitOfWork.Course.
+                    GetAllAsync(x => !assignPrerequisite.Contains(x.Id) && !x.Id.Equals(id) && x.DepartmentId.Equals(assignCourseVM.Course.DepartmentId));
+                assignCourseVM.CoursePreList = tempPreList.Select(x => new SelectListItem
+                {
+                    Text = x.Name,
+                    Value = x.Id.ToString()
+                });
+                return View(assignCourseVM);
+            }
+            catch(Exception ex)
+            {
+                return NotFound();
+            }
+            
+        }
+        public async Task<IActionResult> PreCourseTable(Guid id)
+        {
+            PrerequisiteCourseVM prerequisiteCourse = new PrerequisiteCourseVM()
+            {
+                PrerequisiteCourseList = await _unitOfWork.CourseToCoursePrerequisite.GetAllAsync(x => x.CourseId.Equals(id),
+                                        includeProperties: "Course,CoursePrerequisite"),
+                CourseId=id
+            };
+            return PartialView("_PreCourseTable", prerequisiteCourse);
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> ManagePrerequisite(Guid courseId,Guid preCourseId )
+        {
+            try
+            {
+                if(courseId!=Guid.Empty && preCourseId!=Guid.Empty)
+                {
+                    //var exits = await _unitOfWork.CourseToCoursePrerequisite.
+                    //    GetAllAsync(x => x.CourseId.Equals(courseId) && x.CoursePreId.Equals(preCourseId));
+                    //if(exits.Count()>0)
+                    //{
+                    //    return Json(new { success = false });
+
+                    //}
+                    CourseToCoursePrerequisite courseObj = new CourseToCoursePrerequisite();
+                    courseObj.CourseId = courseId;
+                    courseObj.CoursePreId = preCourseId;
+                    await _unitOfWork.CourseToCoursePrerequisite.AddAsync(courseObj);
+                    await _unitOfWork.SaveAsync();
+                    PrerequisiteCourseVM prerequisiteCourse = new PrerequisiteCourseVM()
+                    {
+                        PrerequisiteCourseList = await _unitOfWork.CourseToCoursePrerequisite.GetAllAsync(x => x.CourseId.Equals(courseId),
+                                        includeProperties: "Course,CoursePrerequisite"),
+                        CourseId=courseId
+                    };
+                    return PartialView("_PreCourseTable", prerequisiteCourse);
+                }
+                return View();
+            }
+            catch(Exception ex)
+            {
+                return NotFound();
+            }
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult>DeletePreCourse(Guid courseId,Guid coursePreId)
+        {
+            var preCourseObj = await _unitOfWork.CourseToCoursePrerequisite.
+                FirstOrDefaultAsync(x => x.CoursePreId.Equals(coursePreId) && x.CourseId.Equals(courseId));
+            if(preCourseObj==null)
+            {
+                return NotFound();
+            }
+            await _unitOfWork.CourseToCoursePrerequisite.RemoveAsync(preCourseObj);
+            await _unitOfWork.SaveAsync();
+            PrerequisiteCourseVM prerequisiteCourse = new PrerequisiteCourseVM()
+            {
+                PrerequisiteCourseList = await _unitOfWork.CourseToCoursePrerequisite.GetAllAsync(x => x.CourseId.Equals(courseId),
+                                        includeProperties: "Course,CoursePrerequisite"),
+                CourseId=courseId
+            };
+            return PartialView("_PreCourseTable", prerequisiteCourse);
+
         }
         #endregion
     }

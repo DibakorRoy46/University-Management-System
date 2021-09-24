@@ -2,25 +2,27 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<span id="messageBox" class="d-none">@TempData["message"]</span>
-<h2 class="text-primary text-center border-bottom">Course Proto Types</h2>
-<div class="row pt-4">
-    <div class="col-6">
-        <div class="input-group">
-            <input class="form-control" placeholder="Search..." id="search" />
-            <div class="input-group-prepend">
-                <div class="input-group-text"><i class="fas fa-search"></i></div>
+<div class="container" id="main-container">
+    <span id="messageBox" class="d-none">@TempData["message"]</span>
+    <h2 class="text-primary text-center border-bottom">Course Proto Types</h2>
+    <div class="row pt-4">
+        <div class="col-6">
+            <div class="input-group">
+                <input class="form-control" placeholder="Search..." id="search" />
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fas fa-search"></i></div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-3">
-        <input class="btn btn-primary form-control" type="submit" value="Reset" id="resetBtn" />
-    </div>
-    <div class="col-3">
-        <a class="btn btn-success form-control" asp-action="Upsert"><i class="fas fa-plus"></i> Create New</a>
-    </div>
-    <div id="table-container" class="col-12">
+        <div class="col-3">
+            <input class="btn btn-primary form-control" type="submit" value="Reset" id="resetBtn" />
+        </div>
+        <div class="col-3">
+            <a class="btn btn-success form-control" asp-action="Upsert"><i class="fas fa-plus"></i> Create New</a>
+        </div>
+        <div id="table-container" class="col-12">
 
+        </div>
     </div>
 </div>
 
@@ -64,6 +66,7 @@
 
         $("#resetBtn").click(function () {
             var searchValue = $("#search").val('');
+            $("#search").val('');
             $.ajax({
                 url: '@Url.Action("CourseProtoTypeTable", "CourseProtoType")',
                 type: "GET",
