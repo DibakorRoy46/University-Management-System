@@ -14,6 +14,7 @@ namespace UMS.Data.IRepository
         public ICourseRepository Course { get;  }
         public ICoursePrerequisiteRepository CoursePrerequisite { get; }
         public ICourseToCoursePrerequisiteRepository CourseToCoursePrerequisite { get; }
+        public ISemesterRepository Semester { get; }
         Task SaveAsync();
     }
 }
