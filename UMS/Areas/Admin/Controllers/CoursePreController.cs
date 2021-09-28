@@ -30,7 +30,7 @@ namespace UMS.Areas.Admin.Controllers
         public async Task<IActionResult>CoursePreTable(string searchValue,int pageNo,int pageSize)
         {
             pageNo = pageNo != 0 ? pageNo : 1;
-            pageSize = 1;
+            pageSize = 10;
             var numberOfCourePre = await _unitOfWork.CoursePrerequisite.CountAsync(searchValue);
             CoursePreVM coursePreVM = new CoursePreVM()
             {
@@ -57,7 +57,7 @@ namespace UMS.Areas.Admin.Controllers
                 await _unitOfWork.CoursePrerequisite.RemoveAsync(coursePreObj);
                 await _unitOfWork.SaveAsync();
                 int pageNo = 1;
-                int pageSize = 1;
+                int pageSize = 10;
                 var searchValue = String.Empty;
                 var numberOfCourePre = await _unitOfWork.CoursePrerequisite.CountAsync(searchValue);
                 CoursePreVM coursePreVM = new CoursePreVM()

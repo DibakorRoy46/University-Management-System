@@ -1,0 +1,161 @@
+﻿@model UMS.Models.ViewModels.ActivityVM
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-secondary">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Active</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ActivityList.Count() > 0)
+            {
+                int i = 0;
+                foreach (var activity in Model.ActivityList)
+                {
+                    i++;
+
+                    <tr>
+                        <td>@(i)</td>
+                        <td>@activity.Name</td>
+                        <td>@activity.StartDate</td>
+                        <td>@activity.EndDate</td>
+                        <td>
+                            @if (activity.IsActive == true)
+                            {
+
+                                <button class="btn btn-primary activeBtn" data-id="@activity.Id" > <i class="fas fa-thumbs-up text-white"></i> &nbsp; Active</button>
+
+                            }
+                            else
+                            {
+                        
+                                <button class="btn btn-danger activeBtn" data-id="@activity.Id"> <i class="fas fa-thumbs-down text-white"></i> &nbsp; InActive</button>
+                                
+                            }
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" asp-action="Upsert" asp-route-id="@activity.Id"><i class="fas fa-edit"></i></a>
+                            <button class="btn btn-danger deleteBtn" data-id="@activity.Id"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-danger">No Activity Available</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="text-center">
+    @if (Model.Pager != null && Model.Pager.TotalPages > 1)
+    {
+        @if (Model.Pager.CurrentPage > 1)
+        {
+            <button class="btn btn-outline-info page-buttons" data-pageNo="1">First</button>
+            <button class="btn btn-outline-info page-buttons" data-pageNo="@(Model.Pager.CurrentPage-1)">Previous</button>
+        }
+        for (int page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
+        {
+            string activeClass = Model.Pager.CurrentPage == page ? "active bg-info" : "";
+            <button class="btn btn-outline-info page-buttons @activeClass" data-pageNo="@(page)">@(page)</button>
+        }
+        if (Model.Pager.CurrentPage < Model.Pager.EndPage)
+        {
+            <button class="btn btn-outline-info page-buttons" data-pageNo="@(Model.Pager.CurrentPage+1)">Next</button>
+            <button class="btn btn-outline-info page-buttons" data-pageNo="@(Model.Pager.EndPage)">Last</button>
+        }
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $(".activeBtn").click(function () {
+            $.ajax({
+                url: '@Url.Action("Activity", "Activity")',
+                type: "POST",
+                data: {
+                    id: $(this).attr("data-id"),
+                    pageNo: '@Model.Pager.CurrentPage',
+                    searchValue: '@Model.Search'
+                }
+            }).done(function (response) {
+                $(".loader").fadeOut(1000);
+                $(".wrapper").fadeIn(1000);
+                $("#table-container").html(response);
+                toastr.success("Successfully Executed");
+            }).fail(function (xhr) {
+                $(".loader").fadeOut(1000);
+                $(".wrapper").fadeIn(1000);
+                toastr.error("Something went wrong");
+            })
+        });
+
+        $(".deleteBtn").click(function () {
+            swal({
+                title: "Are you sure that you want to delete this data",
+                text: "If you once delete this you can not restore it!",
+                icon: "warning",
+                dangerMode: true,
+                buttons: true
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "Activity")',
+                        type: "POST",
+                        data: {
+                            id: $(this).attr("data-id")
+                        }
+                    }).done(function (response) {
+                       
+                        swal("Successfully Deleted", {
+                            icon: "success"
+                        });
+                        $(".loader").fadeOut(1000);
+                        $(".wrapper").fadeIn(1000);
+                        $("#table-container").html(response);
+                    }).fail(function (xhr) {
+                        $(".loader").fadeOut(1000);
+                        $(".wrapper").fadeIn(1000);
+                        toastr.error("Something went wrong");
+                    })
+                }
+            })
+        });
+
+        $(".page-buttons").click(function () {
+            $.ajax({
+                url: '@Url.Action("ActivityTable", "Activity")',
+                data: {
+                    pageNo: $(this).attr("data-pageNo"),
+                    searchValue: '@Model.Search'
+                }
+            }).done(function (response) {
+                $(".loader").fadeOut(1000);
+                $(".wrapper").fadeIn(1000);
+                $("#table-container").html(response);
+            }).fail(function (xhr) {
+                $(".loader").fadeOut(1000);
+                $(".wrapper").fadeIn(1000);
+                toastr.error("Something Went Wrong");
+            })
+        })
+    });
+
+
+</script>

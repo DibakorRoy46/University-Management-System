@@ -128,9 +128,10 @@
     <script>
 
         $(document).ready(function () {
-
+            $(".loader").fadeOut(1000);
+            $(".wrapper").fadeIn(1000);
             $("#name").keyup(function () {
-                var alphabaticString = new RegExp("^[a-zA-Z ]+$");
+                var alphabaticString = new RegExp("^[a-zA-Z() ]+$");
                 var name = $("#name").val();
                 $.ajax({
                     url: '@Url.Action("ExistName", "Course")',

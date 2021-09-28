@@ -343,13 +343,6 @@ namespace UMS.Areas.Admin.Controllers
             {
                 if(courseId!=Guid.Empty && preCourseId!=Guid.Empty)
                 {
-                    //var exits = await _unitOfWork.CourseToCoursePrerequisite.
-                    //    GetAllAsync(x => x.CourseId.Equals(courseId) && x.CoursePreId.Equals(preCourseId));
-                    //if(exits.Count()>0)
-                    //{
-                    //    return Json(new { success = false });
-
-                    //}
                     CourseToCoursePrerequisite courseObj = new CourseToCoursePrerequisite();
                     courseObj.CourseId = courseId;
                     courseObj.CoursePreId = preCourseId;

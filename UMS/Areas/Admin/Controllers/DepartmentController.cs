@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ using UMS.Utility;
 namespace UMS.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class DepartmentController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -19,20 +21,21 @@ namespace UMS.Areas.Admin.Controllers
             _unitOfWork = unitOfWork;
         }
         #region Index
+      
         public async Task<IActionResult> Index()
         {
             return View();
         }
-        public async Task<IActionResult>DepartmentTable(string searchValue,int pageNo,int pageSize)
+        public async Task<IActionResult> DepartmentTable(string searchValue, int pageNo, int pageSize)
         {
             pageNo = pageNo != 0 ? pageNo : 1;
             pageSize = 10;
             int numberOfDepartment = await _unitOfWork.Department.CountAsync(searchValue);
             DepartmentVM departmentVM = new DepartmentVM()
             {
-                DepartmentList=await _unitOfWork.Department.SearchAsync(searchValue,pageNo,pageSize),
-                Search=searchValue,
-                Pager=new Pager(numberOfDepartment,pageNo,pageSize)
+                DepartmentList = await _unitOfWork.Department.SearchAsync(searchValue, pageNo, pageSize),
+                Search = searchValue,
+                Pager = new Pager(numberOfDepartment, pageNo, pageSize)
             };
             return PartialView("_DepartmentTable", departmentVM);
 
@@ -40,7 +43,9 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
 
         #region Upsert
-        public async Task<IActionResult>Upsert(Guid id)
+
+       
+        public async Task<IActionResult> Upsert(Guid id)
         {
             try
             {
@@ -52,22 +57,24 @@ namespace UMS.Areas.Admin.Controllers
                 else
                 {
                     department = await _unitOfWork.Department.FirstOrDefaultAsync(x => x.Id.Equals(id));
-                    if(department==null)
+                    if (department == null)
                     {
                         return NotFound();
                     }
                     return View(department);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return NotFound();
             }
-            
+
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult>Upsert(Department department)
+     
+        public async Task<IActionResult> Upsert([FromBody] Department department)
         {
             try
             {
@@ -88,7 +95,7 @@ namespace UMS.Areas.Admin.Controllers
                 }
                 return View();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return NotFound();
             }
@@ -96,7 +103,7 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
 
         #region Delete
-        [HttpPost]
+        
         public async Task<IActionResult>Delete(Guid id, int pageNo, int pageSize)
         {
             try
@@ -125,7 +132,6 @@ namespace UMS.Areas.Admin.Controllers
             }
         }
         #endregion
-
         #region Exists
         public async Task<IActionResult>ExistName(string name)
         {

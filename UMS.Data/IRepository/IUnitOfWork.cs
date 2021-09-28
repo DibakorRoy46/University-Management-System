@@ -15,6 +15,12 @@ namespace UMS.Data.IRepository
         public ICoursePrerequisiteRepository CoursePrerequisite { get; }
         public ICourseToCoursePrerequisiteRepository CourseToCoursePrerequisite { get; }
         public ISemesterRepository Semester { get; }
+        public IClassTimeRepository ClassTime{ get; }
+        public IDayRepository Day { get; }
+        public ISectionRepository Section { get; }
+        public IActivityRepository Activity { get; }
+        public IApplicationUserRepository ApplicationUser { get; }
+        public IUserDetialsRepository UserDetials { get; }
         Task SaveAsync();
     }
 }

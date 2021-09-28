@@ -14,4 +14,8 @@
     <ProjectReference Include="..\UMS.Utility\UMS.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,31 @@
+﻿@model UMS.Models.ViewModels.LoginVM
+@{
+    ViewData["Title"] = "";
+    Layout = "_LayoutFirst";
+}
+    <section>
+        <div class="form-container">
+            <h1>Login Form</h1>
+            <form method="post">
+                <div class="control">
+                    <label for="Email">Name</label>
+                    <input asp-for="Email" class="form-control" id="email">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="control">
+                    <label for="psw">Password</label>
+                    <input type="password" asp-for="Password" class="form-control" id="psw">
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <span><input type="checkbox"> Remember me</span>
+                <div class="control">
+                    <input type="submit" class="btn" value="Login">
+                </div>
+            </form>
+            <p><a href="#">Forget password ?</a></p>
+        </div>
+    </section>
+
+@section Scripts{ 
+    <partial name="_ValidationScriptsPartial"/>
+}

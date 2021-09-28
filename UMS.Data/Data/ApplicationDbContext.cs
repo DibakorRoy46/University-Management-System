@@ -20,7 +20,12 @@ namespace UMS.Data.Data
         public DbSet<CoursePrerequisite> CoursePrerequisites { get; set; }
         public DbSet<CourseToCoursePrerequisite> CourseToCoursePrerequisites { get; set; }
         public DbSet<Semester> Semesters { get; set; }
-
+        public DbSet<ClassTime> ClassTimes { get; set; }
+        public DbSet<Day> Days { get; set; }
+        public DbSet<Section> Sections { get; set; }
+        public DbSet<Activity> Activities { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<UserDetails> UserDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

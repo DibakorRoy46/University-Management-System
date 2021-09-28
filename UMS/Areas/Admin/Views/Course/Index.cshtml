@@ -2,6 +2,7 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div class="container" id="main-container">
     <span id="messageBox" class="d-none">@TempData["message"]</span>
     <h2 class="text-primary text-center border-bottom">Course Types</h2>
@@ -40,7 +41,8 @@
 
 @section Scripts{
 
-    <script>
+    <script>   
+
 
         $(document).ready(function () {
             getData();
@@ -50,9 +52,14 @@
                 url: '@Url.Action("CourseTable", "Course")',
                 type: "GET"
             }).done(function (response) {
+                $(".loader").fadeOut(1000);
+                $(".wrapper").fadeIn(1000);
                 $("#table-container").html(response);
             }).fail(function (xhr) {
+                $(".loader").fadeOut(1000);
+                $(".wrapper").fadeIn(1000);
                 toastr.error("Something went wrong");
+
             })
         }
         $("#searchBtn").click(function () {
@@ -68,12 +75,18 @@
                         departmentId: departmentId
                     }
                 }).done(function (response) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
                     $("#table-container").html(response);
                 }).fail(function (xhr) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
                     toastr.error("Something went error");
                 })
             }
             else {
+                $(".loader").fadeOut(1000);
+                $(".wrapper").fadeIn(1000);
                 toastr.error("Nothing to Search");
             }
 
@@ -96,15 +109,20 @@
                     url: '@Url.Action("CourseTable", "Course")',
                     type: "GET"
                 }).done(function (response) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
                     $("#table-container").html(response);
                 }).fail(function (xhr) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
                     toastr.error("Something went error");
                 })
             }
             else {
+                $(".loader").fadeOut(1000);
+                $(".wrapper").fadeIn(1000);
                 toastr.error("You can not reset at this time");
             }
-
         });
     </script>
 }

@@ -70,11 +70,15 @@
                      data: {
                              id: courseId
                     }
-                }).done(function (response) {
-                    $("#courseList").html(response);
-                }).fail(function (xhr) {
-                    toastr.error("Something Went Wrong");
-                })
+                    }).done(function (response) {
+                            $(".loader").fadeOut(1000);
+                            $(".wrapper").fadeIn(1000);
+                            $("#courseList").html(response);
+                    }).fail(function (xhr) {
+                        $(".loader").fadeOut(1000);
+                        $(".wrapper").fadeIn(1000);
+                        toastr.error("Something Went Wrong");
+                    })
         }
      
       
@@ -90,12 +94,18 @@
                         preCourseId: preCourseId
                     }
                 }).done(function (response) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
                     $("#courseList").html(response);
                 }).fail(function (xhr) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
                     toastr.error("Course Already in PrerequisiteList");
                 })
             }
             else {
+                $(".loader").fadeOut(1000);
+                $(".wrapper").fadeIn(1000);
                 toastr.error(" Select Any Prerequisite Course");             
             }
         });

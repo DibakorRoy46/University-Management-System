@@ -17,9 +17,15 @@ namespace UMS.Models.Models
         [Required(ErrorMessage ="Please Enter the Department Initial Name")]      
         [RegularExpression(@"^[a-zA-Z ]+$")]
         public string Initial { get; set; }
+        [Required]
+        [Range(100,200)]
         public int RequiredCreditToComplete { get; set; }
+        [Required]
+        [Range(1,100)]
         public int RequireCourseToComplete { get; set; }
         public IEnumerable<Course> Courses { get; set; }
+        public IEnumerable<UserDetails> UserDetails { get; set; }
+       
       
        
         

@@ -10,8 +10,6 @@ a.navbar-brand {
 a {
     color: #0366d6;
 }
-
-
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -62,12 +60,6 @@ body {
     background: var(--second-bg-color);
     transition: margin-left .5s;
 }
-
-
-.boxContainer {
-    display: table;
-}
-
 .box {
     width: 200px;
     height: 200px;
@@ -77,7 +69,6 @@ body {
     text-align: center;
     vertical-align: bottom;
 }
-
 #header {
     position: relative;
     min-height: 150px;
@@ -286,6 +277,73 @@ body {
     box-shadow: rgba(0,0,0,0.12) 0px 1px 4px 1px;
 }
 
+section {
+    height: 100vh;
+    width: 100%;
+    background-size: cover;
+    background-position: center center;
+}
+
+.form-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 380px;
+    padding: 50px 30px;
+    border-radius: 10px;
+    box-shadow: 7px 7px 60px #000;
+}
+
+h1 {
+    font-size: 2em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.control input {
+    padding: 10px;
+    font-size: 16px;
+    display: block;
+    width: 100%;
+    color: #000;
+    background: #fff;
+    outline: none;
+    border: none;
+    margin: 1em 0;
+    border:1px solid black;
+}
+
+.control .btn {
+    color: #fff;
+    text-transform: uppercase;
+    background: crimson;
+    opacity: .7;
+    transition: opacity 1s ease;
+}
+
+.btn:focus {
+    opacity: 1;
+    background:red;
+}
+.control .btn:hover {
+    background: red;
+}
+
+p {
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    opacity: .7;
+}
+
+    a:hover {
+        opacity: 1;
+        text-decoration:none;
+    }
 .navbar-nav {
     list-style: none;
     display: flex;
@@ -466,6 +524,7 @@ body {
     padding-top: 75px;
     background: var(--second-bg-color);
     transition: margin-left .5s;
+    display: none;
 }
 
 .sidebar {
@@ -476,23 +535,78 @@ body {
     box-shadow: rgba(0,0,0,0.12) 0px 1px 4px 1px;
     overflow-y:auto;
     z-index: 100;
-    transition: width .5s;
+    transition: width .5s;  
+}
+  .content {
+            display: none;
+        }
+
+
+
+.loader {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background-color: #16191e;
+    position: absolute;
 }
 
-    .sidebar:hover {
-        width: 250px;
+    .loader > div {
+        height: 100px;
+        width: 100px;
+        border: 15px solid #45474b;
+        border-top-color: #2a88e6;
+        position: absolute;
+        margin: auto;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-radius: 50%;
+        animation: spin 1.5s infinite linear;
     }
 
-.sidebar-nav {
-    list-style: none;
-    padding:0;
-    margin: 0px;
-    margin-bottom: -68px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
 }
+
+ .sidebar:hover {
+        width: 250px;
+       
+ }
+.sidebar ul li ul li {
+    text-decoration: none;
+    list-style: none;
+    padding: 10px;
+    width:100%;
+    transition: all 1s ease;
+}
+
+    .sidebar ul li ul li a {
+        text-decoration: none;
+        color:black;
+        
+    }
+
+
+    .sidebar ul li ul li:hover {
+        background: var(--danger-color);
+        text-decoration: none;
+        color: white;
+    }
+
+    .sidebar-nav {
+        list-style: none;
+        padding: 0;
+        margin: 0px;
+        margin-bottom: -68px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+    }
 
 .sidebar-nav-item {
     width: 100%;
@@ -521,6 +635,7 @@ body {
         height: 50px;
         position: relative;
     }
+    
 
     .sidebar-nav-link:hover {
         background: var(--danger-color);
@@ -533,6 +648,8 @@ body {
         color: white;
         transition: all 1s ease;
     }
+
+
 
         .sidebar-active i {
             color: white;
@@ -550,7 +667,6 @@ body {
     .sidebar {
         width: 0;
     }
-
     .wrapper {
         
         padding: 2px;

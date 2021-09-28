@@ -1,11 +1,14 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 <!DOCTYPE html>
 <html>
 <head>
     <title>University Management System</title>
 
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-    <link rel="icon" type="image/png" href="assets/AT-pro-logo.png" />
+   
     <!-- Import lib -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <!-- End import lib -->
@@ -16,6 +19,9 @@
     <link rel="stylesheet" type="text/css" href="~/css/site.css" asp-append-version="true">
 </head>
 <body class="overlay-scrollbar">
+    <div class="loader">
+        <div></div>
+    </div>
     <!-- navbar -->
     <div class="navbar-wrapper">
         <!-- nav left -->
@@ -68,12 +74,12 @@
                             </a>
                         </li>
                         <li class="dropdown-menu-item">
-                            <a href="#" class="dropdown-menu-link">
-                                <div>
-                                    <i class="fas fa-sign-out-alt"></i>
-                                </div>
-                                <span>Logout</span>
-                            </a>
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                            <form id="logoutForm" class="form-inline" asp-area="Admin" asp-controller="Account" asp-action="LogOut" asp-route-returnUrl="@Url.Action("Login", "Account", new { area = "Admin" })">
+                                <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                            </form>
+                            }
                         </li>
                     </ul>
                 </div>
@@ -91,6 +97,7 @@
                     <span>
                         Dashboard
                     </span>
+                    
                 </a>
             </li>
             <li class="sidebar-nav-item">
@@ -124,11 +131,12 @@
                         <i class="fas fa-check-circle"></i>
                     </div>
                     <span>Courses</span>
+                    
                 </a>
             </li>
-           
+
             <li class="sidebar-nav-item">
-                <a asp-action="Index" asp-controller="CoursePre"asp-area="Admin" class="sidebar-nav-link">
+                <a asp-action="Index" asp-controller="CoursePre" asp-area="Admin" class="sidebar-nav-link">
                     <div>
                         <i class="fas fa-check-circle"></i>
                     </div>
@@ -136,7 +144,7 @@
                 </a>
             </li>
             <li class="sidebar-nav-item">
-                <a asp-action="Index" asp-controller="Semester"asp-area="Admin"  class="sidebar-nav-link">
+                <a asp-action="Index" asp-controller="Semester" asp-area="Admin" class="sidebar-nav-link">
                     <div>
                         <i class="fas fa-check-circle"></i>
                     </div>
@@ -144,52 +152,62 @@
                 </a>
             </li>
             <li class="sidebar-nav-item">
-                <a href="#" class="sidebar-nav-link">
+                <a asp-action="Index" asp-controller="ClassTime" asp-area="Admin" class="sidebar-nav-link">
                     <div>
                         <i class="fas fa-check-circle"></i>
                     </div>
-                    <span>Pellentesque</span>
+                    <span>Class Times</span>
                 </a>
             </li>
             <li class="sidebar-nav-item">
-                <a href="#" class="sidebar-nav-link">
+                <a asp-action="Index" asp-controller="Day" asp-area="Admin" class="sidebar-nav-link">
                     <div>
                         <i class="fas fa-check-circle"></i>
                     </div>
-                    <span>Pellentesque</span>
+                    <span>Days</span>
                 </a>
             </li>
             <li class="sidebar-nav-item">
-                <a href="#" class="sidebar-nav-link">
+                <a asp-action="Index" asp-controller="Section" asp-area="Admin" class="sidebar-nav-link">
                     <div>
                         <i class="fas fa-check-circle"></i>
                     </div>
-                    <span>Pellentesque</span>
+                    <span>Sections</span>
                 </a>
             </li>
             <li class="sidebar-nav-item">
-                <a href="#" class="sidebar-nav-link">
+                <a asp-action="Index" asp-controller="Activity" asp-area="Admin" class="sidebar-nav-link">
                     <div>
                         <i class="fas fa-bug"></i>
                     </div>
-                    <span>Morbi</span>
+                    <span>Activities</span>
                 </a>
             </li>
             <li class="sidebar-nav-item">
-                <a href="#" class="sidebar-nav-link">
+                <a asp-action="Index" asp-controller="Role" asp-area="Admin" class="sidebar-nav-link">
                     <div>
                         <i class="fas fa-chart-line"></i>
                     </div>
-                    <span>Praesent</span>
+                    <span>Roles</span>
                 </a>
             </li>
-            <li class="sidebar-nav-item">
-                <a href="#" class="sidebar-nav-link ">
+            
+            <li class="nav-item has-submenu sidebar-nav-item">
+                <a class="sidebar-nav-link" href="#">
                     <div>
-                        <i class="fas fa-book-open"></i>
+                        <i class="fas fa-chart-line"></i>
                     </div>
-                    <span>Pellentesque</span>
+                    <span>Dropdown</span>
+                    <div>
+                        <i class="fas fa-caret-down"></i>
+                    </div>
                 </a>
+                <ul class="submenu collapse">
+                    <li><a class="submenu-link" href="#">Submenu item 4 </a></li>
+                    <li><a class="submenu-link" href="#">Submenu item 5 </a></li>
+                    <li><a class="submenu-link" href="#">Submenu item 6 </a></li>
+                    <li><a class="submenu-link" href="#">Submenu item 7 </a></li>
+                </ul>
             </li>
             <li class="sidebar-nav-item">
                 <a href="#" class="sidebar-nav-link">
@@ -207,18 +225,12 @@
                     <span>Praesent</span>
                 </a>
             </li>
-            <li class="sidebar-nav-item">
-                <a href="#" class="sidebar-nav-link">
-                    <div>
-                        <i class="fas fa-audio-description"></i>
-                    </div>
-                    <span>Pellentesque</span>
-                </a>
-            </li>
+            
+
         </ul>
     </div>
 
-    <div class="wrapper">
+    <div class="wrapper" id="contents">
         <main role="main" class="pb-3 px-3">
             @RenderBody()
         </main>

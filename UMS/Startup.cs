@@ -30,12 +30,20 @@ namespace UMS
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders().AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.Configure<IdentityOptions>(opt =>
+            {
+                opt.Password.RequiredLength = 5;
+                opt.Password.RequireLowercase = true;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(30);
+                opt.Lockout.MaxFailedAccessAttempts = 5;
+
+            });
+            services.AddAuthorization();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddRazorPages();
@@ -64,10 +72,10 @@ namespace UMS
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
-            {
+            {              
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{area=Student}/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area=Admin}/{controller=Account}/{action=Login}/{id?}");           
                 endpoints.MapRazorPages();
             });
         }

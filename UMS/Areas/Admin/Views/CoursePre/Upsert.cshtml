@@ -69,9 +69,10 @@
     <script>
 
         $(document).ready(function () {
-
-           var department = $("#department");
-           var course = $("#course");
+            $(".loader").fadeOut(1000);
+            $(".wrapper").fadeIn(1000);
+               var department = $("#department");
+               var course = $("#course");
 
            
                 course.prop('disabled', true);

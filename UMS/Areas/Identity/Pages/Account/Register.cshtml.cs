@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using UMS.Data.IRepository;
+using UMS.Models.Models;
 
 namespace UMS.Areas.Identity.Pages.Account
 {
@@ -24,6 +26,8 @@ namespace UMS.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IUnitOfWork _unitOfWork;
+
         
 
         public RegisterModel(
@@ -31,13 +35,15 @@ namespace UMS.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _unitOfWork = unitOfWork;
 
         }
 
@@ -67,9 +73,9 @@ namespace UMS.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
             [Required(ErrorMessage ="Please Enter your Name")]
             public string Name { get; set; }
-           
-           
-            
+            public DateTime RegisterDate { get; set; }
+
+
 
 
         }
@@ -86,22 +92,23 @@ namespace UMS.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser
+                var user = new ApplicationUser
                 {
-
                     UserName = Input.Email,
-                    Email = Input.Email,               
+                    Email = Input.Email,   
+                    Name=Input.Name,
+                    RegisterDate=DateTime.Now
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    if (!await _roleManager.RoleExistsAsync("Customer"))
+                    if (!await _roleManager.RoleExistsAsync("Admin"))
                     {
-                        await _roleManager.CreateAsync(new IdentityRole("Customer"));
+                        await _roleManager.CreateAsync(new IdentityRole("Admin"));
                     }
-                    await _userManager.AddToRoleAsync(user, "Customer");
+                    await _userManager.AddToRoleAsync(user, "Admin");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

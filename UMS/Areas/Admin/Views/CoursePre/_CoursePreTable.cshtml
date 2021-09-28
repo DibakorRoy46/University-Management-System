@@ -88,8 +88,12 @@
                         swal("Successfully Deleted", {
                             icon: "success"
                         });
+                        $(".loader").fadeOut(1000);
+                        $(".wrapper").fadeIn(1000);
                         $("#table-container").html(response);
                     }).fail(function (xhr) {
+                        $(".loader").fadeOut(1000);
+                        $(".wrapper").fadeIn(1000);
                         toastr.error("Something went wrong");
                     })
                 }
@@ -105,8 +109,12 @@
                    
                 }
             }).done(function (response) {
+                $(".loader").fadeOut(1000);
+                $(".wrapper").fadeIn(1000);
                 $("#table-container").html(response);
             }).fail(function (xhr) {
+                $(".loader").fadeOut(1000);
+                $(".wrapper").fadeIn(1000);
                 toastr.error("Something Went Wrong");
             })
         })

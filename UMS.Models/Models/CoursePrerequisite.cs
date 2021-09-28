@@ -13,7 +13,7 @@ namespace UMS.Models.Models
         [Key]
         public Guid Id { get; set; }
         [Required(ErrorMessage ="Please Enter the Course Name")]
-        [RegularExpression(@"^[a-zA-Z ]+$")]
+        [RegularExpression(@"^[a-zA-Z() ]+$")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Please Enter the Course Initial")]
         [RegularExpression(@"^[a-zA-Z0-9 ]+$")]

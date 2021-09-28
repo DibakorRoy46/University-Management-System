@@ -21,6 +21,12 @@ namespace UMS.Data.Repository
             CoursePrerequisite = new CoursePrerequisiteRepository(db);
             CourseToCoursePrerequisite = new CourseToCoursePrerequisiteRepository(db);
             Semester = new SemesterRepository(db);
+            ClassTime = new ClassTimeRepository(db);
+            Day = new DayRepository(db);
+            Section = new SectionRepository(db);
+            Activity = new ActivityRepository(db);
+            ApplicationUser = new ApplicationUserRepository(db);
+            UserDetials = new UserDetialsRepository(db);
         }
         public IDepartmentRepository Department { get; private set; }
 
@@ -34,7 +40,16 @@ namespace UMS.Data.Repository
         public ICourseToCoursePrerequisiteRepository CourseToCoursePrerequisite { get; private set; }
 
         public ISemesterRepository Semester { get; private set; }
+        public IClassTimeRepository ClassTime { get; private set; }
 
+        public IDayRepository Day { get; private set; }
+
+        public ISectionRepository Section { get; private set; }
+
+        public IActivityRepository Activity { get; private set; }
+
+        public IApplicationUserRepository ApplicationUser { get; private set; }
+        public IUserDetialsRepository UserDetials { get; private set; }
         public void Dispose()
         {
             _db.Dispose();
