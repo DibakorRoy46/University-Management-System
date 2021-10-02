@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using UMS.Utility;
 namespace UMS.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class CourseController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

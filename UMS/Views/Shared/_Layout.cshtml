@@ -1,7 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
-
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+﻿
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,51 +35,9 @@
 
         <ul class="navbar-nav nav-right">
             <li class="navbar-item avt-wrapper">
-                <div class="avt dropdown-wrapper">
-                    <img src="~/Images/profile.jpg" alt="User image" class="dropdown-toggle-nav" data-toggle="user-menu">
-                    <ul id="user-menu" class="dropdown-menu-nav">
-                        <li class="dropdown-menu-item">
-                            <a class="dropdown-menu-link">
-                                <div>
-                                    <i class="fas fa-user-tie"></i>
-                                </div>
-                                <span>Profile</span>
-                            </a>
-                        </li>
-                        <li class="dropdown-menu-item">
-                            <a href="#" class="dropdown-menu-link">
-                                <div>
-                                    <i class="fas fa-cog"></i>
-                                </div>
-                                <span>Settings</span>
-                            </a>
-                        </li>
-                        <li class="dropdown-menu-item">
-                            <a href="#" class="dropdown-menu-link">
-                                <div>
-                                    <i class="far fa-credit-card"></i>
-                                </div>
-                                <span>Payments</span>
-                            </a>
-                        </li>
-                        <li class="dropdown-menu-item">
-                            <a href="#" class="dropdown-menu-link">
-                                <div>
-                                    <i class="fas fa-spinner"></i>
-                                </div>
-                                <span>Projects</span>
-                            </a>
-                        </li>
-                        <li class="dropdown-menu-item">
-                            @if (SignInManager.IsSignedIn(User))
-                            {
-                            <form id="logoutForm" class="form-inline" asp-area="Admin" asp-controller="Account" asp-action="LogOut" asp-route-returnUrl="@Url.Action("Login", "Account", new { area = "Admin" })">
-                                <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-                            </form>
-                            }
-                        </li>
-                    </ul>
-                </div>
+                
+                    <partial name="_LoginPartial"/>
+               
             </li>
         </ul>
 
@@ -97,7 +52,18 @@
                     <span>
                         Dashboard
                     </span>
-                    
+
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a asp-action="Index" asp-controller="User" asp-area="Admin" class="sidebar-nav-link ">
+                    <div>
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <span>
+                        User
+                    </span>
+
                 </a>
             </li>
             <li class="sidebar-nav-item">
@@ -131,7 +97,7 @@
                         <i class="fas fa-check-circle"></i>
                     </div>
                     <span>Courses</span>
-                    
+
                 </a>
             </li>
 
@@ -191,7 +157,7 @@
                     <span>Roles</span>
                 </a>
             </li>
-            
+
             <li class="nav-item has-submenu sidebar-nav-item">
                 <a class="sidebar-nav-link" href="#">
                     <div>
@@ -225,7 +191,7 @@
                     <span>Praesent</span>
                 </a>
             </li>
-            
+
 
         </ul>
     </div>

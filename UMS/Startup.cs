@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,7 @@ using System.Threading.Tasks;
 using UMS.Data.Data;
 using UMS.Data.IRepository;
 using UMS.Data.Repository;
+using UMS.Utility.Services;
 
 namespace UMS
 {
@@ -35,17 +38,28 @@ namespace UMS
 
             services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders().AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.Configure<IdentityOptions>(opt =>
+            services.AddAuthorization();
+            services.ConfigureApplicationCookie(config =>
             {
-                opt.Password.RequiredLength = 5;
-                opt.Password.RequireLowercase = true;
-                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(30);
-                opt.Lockout.MaxFailedAccessAttempts = 5;
+                config.LoginPath = $"/Login";
+                //config.LogoutPath = $"/Identity/Account/Logout";
+                config.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 
             });
-            services.AddAuthorization();
+          
+            services.Configure<IdentityOptions>(option =>
+            {
+                option.Lockout.MaxFailedAccessAttempts = 3;
+                option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+               
+            });
+            services.Configure<DataProtectionTokenProviderOptions>(option =>
+            {
+                option.TokenLifespan = TimeSpan.FromMinutes(5);
+            });
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddRazorPages();
         }
 
@@ -75,7 +89,8 @@ namespace UMS
             {              
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{area=Admin}/{controller=Account}/{action=Login}/{id?}");           
+                    pattern: "{area=Student}/{controller=Home}/{action=Index}/{id?}");
+               
                 endpoints.MapRazorPages();
             });
         }

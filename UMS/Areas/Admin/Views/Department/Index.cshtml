@@ -72,23 +72,29 @@
         }
 
         $("#resetBtn").click(function () {
-            var searchValue = $("#search").val('');
+            var searchValue = $("#search").val();
             $("#search").val('');
-            $.ajax({
-                url: '@Url.Action("DepartmentTable","Department")',
-                type: "GET",
-                data: {
-                    searchValue: searchValue
-                }
-            }).done(function (response) {
+            if (searchValue != "") {
+                $.ajax({
+                    url: '@Url.Action("DepartmentTable","Department")',
+                    type: "GET"
+                }).done(function (response) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+                    $("#table-container").html(response);
+                }).fail(function (xhr) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+                    toastr.error("Something went error");
+                })
+            }
+            else {
                 $(".loader").fadeOut(1000);
                 $(".wrapper").fadeIn(1000);
-                $("#table-container").html(response);
-            }).fail(function (xhr) {
-                $(".loader").fadeOut(1000);
-                $(".wrapper").fadeIn(1000);
-                toastr.error("Something went error");
-            })
+                toastr.error("Nothing to Reset");
+            }
+            
+
         });
     </script>
 }

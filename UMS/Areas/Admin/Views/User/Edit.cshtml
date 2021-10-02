@@ -1,0 +1,65 @@
+﻿@model UMS.Models.Models.ApplicationUser
+@{
+   
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container" id="main-container">
+    <form method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-12">
+               
+                    <input asp-for="Id" hidden />
+               
+                <h3 class="text-primary">Edit User Profile</h3>
+            </div>
+
+            <div class="col-md-10 col-lg-8 col-sm-12  pt-4">
+                <div class="row form-group my-3">
+                    <div class="col-3">
+                        <label>Name</label>
+                    </div>
+                    <div class="col-8">
+                        <input class="form-control" asp-for="Name" id="name" autocomplete="off" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row form-group my-3">
+                    <div class="col-3">
+                        <label>Phone Number</label>
+                    </div>
+                    <div class="col-8">
+                        <input class="form-control" asp-for="PhoneNumber" id="name" autocomplete="off" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+
+                <div class="row form-group offset-3 my-3">
+                    <div class="col-6">
+                        @if (!Model.Id.Equals(Guid.Empty))
+                        {
+                            <input type="submit" value="Update" id="submitBtn" class="form-control btn btn-success" />
+                        }
+                        else
+                        {
+                            <input type="submit" value="Submit" id="submitBtn" class="form-control btn btn-success" />
+                        }
+                    </div>
+                    <div class="col-6">
+                        <a class="form-control btn btn-primary" asp-action="Index" asp-controller="Home" asp-area="Student"><i class="fas fa-arrow-left"></i> Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+<script>
+    $(".loader").fadeOut(1000);
+    $(".wrapper").fadeIn(1000);
+</script>
+}

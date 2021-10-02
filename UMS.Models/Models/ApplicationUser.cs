@@ -16,12 +16,13 @@ namespace UMS.Models.Models
         public string Name { get; set; }
         public DateTime RegisterDate { get; set; }
         [NotMapped]
-        public string RoleId { get; set; }
+        public IEnumerable<string> RoleId { get; set; }
         [NotMapped]
-        public string Role { get; set; }
+        public  IEnumerable<string> Role { get; set; }
         [NotMapped]
         public IEnumerable<SelectListItem> RoleList { get; set; }
         public IEnumerable<UserDetails> UserDetails { get; set; }
+        
 
 
     }

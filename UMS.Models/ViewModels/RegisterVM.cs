@@ -27,7 +27,7 @@ namespace UMS.Models.ViewModels
         [Required]
         public string Name { get; set; }      
         public IEnumerable<SelectListItem> RoleList { get; set; }
-        public string RoleSelected { get; set; }
+        public IEnumerable<string> RoleSelected { get; set; }
         public IEnumerable<SelectListItem> DepartmentList { get; set; }
         public Guid DepartmentSelected { get; set; }
     }

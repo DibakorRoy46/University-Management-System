@@ -3,10 +3,12 @@
     ViewData["Title"] = "";
     Layout = "_LayoutFirst";
 }
-    <section>
+<span class="d-none" id="message">@TempData["LogoutSuccess"]</span>
+ <section>      
         <div class="form-container">
             <h1>Login Form</h1>
             <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="control">
                     <label for="Email">Name</label>
                     <input asp-for="Email" class="form-control" id="email">
@@ -22,10 +24,16 @@
                     <input type="submit" class="btn" value="Login">
                 </div>
             </form>
-            <p><a href="#">Forget password ?</a></p>
+            <p><a asp-action="ForgetPassword" asp-controller="Account" asp-area="Admin">Forget password ?</a></p>
         </div>
     </section>
 
 @section Scripts{ 
-    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_ValidationScriptsPartial"/>   
+    <script>
+        var message = $("#message").text();
+        if (message != "") {
+            toastr.success(message);
+        }
+    </script>
 }

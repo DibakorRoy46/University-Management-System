@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
+<span class="d-none" id="message">@TempData["LoginSuccess"]</span>
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
@@ -11,6 +11,12 @@
     <script>
         $(".loader").fadeOut(1000);
         $(".wrapper").fadeIn(1000);
+
+
+        var message = $("#message").text();
+        if (message != "") {
+            toastr.success(message);
+        }
     </script>
 
 }

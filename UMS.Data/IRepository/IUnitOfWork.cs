@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UMS.Data.Data;
 
 namespace UMS.Data.IRepository
 {
@@ -21,6 +22,8 @@ namespace UMS.Data.IRepository
         public IActivityRepository Activity { get; }
         public IApplicationUserRepository ApplicationUser { get; }
         public IUserDetialsRepository UserDetials { get; }
+        public IUserRepository User { get; }
+        
         Task SaveAsync();
     }
 }

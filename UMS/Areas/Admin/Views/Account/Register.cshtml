@@ -1,5 +1,5 @@
 ﻿@model UMS.Models.ViewModels.RegisterVM
-    <div class="container py-5">
+    <div class="container py-5" id="main-container">
         <h1 class="text-info">Register</h1>
         <form asp-controller="Account" asp-action="Register" method="post" role="form">
             <h4>Create a new User</h4>
@@ -36,7 +36,7 @@
             <div class="form-group">
                 <label asp-for="RoleSelected" class="col-md-2"></label>
                 <div class="col-md-10">
-                    <select asp-for="RoleSelected" asp-items="@Model.RoleList" class="form-control">
+                    <select asp-for="RoleSelected" asp-items="@Model.RoleList" class="form-control" multiple>
                         <option disabled selected>--Select Role--</option>
                     </select>
                 </div>
@@ -44,7 +44,7 @@
             <div class="form-group">
                 <label asp-for="DepartmentSelected" class="col-md-2"></label>
                 <div class="col-md-10">
-                    <select asp-for="DepartmentSelected" asp-items="@Model.DepartmentList" class="form-control">
+                    <select asp-for="DepartmentSelected" asp-items="@Model.DepartmentList" class="form-control" >
                         <option disabled selected>--Select Department--</option>
                     </select>
                 </div>
