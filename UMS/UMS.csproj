@@ -8,9 +8,11 @@
 
   <ItemGroup>
     <None Remove="Areas\Admin\Controllers\CourseToCourseController.cs~RF7753f9.TMP" />
+    <None Remove="Areas\Admin\Views\Semester\_SemesterTable.cshtml~RF2fa6f2a.TMP" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="IdentityServer4.EntityFramework.Storage" Version="4.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.10" />

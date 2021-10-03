@@ -1,6 +1,6 @@
 ﻿
 @{
- 
+
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -11,3 +11,10 @@
 
 </div>
 
+
+@section Scripts{
+    <script>
+    $(".loader").fadeOut(1000);
+    $(".wrapper").fadeIn(1000);
+    </script>
+}

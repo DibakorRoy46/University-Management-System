@@ -72,9 +72,8 @@ namespace UMS.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-     
-        public async Task<IActionResult> Upsert([FromBody] Department department)
+        [ValidateAntiForgeryToken]  
+        public async Task<IActionResult> Upsert(Department department)
         {
             try
             {

@@ -26,6 +26,7 @@ namespace UMS.Data.Data
         public DbSet<Activity> Activities { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<UserDetails> UserDetails { get; set; }
+        public DbSet<Claims> Claims { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

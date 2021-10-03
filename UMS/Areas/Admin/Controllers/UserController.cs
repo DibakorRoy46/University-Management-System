@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using UMS.Data.Data;
 using UMS.Data.IRepository;
@@ -42,12 +43,13 @@ namespace UMS.Areas.Admin.Controllers
         }
         public async Task<IActionResult>UserTable(string searchValue,string roleId,int pageNo,int pageSize)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             pageNo = pageNo != 0 ? pageNo : 1;
             pageSize = 10;
-            var numberOfUser = await _unitOfWork.User.CountAsync(searchValue, roleId);
+            var numberOfUser = await _unitOfWork.User.CountAsync(searchValue,userId, roleId);
             UserVM userVM = new UserVM()
             {
-                UserList = await _unitOfWork.User.SearchAsync(searchValue, roleId, pageNo, pageSize),
+                UserList = await _unitOfWork.User.SearchAsync(searchValue,userId, roleId, pageNo, pageSize),
                 Search = searchValue,
                 Role = roleId,
                 Pager = new Pager(numberOfUser, pageNo, pageSize)
@@ -113,8 +115,53 @@ namespace UMS.Areas.Admin.Controllers
 
         #endregion
 
+        #region Delete
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id,string searchValue,string roleId,int pageNo)
+        {
+            try
+            {
+                if(!String.IsNullOrEmpty(id))
+                {
+                    var userObj = await _unitOfWork.User.FirstOrDefaultAsync(x => x.Id == id);
+                    if(userObj==null)
+                    {
+                        return NotFound();
+                    }
+                    var userDetails = await _unitOfWork.UserDetials.FirstOrDefaultAsync(x => x.UserId == id);
+                    if(userDetails!=null)
+                    {
+                        await _unitOfWork.UserDetials.RemoveAsync(userDetails);
+                        await _unitOfWork.SaveAsync();
+                    }
+                    
+                    await  _unitOfWork.User.RemoveAsync(userObj);
+                    await _unitOfWork.SaveAsync();
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    pageNo = pageNo != 0 ? pageNo : 1;
+                    int pageSize = 10;
+                    var numberOfUser = await _unitOfWork.User.CountAsync(searchValue,userId, roleId);
+                    UserVM userVM = new UserVM()
+                    {
+                        UserList = await _unitOfWork.User.SearchAsync(searchValue,userId, roleId, pageNo, pageSize),
+                        Search = searchValue,
+                        Role = roleId,
+                        Pager = new Pager(numberOfUser, pageNo, pageSize)
+                    };
+                    return PartialView("_UserTable", userVM);
+
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+        #endregion
+
         #region LockUnLock
-        
+
         public async Task<IActionResult>LockUnLock(string id,int pageNo,string searchValue,string roleId)
         {
             try
@@ -135,12 +182,13 @@ namespace UMS.Areas.Admin.Controllers
                         user.LockoutEnd = DateTime.Now.AddYears(100);
                     }
                     await _unitOfWork.SaveAsync();
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     pageNo = pageNo != 0 ? pageNo : 1;
                     int pageSize = 10;
-                    var numberOfUser = await _unitOfWork.User.CountAsync(searchValue, roleId);
+                    var numberOfUser = await _unitOfWork.User.CountAsync(searchValue,userId, roleId);
                     UserVM userVM = new UserVM()
                     {
-                        UserList = await _unitOfWork.User.SearchAsync(searchValue, roleId, pageNo, pageSize),
+                        UserList = await _unitOfWork.User.SearchAsync(searchValue,userId, roleId, pageNo, pageSize),
                         Search = searchValue,
                         Role = roleId,
                         Pager = new Pager(numberOfUser, pageNo, pageSize)
@@ -160,6 +208,7 @@ namespace UMS.Areas.Admin.Controllers
             }
         }
         #endregion
+
         #region AccessDenied
         [HttpGet]
         [Authorize]
@@ -169,6 +218,7 @@ namespace UMS.Areas.Admin.Controllers
             return View();
         }
         #endregion
+
         #region ManageRole
         public async Task<IActionResult> ManageRole(string id)
         {
@@ -288,7 +338,91 @@ namespace UMS.Areas.Admin.Controllers
             return PartialView("_ManageRolePartial", userRolePartialVM);
 
         }
+        #endregion
 
+        #region AssignClaimtoRole
+        public async Task<IActionResult> AssignClaimToUser(string id)
+        {
+            var cliamList = await _unitOfWork.Claims.GetAllAsync();
+            ManageUserClaimVM manageClaim = new ManageUserClaimVM()
+            {
+                User = await _unitOfWork.User.FirstOrDefaultAsync(x => x.Id == id),
+                UserId = id,
+            };
+            var userClaimList = await _userManager.GetClaimsAsync(manageClaim.User);
+            List<string> assignClaim = userClaimList.Select(x => x.Type).ToList();
+            var dropClaimList = cliamList.Where(x => !assignClaim.Contains(x.ClaimType)).ToList();
+            manageClaim.ClaimList = dropClaimList.Select(x => new SelectListItem
+            {
+                Text = x.ClaimType,
+                Value = x.Id.ToString()
+            });
+            return View(manageClaim);
+        }
+        public async Task<IActionResult> ManageClaimPartial(string id)
+        {
+            var user =await _userManager.FindByIdAsync(id);
+            UserClaimPartial userClaim = new UserClaimPartial()
+            {
+                UserClaimList= await _userManager.GetClaimsAsync(user),
+                UserId = id
+            };
+            return PartialView("_ManageClaimPartial", userClaim);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AssignClaimToUser(string userId,Guid claimId)
+        {
+            if(!String.IsNullOrEmpty(userId)&& Guid.Empty!=claimId)
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+                if(user==null)
+                {
+                    return NotFound();
+                }
+                var claim = await _unitOfWork.Claims.FirstOrDefaultAsync(x => x.Id == claimId);
+                if(claim==null)
+                {
+                    return NotFound();
+                }
+                var existsClaimType = await _db.UserClaims.Where(x=>x.UserId==user.Id).Select(x=>x.ClaimType).ToListAsync();
+                var existsClaimValue = await _db.UserClaims.Where(x => x.UserId == user.Id).Select(x=>x.ClaimValue).ToListAsync();
+                if(existsClaimType.Contains(claim.ClaimType)&&existsClaimValue.Contains(claim.ClaimValue))
+                {
+                    return NotFound();
+                }
+                
+                await _userManager.AddClaimAsync(user,new Claim(claim.ClaimType, claim.ClaimValue));
+                
+                UserClaimPartial userClaim = new UserClaimPartial()
+                {
+                    UserClaimList = await _userManager.GetClaimsAsync(user),
+                    UserId = userId
+                };
+                return PartialView("_ManageClaimPartial", userClaim);
+            }
+            return BadRequest();
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteClaimOfUser(string userId,string claimType,string claimValue)
+        {
+            if (!String.IsNullOrEmpty(userId) && !String.IsNullOrEmpty(claimType) &&!String.IsNullOrEmpty(claimValue))
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+                if(user==null)
+                {
+                    return NotFound();
+                }
+                await _userManager.RemoveClaimAsync(user, new Claim(claimType, claimValue));
+              
+                UserClaimPartial userClaim = new UserClaimPartial()
+                {
+                    UserClaimList = await _userManager.GetClaimsAsync(user),
+                    UserId = userId
+                };
+                return PartialView("_ManageClaimPartial", userClaim);
+            }
+            return BadRequest();
+        }
         #endregion
     }
 }

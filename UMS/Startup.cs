@@ -39,11 +39,12 @@ namespace UMS
             services.AddIdentity<IdentityUser, IdentityRole>().AddDefaultTokenProviders().AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddAuthorization();
+           
             services.ConfigureApplicationCookie(config =>
             {
                 config.LoginPath = $"/Login";
                 //config.LogoutPath = $"/Identity/Account/Logout";
-                config.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+                config.AccessDeniedPath = new PathString("/AccessDenied"); 
 
             });
           
@@ -59,6 +60,8 @@ namespace UMS
             });
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+           
+            services.AddHttpContextAccessor();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddRazorPages();
         }

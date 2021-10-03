@@ -1,31 +1,32 @@
-﻿@model UMS.Models.ViewModels.SemesterVM
+﻿@model UMS.Models.ViewModels.ClaimVM
 
 <div class="table-responsive">
     <table class="table table-hover">
         <thead class="table-secondary">
             <tr>
                 <th>#</th>
-                <th>Name</th>          
+                <th>CLaimType</th>
+                <th>ClaimValue</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @if (Model.SemesterList.Count() > 0)
+            @if (Model.ClaimList.Count() > 0)
             {
                 int i = 0;
-                foreach (var semester in Model.SemesterList)
+                foreach (var claim in Model.ClaimList)
                 {
                     i++;
 
                     <tr>
                         <td>@(i)</td>
-                        <td>@semester.Name</td>
-                     
-                        
+                        <td>@claim.ClaimType</td>
+                        <td>@claim.ClaimType</td>
+
 
                         <td>
-                            <a class="btn btn-primary" asp-action="Upsert" asp-route-id="@semester.Id"><i class="fas fa-edit"></i></a>
-                            <button class="btn btn-danger deleteBtn" data-id="@semester.Id"><i class="fas fa-trash-alt"></i></button>
+                            <a class="btn btn-primary" asp-action="Upsert" asp-route-id="@claim.Id"><i class="fas fa-edit"></i></a>
+                            <button class="btn btn-danger deleteBtn" data-id="@claim.Id"><i class="fas fa-trash-alt"></i></button>
                         </td>
                     </tr>
                 }
@@ -34,7 +35,7 @@
             {
                 <tr>
                     <td></td>
-                    <td class="text-danger">No Semesters Available</td>
+                    <td class="text-danger">No Claims Available</td>
                     <td></td>
                 </tr>
             }
@@ -76,7 +77,7 @@
             }).then((willDelete) => {
                 if (willDelete) {
                     $.ajax({
-                        url: '@Url.Action("Delete", "Semester")',
+                        url: '@Url.Action("Delete", "Claim")',
                         type: "POST",
                         data: {
                             id: $(this).attr("data-id")
@@ -99,7 +100,7 @@
 
         $(".page-buttons").click(function () {
             $.ajax({
-                url: '@Url.Action("SemesterTable", "Semester")',
+                url: '@Url.Action("ClaimTable", "Claim")',
                 data: {
                     pageNo: $(this).attr("data-pageNo"),
                     searchValue: '@Model.Search'

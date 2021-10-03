@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using UMS.Data.Data;
@@ -13,13 +16,16 @@ namespace UMS.Data.Repository
     public class UserRepository : Repository<ApplicationUser>, IUserRepository
     {
         private readonly ApplicationDbContext _db;
-        public UserRepository(ApplicationDbContext db):base(db)
+      
+        public UserRepository(ApplicationDbContext db) :base(db)
         {
             _db = db;
+            
         }
-        public async Task<int> CountAsync(string search, string roleId)
+        public async Task<int> CountAsync(string search,string userId, string roleId)
         {
-            var userList = await _db.ApplicationUsers.ToListAsync();
+            
+            var userList = await _db.ApplicationUsers.Where(x=>x.Id!=userId).ToListAsync();
             var roleList = await _db.Roles.ToListAsync();
             var userRole = await _db.UserRoles.ToListAsync();
             foreach (var user in userList)
@@ -58,9 +64,10 @@ namespace UMS.Data.Repository
 
         }
 
-        public async Task<IEnumerable<ApplicationUser>> SearchAsync(string search, string roleId, int pageNo, int pageSize)
+        public async Task<IEnumerable<ApplicationUser>> SearchAsync(string search,string userId, string roleId, int pageNo, int pageSize)
         {
-            var userList = await _db.ApplicationUsers.ToListAsync();
+            
+            var userList = await _db.ApplicationUsers.Where(x => x.Id != userId).ToListAsync();
             var roleList = await _db.Roles.ToListAsync();
             var userRole = await _db.UserRoles.ToListAsync();
             foreach (var user in userList)

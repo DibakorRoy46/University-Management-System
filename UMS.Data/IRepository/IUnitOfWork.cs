@@ -23,6 +23,7 @@ namespace UMS.Data.IRepository
         public IApplicationUserRepository ApplicationUser { get; }
         public IUserDetialsRepository UserDetials { get; }
         public IUserRepository User { get; }
+        public IClaimRepository Claims { get; }
         
         Task SaveAsync();
     }
