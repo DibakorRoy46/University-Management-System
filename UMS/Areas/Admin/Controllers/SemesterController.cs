@@ -12,7 +12,7 @@ using UMS.Utility;
 namespace UMS.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles ="Admin, Super Admin")]
     public class SemesterController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

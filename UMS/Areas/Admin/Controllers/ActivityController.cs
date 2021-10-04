@@ -12,8 +12,7 @@ using UMS.Utility;
 namespace UMS.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles ="Admin")]
-
+    [Authorize(Roles ="Super Admin,Admin")]
     public class ActivityController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

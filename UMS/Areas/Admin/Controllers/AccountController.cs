@@ -47,6 +47,7 @@ namespace UMS.Areas.Admin.Controllers
 
         #region Register
         [Route("Register")]
+        [Authorize(Policy = "AdminOrRegisterClaim")]
         public async Task<IActionResult> Register(string returnurl = null)
         {
             ViewData["ReturnUrl"] = returnurl;
@@ -72,6 +73,7 @@ namespace UMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Register")]
+        [Authorize(Policy = "AdminOrRegisterClaim")]
         public async Task<IActionResult>Register( RegisterVM model,string returnurl=null)
         {
             ViewData["ReturnUrl"] = returnurl;
@@ -96,11 +98,15 @@ namespace UMS.Areas.Admin.Controllers
                             await _userManager.AddToRoleAsync(user, role.Name);
                         }                      
                         var department = await _unitOfWork.Department.FirstOrDefaultAsync(x => x.Id.Equals(model.DepartmentSelected));                       
-                        UserDetails userDetails = new UserDetails();
-                        userDetails.UserId = user.Id;
-                        userDetails.DepartmentId = model.DepartmentSelected;
-                        await _unitOfWork.UserDetials.AddAsync(userDetails);
-                        await _unitOfWork.SaveAsync();
+                        if(model.DepartmentSelected!=null)
+                        {
+                            UserDetails userDetails = new UserDetails();
+                            userDetails.UserId = user.Id;
+                            userDetails.DepartmentId = model.DepartmentSelected.Value;
+                            await _unitOfWork.UserDetials.AddAsync(userDetails);
+                            await _unitOfWork.SaveAsync();
+                        }
+                      
                     }
                     TempData["success"] = "Account Created Successfully";
                     return RedirectToAction("Index","Home",new { area="Student"});
@@ -128,16 +134,15 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
 
         #region Login
-        [Route("Login")]
-        
+        [Route("Login")] 
+        [Route("Admin/Account/Login")]
         [AllowAnonymous]
         public async Task<IActionResult>Login()
         {
             return View();
         }
         [Route("Login")]
-        
-        
+        [Route("Admin/Account/Login")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
@@ -174,6 +179,7 @@ namespace UMS.Areas.Admin.Controllers
 
         #region LogOut
         [Route("Logout")]
+        
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();

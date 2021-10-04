@@ -42,8 +42,8 @@ namespace UMS
            
             services.ConfigureApplicationCookie(config =>
             {
-                config.LoginPath = $"/Login";
-                //config.LogoutPath = $"/Identity/Account/Logout";
+                config.LoginPath = new PathString("/Login"); 
+                config.LogoutPath =new PathString("/Logout");
                 config.AccessDeniedPath = new PathString("/AccessDenied"); 
 
             });
@@ -63,6 +63,14 @@ namespace UMS
            
             services.AddHttpContextAccessor();
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOrRegisterClaim",
+                    policy => policy.RequireAssertion(context =>
+                    context.User.IsInRole("Super Admin") ||context.User.IsInRole("Admin")||
+                    context.User.HasClaim(claim => claim.Type == "Register")));
+                
+            });
             services.AddRazorPages();
         }
 
@@ -97,5 +105,6 @@ namespace UMS
                 endpoints.MapRazorPages();
             });
         }
+
     }
 }

@@ -17,7 +17,7 @@ using UMS.Utility;
 namespace UMS.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "Super Admin,Admin,Program Officer")]
     public class UserController : Controller
     {
       
@@ -60,6 +60,7 @@ namespace UMS.Areas.Admin.Controllers
 
         #region Edit 
         [Route("User/Edit/")]
+        
         public async Task<IActionResult> Edit(string Id)
         {
             try
@@ -116,7 +117,9 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
 
         #region Delete
+        
         [HttpPost]
+        [Authorize(Roles = "Super Admin,Admin")]
         public async Task<IActionResult> Delete(string id,string searchValue,string roleId,int pageNo)
         {
             try
@@ -220,6 +223,7 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
 
         #region ManageRole
+        [Authorize(Roles = "Super Admin,Admin")]
         public async Task<IActionResult> ManageRole(string id)
         {
             var roleList = await _db.Roles.ToListAsync();
@@ -251,6 +255,7 @@ namespace UMS.Areas.Admin.Controllers
             });
           return View(manageRole);           
         }
+        [Authorize(Roles = "Super Admin,Admin")]
         public async Task<IActionResult>ManageRolePartial(string id)
         {
             UserRolePartialVM userRolePartialVM = new UserRolePartialVM()
@@ -271,7 +276,7 @@ namespace UMS.Areas.Admin.Controllers
         }
         
         [HttpPost]
-       
+        [Authorize(Roles = "Super Admin,Admin")]
         public async Task<IActionResult> ManageRole(string userId,string roleId)
         {
             if(!String.IsNullOrEmpty(userId)&&!String.IsNullOrEmpty(roleId))
@@ -311,6 +316,7 @@ namespace UMS.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Super Admin,Admin")]
         public async Task<IActionResult> DeleteRole(string userId, string roleId)
         {
             var userRoleObj = await _db.UserRoles.FirstOrDefaultAsync(x => x.UserId == userId && x.RoleId == roleId);
@@ -341,6 +347,7 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
 
         #region AssignClaimtoRole
+        [Authorize(Roles = "Super Admin,Admin")]
         public async Task<IActionResult> AssignClaimToUser(string id)
         {
             var cliamList = await _unitOfWork.Claims.GetAllAsync();
@@ -359,6 +366,7 @@ namespace UMS.Areas.Admin.Controllers
             });
             return View(manageClaim);
         }
+        [Authorize(Roles = "Super Admin,Admin")]
         public async Task<IActionResult> ManageClaimPartial(string id)
         {
             var user =await _userManager.FindByIdAsync(id);
@@ -370,6 +378,7 @@ namespace UMS.Areas.Admin.Controllers
             return PartialView("_ManageClaimPartial", userClaim);
         }
         [HttpPost]
+        [Authorize(Roles = "Super Admin,Admin")]
         public async Task<IActionResult> AssignClaimToUser(string userId,Guid claimId)
         {
             if(!String.IsNullOrEmpty(userId)&& Guid.Empty!=claimId)
@@ -403,6 +412,7 @@ namespace UMS.Areas.Admin.Controllers
             return BadRequest();
         }
         [HttpPost]
+        [Authorize(Roles = "Super Admin,Admin")]
         public async Task<IActionResult> DeleteClaimOfUser(string userId,string claimType,string claimValue)
         {
             if (!String.IsNullOrEmpty(userId) && !String.IsNullOrEmpty(claimType) &&!String.IsNullOrEmpty(claimValue))
