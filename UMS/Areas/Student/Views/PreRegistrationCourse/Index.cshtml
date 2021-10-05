@@ -1,0 +1,78 @@
+﻿@using Microsoft.AspNetCore.Identity 
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" id="main-container">
+    <h2 class="text-center text-primary border-bottom">Preregistration</h2>
+    <div class="row mt-4">
+        @if(User.IsInRole("Student"))
+        {
+            <div class="col-12 border mb-4 py-3">
+                <h2 class="text-center">Preregistration Course</h2>
+                <div id="PreCourseList">
+
+                </div>
+            </div>
+        }
+        <div class="col-12 border py-5">
+            <div class="col-6">
+                <div class="input-group">
+                    <input class="form-control" placeholder="Search..." id="search" />
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="fas fa-search"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4"></div>
+            <div class="col-12" id="CourseList">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{ 
+    <script>
+
+    $(document).ready(function () {
+        getCourseData();
+        if ('@User.IsInRole("Student")') {
+            getPreCourseData();
+        }
+
+    });
+    function getCourseData() {
+        $.ajax({
+            url: '@Url.Action("CourseTable", "PreRegistrationCourse")',
+            type: "GET"
+        }).done(function (response) {
+            $(".loader").fadeOut(1000);
+            $(".wrapper").fadeIn(1000);
+            $("#CourseList").html(response);
+        }).fail(function (xhr) {
+            $(".loader").fadeOut(1000);
+            $(".wrapper").fadeIn(1000);
+            toastr.error("Something went wrong");
+        })
+    }
+        if ('@User.IsInRole("Student")') {
+            function getPreCourseData() {
+                $.ajax({
+                    url: '@Url.Action("SelectPreCourseTable", "PreRegistrationCourse")',
+                    type: "GET"
+                }).done(function (response) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+                    $("#PreCourseList").html(response);
+                }).fail(function (xhr) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+                    toastr.error("Something went wrong");
+                })
+            }
+        }
+    </script>
+}

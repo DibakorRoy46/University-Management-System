@@ -22,7 +22,8 @@ namespace UMS.Models.Models
         [NotMapped]
         public IEnumerable<SelectListItem> RoleList { get; set; }
         public IEnumerable<UserDetails> UserDetails { get; set; }
-        
+        public IEnumerable<AssignPreRegistrationCourse> PreRegistrationCourses { get; set; }
+
 
 
     }

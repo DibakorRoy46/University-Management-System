@@ -69,6 +69,8 @@ namespace UMS
                     policy => policy.RequireAssertion(context =>
                     context.User.IsInRole("Super Admin") ||context.User.IsInRole("Admin")||
                     context.User.HasClaim(claim => claim.Type == "Register")));
+
+                
                 
             });
             services.AddRazorPages();

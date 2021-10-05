@@ -7,9 +7,7 @@ a.navbar-brand {
 }
 
 /* Provide sufficient contrast against white background */
-a {
-    color: #0366d6;
-}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -327,9 +325,7 @@ h1 {
     opacity: 1;
     background:red;
 }
-.control .btn:hover {
-    background: red;
-}
+
 
 p {
     text-align: center;
@@ -344,6 +340,9 @@ a {
         opacity: 1;
         text-decoration:none;
     }
+   
+
+
 .navbar-nav {
     list-style: none;
     display: flex;

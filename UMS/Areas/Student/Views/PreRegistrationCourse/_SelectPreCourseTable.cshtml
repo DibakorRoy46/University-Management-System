@@ -1,0 +1,48 @@
+﻿@model UMS.Models.ViewModels.PreCourseVM
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-secondary ">
+            <tr class="table-head">
+                <th>#</th>
+                <th>Code</th>
+                <th>Title</th>
+                <th>Credits</th>
+               
+            </tr>
+        </thead>
+        <tbody class="table-body">
+            @if (Model.CourseList.Count() > 0)
+            {
+                var i = 0;
+                foreach (var course in Model.CourseList)
+                {
+                    i++;
+                    <tr>
+                        <td>@i</td>
+
+                        <td>@course.Course.Initial</td>
+                        <td>@course.Course.Name</td>
+                        <td>@course.Course.CourseProtoType.Credit</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="text-danger">No Course  Available</td>
+                    <td></td>                 
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".loader").fadeOut(1000);
+        $(".wrapper").fadeIn(1000);
+    });
+</script>

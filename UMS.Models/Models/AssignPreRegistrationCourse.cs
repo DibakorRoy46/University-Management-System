@@ -8,17 +8,13 @@ using System.Threading.Tasks;
 
 namespace UMS.Models.Models
 {
-    public class UserDetails
+    public class AssignPreRegistrationCourse
     {
-        [Key]
-        public Guid Id { get; set; }
-
-        public string UserId { get; set; }
-        [ForeignKey("UserId")]
+        public string StudentId { get; set; }
+        
         public ApplicationUser ApplicationUser { get; set; }
-        public Guid DepartmentId { get; set; }
-        [ForeignKey("DepartmentId")]
-        public Department Department { get; set; }
+        public Guid CourseId { get; set; }
+        public Course Course { get; set; }
         
     }
 }

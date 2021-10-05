@@ -151,8 +151,13 @@ namespace UMS.Areas.Admin.Controllers
                     else
                     {
                         await _unitOfWork.Course.UpdateAsync(courseUpsertVM.Course);
-                        
-                        if (!courseUpsertVM.Course.CoursePreId.Equals(Guid.Empty))
+                        TempData["message"] = "Successfully Updated";
+                        await _unitOfWork.SaveAsync();
+                        if(courseUpsertVM.Course.CoursePreId==null)
+                        {
+                            return RedirectToAction(nameof(Index));
+                        }
+                        if (courseUpsertVM.Course.CoursePreId != null && !courseUpsertVM.Course.CoursePreId.Equals(Guid.Empty) )
                         {
                             foreach (var course in courseUpsertVM.Course.CoursePreId)
                             {
@@ -160,13 +165,12 @@ namespace UMS.Areas.Admin.Controllers
                                 courseToCoursePre.CourseId = courseUpsertVM.Course.Id;
                                 courseToCoursePre.CoursePreId = course;
                                 await _unitOfWork.CourseToCoursePrerequisite.AddAsync(courseToCoursePre);
-                                await _unitOfWork.SaveAsync();
+                                await _unitOfWork.SaveAsync();                             
                             }
-                        }
-                        TempData["message"] = "Successfully Updated";
-                        await _unitOfWork.SaveAsync();
-                    }         
+                        }                     
+                    }
                     return RedirectToAction(nameof(Index));
+
                 }
                 else
                 {

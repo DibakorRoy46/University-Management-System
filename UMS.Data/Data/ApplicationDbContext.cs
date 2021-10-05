@@ -27,6 +27,7 @@ namespace UMS.Data.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<UserDetails> UserDetails { get; set; }
         public DbSet<Claims> Claims { get; set; }
+        public DbSet<AssignPreRegistrationCourse> PreRegistrationCourses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -43,6 +44,18 @@ namespace UMS.Data.Data
                 HasOne<CoursePrerequisite>(x => x.CoursePrerequisite).
                 WithMany(x => x.CourseToCoursePrerequisites).
                 HasForeignKey(x => x.CoursePreId);
+
+            builder.Entity<AssignPreRegistrationCourse>().HasKey(x => new { x.CourseId, x.StudentId });
+
+            builder.Entity<AssignPreRegistrationCourse>().
+                HasOne<Course>(x => x.Course).
+                WithMany(x => x.PreRegistrationCourses).
+                HasForeignKey(x => x.CourseId);
+
+            builder.Entity<AssignPreRegistrationCourse>().
+                HasOne<ApplicationUser>(x => x.ApplicationUser).
+                WithMany(x => x.PreRegistrationCourses).
+                HasForeignKey(x => x.StudentId);
 
         }
     }

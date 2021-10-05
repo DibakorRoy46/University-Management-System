@@ -50,9 +50,7 @@ function closeAllDropdown() {
 
 function openCloseDropdown(event) {
 	if (!event.target.matches('.dropdown-toggle-nav')) {
-		// 
-		// Close dropdown when click out of dropdown menu
-		// 
+		
 		closeAllDropdown()
 	} else {
 		var toggle = event.target.dataset.toggle

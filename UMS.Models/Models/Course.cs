@@ -30,5 +30,8 @@ namespace UMS.Models.Models
         [NotMapped]      
         public IEnumerable<Guid> CoursePreId { get; set; }
         public IEnumerable<CourseToCoursePrerequisite> CourseToCoursePrerequisites { get; set; }
+        public IEnumerable<AssignPreRegistrationCourse> PreRegistrationCourses { get; set; }
+        [NotMapped]
+        public bool IsTaken { get; set; }
     }
 }

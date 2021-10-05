@@ -1,0 +1,109 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model UMS.Models.ViewModels.PreRegistrationVM
+
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-secondary ">
+            <tr class="table-head">
+                <th>#</th>
+                <th>Code</th>
+                <th>Title</th>
+                <th>Credits</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="table-body">
+            @if (Model.CourseList.Count() > 0)
+            {
+                var i = 0;
+                foreach (var course in Model.CourseList)
+                {
+                    i++;
+                    <tr>
+                        <td>@i</td>
+
+                        <td>@course.Initial</td>
+                        <td>@course.Name</td>
+                        <td>@course.CourseProtoType.Credit</td>
+                         @if(User.IsInRole("Student"))
+                         {
+                             @if (course.IsTaken == true)
+                             {
+                                 
+                                 <td>
+                                     <button class="btn select btn-danger form-control "  data-id="@course.Id">Remove</button>                                  
+                                 </td>
+                              }
+                              else
+                              {
+                                   
+                                <td>
+                                     <button class="btn btn-primary select form-control course" data-id="@course.Id">Add</button>                                                         
+                                </td>
+                              }
+                          }                      
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td></td>                 
+                    <td class="text-danger">No Course  Available</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $(".select").click(function () {
+            if ($(this).hasClass("btn-primary")) {
+                 $.ajax({
+                    url: '@Url.Action("SelectPreregistationCourse", "PreRegistrationCourse")',
+                    type: "POST",
+                    data: {
+                        userId: '@Model.User.Id',
+                        courseId: $(this).attr("data-id")
+                    }
+                }).done(function (response) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+                    toastr.success("Successfully Added");
+                    $("#PreCourseList").html(response);
+                    
+                })
+                $(this).removeClass("btn-primary");
+                $(this).addClass("btn-danger");
+                $(this).html("Remove");
+            }
+           else{
+                  $.ajax({
+                    url: '@Url.Action("DeletePreregistationCourse", "PreRegistrationCourse")',
+                    type: "POST",
+                    data: {
+                        userId: '@Model.User.Id',
+                        courseId: $(this).attr("data-id")
+                    }
+                }).done(function (response) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+                    toastr.success("Successfully Removed");
+                    $("#PreCourseList").html(response);
+                    
+                })
+                $(this).removeClass("btn-danger");
+                $(this).addClass("btn-primary");
+
+                $(this).html("Add");
+            }
+        });
+    });
+</script>
