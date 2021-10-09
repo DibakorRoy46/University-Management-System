@@ -375,6 +375,28 @@ namespace UMS.Data.Migrations
                     b.ToTable("Courses");
                 });
 
+            modelBuilder.Entity("UMS.Models.Models.CourseContent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("CourseContents");
+                });
+
             modelBuilder.Entity("UMS.Models.Models.CoursePrerequisite", b =>
                 {
                     b.Property<Guid>("Id")
@@ -724,6 +746,17 @@ namespace UMS.Data.Migrations
                     b.Navigation("Department");
                 });
 
+            modelBuilder.Entity("UMS.Models.Models.CourseContent", b =>
+                {
+                    b.HasOne("UMS.Models.Models.AssignRegistrationCourse", "Courses")
+                        .WithMany("CourseContents")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Courses");
+                });
+
             modelBuilder.Entity("UMS.Models.Models.CourseToCoursePrerequisite", b =>
                 {
                     b.HasOne("UMS.Models.Models.Course", "Course")
@@ -800,6 +833,8 @@ namespace UMS.Data.Migrations
 
             modelBuilder.Entity("UMS.Models.Models.AssignRegistrationCourse", b =>
                 {
+                    b.Navigation("CourseContents");
+
                     b.Navigation("StudentRegisteationCourses");
                 });
 

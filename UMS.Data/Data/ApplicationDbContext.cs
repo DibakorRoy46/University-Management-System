@@ -31,6 +31,7 @@ namespace UMS.Data.Data
         public DbSet<PreregistrationCourses> CourseforPreregistration { get; set; }
         public DbSet<AssignRegistrationCourse> AssignRegistrationCourses { get; set; }
         public DbSet<StudentRegisteationCourse> StudentRegisteationCourses { get; set; }
+        public DbSet<CourseContent> CourseContents { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

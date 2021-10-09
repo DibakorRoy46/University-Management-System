@@ -40,6 +40,7 @@ namespace UMS.Controllers
                     GetPreCourses(userId, semesterObj.Id, DateTime.Now.Year);
             }
             return View();
+
         }
 
         public IActionResult Privacy()

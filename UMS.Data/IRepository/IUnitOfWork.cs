@@ -28,6 +28,7 @@ namespace UMS.Data.IRepository
         public IPreregiCoursesRepository PreregiCourses { get; }
         public IAssignRegistrationCourseRepository AssignRegistrationCourse { get; }
         public IRegistrationCourseRepository RegistrationCourse { get; }
+        public ICourseContentRepository CourseContent { get; }
         Task SaveAsync();
     }
 }

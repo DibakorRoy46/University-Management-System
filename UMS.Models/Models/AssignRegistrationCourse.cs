@@ -39,7 +39,7 @@ namespace UMS.Models.Models
         public bool IsTaken { get; set; }
         [NotMapped]
         public int Count { get; set; }
-
+        public IEnumerable<CourseContent> CourseContents { get; set; }
     
     }
 }
