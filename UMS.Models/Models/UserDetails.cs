@@ -19,6 +19,7 @@ namespace UMS.Models.Models
         public Guid DepartmentId { get; set; }
         [ForeignKey("DepartmentId")]
         public Department Department { get; set; }
+
         
     }
 }

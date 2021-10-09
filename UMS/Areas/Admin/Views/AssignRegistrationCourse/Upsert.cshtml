@@ -1,0 +1,316 @@
+﻿@model UMS.Models.ViewModels.AssginRegistrationCourseUpsertVM
+@{
+    var title = "Assign Registration Course";
+    ViewData["Title"] = "Upsert";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" id="main-container">
+    <form method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-12">
+                @if (!Model.AssignRegistrationCourse.Id.Equals(Guid.Empty))
+                {
+                    title = "Edit Assign Registration Course";
+                    <input asp-for="AssignRegistrationCourse.Id" hidden />
+                }
+                <h3 class="text-primary text-center">@title</h3>
+            </div>
+           
+            <div class="col-12  mt-4">
+                <div class="row">
+                    @if (!Model.AssignRegistrationCourse.Id.Equals(Guid.Empty))
+                    {
+                        <div class="col-sm-12 col-lg-6 col-md-6 mb-3">
+                            <div class="row form-group">
+                                <div class="col-3">
+                                    <label>Department Name</label>
+                                </div>
+                                <div class="col-8" id="departmentdiv">
+                                    <select class="form-control" id="departmentId" asp-for="AssignRegistrationCourse.DepartmentId" asp-items="Model.DepartemntList" disabled>
+                                        <option selected disabled value="#">--Select Department--</option>
+                                    </select>
+                                    <span asp-validation-for="AssignRegistrationCourse.DepartmentId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6 col-md-6 mb-3">
+                            <div class="row form-group">
+                                <div class="col-3">
+                                    <label>Course Name</label>
+                                </div>
+                                <div class="col-8">
+                                    <select class="form-control" id="courseId" asp-for="AssignRegistrationCourse.CourseId" asp-items="Model.CourseList" disabled>
+                                        <option selected disabled value="#">--Select Course--</option>
+                                    </select>
+                                    <span asp-validation-for="AssignRegistrationCourse.CourseId" class=" text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-sm-12 col-lg-6 col-md-6 mb-3">
+                            <div class="row form-group">
+                                <div class="col-3">
+                                    <label>Department Name</label>
+                                </div>
+                                <div class="col-8" id="departmentdiv">
+                                    <select class="form-control" id="departmentId" asp-for="AssignRegistrationCourse.DepartmentId" asp-items="Model.DepartemntList">
+                                        <option selected disabled value="#">--Select Course--</option>
+                                    </select>
+                                    <span asp-validation-for="AssignRegistrationCourse.DepartmentId" class=" text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6 col-md-6 mb-3">
+                            <div class="row form-group">
+                                <div class="col-3">
+                                    <label>Course Name</label>
+                                </div>
+                                <div class="col-8">
+                                    <select class="form-control" id="courseId" asp-for="AssignRegistrationCourse.CourseId" asp-items="Model.CourseList">
+                                        <option selected disabled value="#">--Select Course--</option>
+                                    </select>
+                                    <span asp-validation-for="AssignRegistrationCourse.CourseId" class=" text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Semester</label>
+                            </div>
+                            <div class="col-8">
+                                <select class="form-control" id="semesterId" asp-for="AssignRegistrationCourse.SemesterId" asp-items="Model.SemesterList">
+                                    <option selected disabled value="">--Select Semester--</option>
+                                </select>
+                                <span asp-validation-for="AssignRegistrationCourse.SemesterId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Teacher</label>
+                            </div>
+                            <div class="col-8" id="teacherdiv">
+                                <select class="form-control" id="teacherId" asp-for="AssignRegistrationCourse.TeacherId" asp-items="Model.TeacherList">
+                                    <option selected disabled value="">--Select Teacher--</option>
+                                </select>
+                                <span asp-validation-for="AssignRegistrationCourse.TeacherId" class="text-danger"></span>
+                                <span class="text-primary" id="teacher-span"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Section</label>
+                            </div>
+                            <div class="col-8">
+                                <select class="form-control" id="sectionId" asp-for="AssignRegistrationCourse.SectionId" asp-items="Model.SectionList">
+                                    <option selected disabled value="">--Select Section--</option>
+                                </select>
+                                <span asp-validation-for="AssignRegistrationCourse.SectionId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Year</label>
+                            </div>
+                            <div class="col-8">
+                                <input asp-for="AssignRegistrationCourse.Year" class="form-control" />
+                                <span asp-validation-for="AssignRegistrationCourse.SectionId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>First Day</label>
+                            </div>
+                            <div class="col-8">
+                                <select asp-for="AssignRegistrationCourse.FirstDate" class="form-control" asp-items="Model.DayList">
+                                    <option value="#">--Select First Day--</option>
+                                </select>
+                                <span asp-validation-for="AssignRegistrationCourse.FirstDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Second Day</label>
+                            </div>
+                            <div class="col-8">
+                                <select asp-for="AssignRegistrationCourse.SecondDate" class="form-control" asp-items="Model.DayList">
+                                    <option value="#">--Select Second Day--</option>
+                                </select>
+                                <span asp-validation-for="AssignRegistrationCourse.SecondDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Start Time</label>
+                            </div>
+                            <div class="col-8">
+                                <input type="time" id="startTime" asp-for="AssignRegistrationCourse.StartTime" class="form-control" />
+                                <span asp-validation-for="AssignRegistrationCourse.StartTime" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>End Time</label>
+                            </div>
+                            <div class="col-8">
+                                <input type="time" id="endTime" asp-for="AssignRegistrationCourse.EndTime" class="form-control" />
+                                <span asp-validation-for="AssignRegistrationCourse.EndTime" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row col-8 form-group offset-2 my-3">
+                    <div class="col-6">
+                        @if (!Model.AssignRegistrationCourse.Id.Equals(Guid.Empty))
+                        {
+                            <input type="submit" value="Update" id="submitBtn" class="form-control btn btn-success" />
+                        }
+                        else
+                        {
+                            <input type="submit" value="Submit" id="submitBtn" class="form-control btn btn-success" />
+                        }
+                    </div>
+                    <div class="col-6">
+                        <a class="form-control btn btn-primary" asp-action="Index"><i class="fas fa-arrow-left"></i> Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </form>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $(".loader").fadeOut(1000);
+            $(".wrapper").fadeIn(1000);
+
+            var department = $("#departmentId");
+            var course = $("#courseId");
+            var teacher = $("#teacherId");
+            if ('@Model.AssignRegistrationCourse.Id' == '@Guid.Empty') {
+                course.prop('disabled', true);
+                teacher.prop('disabled', true);
+                department.change(function () {
+                    if ($(this).val() == "") {
+                        course.prop('disabled', true);
+                        teacher.prop('disabled', true);
+                    }
+                    else {
+                        $.ajax({
+                            url: '@Url.Action("GetCourseByDepartment", "AssignRegistrationCourse")',
+                            type: "GET",
+                            data: {
+                                departmentId: $(this).val(),
+                            },
+                            success: function (data) {
+                                course.prop('disabled', false);
+                                course.empty();
+                                course.append($('<option>').val('@Guid.Empty').text("--Select Course--").prop("disabled", true).prop("selected", true));
+
+                                $.each(data, function (key, value) {
+                                    $("#courseId").append('<option value="' + value.id + '">' + value.name + '</option>');
+                                })
+                            }
+                        });
+                        $.ajax({
+                            url: '@Url.Action("GetFacultyByDepartment", "AssignRegistrationCourse")',
+                            type: "GET",
+                            data: {
+                                departmentId: $(this).val()
+                            },
+                            success: function (data) {
+                                teacher.prop('disabled', false);
+                                teacher.empty();
+                                teacher.append($('<option>').val('@Guid.Empty').text("--Select Faculty--").prop("disabled", true).prop("selected", true));
+
+                                $.each(data, function (key, value) {
+                                    $("#teacherId").append('<option value="' + value.id + '">' + value.name + '</option>');
+                                })
+                            }
+                        });
+                    }
+                });
+            }
+            else
+            {
+                $.ajax({
+                        url: '@Url.Action("GetFacultyByDepartment", "AssignRegistrationCourse")',
+                        type: "GET",
+                        data: {
+                            departmentId: $("#departmentId").val(),
+                        },
+                        success: function (data) {
+                           
+                            var teacherId = teacher.val();
+                            var teacherName = teacher.text();
+                            teacher.empty();
+                            teacher.append($('<option>').val(teacherId).text()).prop("selected", true);
+                            $.each(data, function (key, value) {
+                                teacher.append('<option value="' + value.id + '">' + value.name + '</option>');
+                            })
+                            teacher.ajaxStop;
+                        }
+                    });
+            }
+
+
+            $("#endTime").change(function () {
+                var startTime = $("#startTime").val();
+                var endTime = $("#endTime").val();
+                if (startTime > endTime) {
+                    $("#submitBtn").prop("disabled", true);
+                    toastr.error("End Time is less than Start Time");
+                }
+                else {
+                    $("#submitBtn").prop("disabled", false);
+                }
+
+            })
+            $("#startTime").change(function () {
+                var startTime = $("#startTime").val();
+                var endTime = $("#endTime").val();
+                if (startTime > endTime) {
+                    $("#submitBtn").prop("disabled", true);
+                    toastr.error("End Time is less than Start Time");
+                }
+                else {
+                    $("#submitBtn").prop("disabled", false);
+                }
+
+            })
+        });
+    </script>
+}
+

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UMS.Data.Data;
 
 namespace UMS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211006115928_AddSemesterUpdate")]
+    partial class AddSemesterUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,53 +265,6 @@ namespace UMS.Data.Migrations
                     b.ToTable("PreRegistrationCourses");
                 });
 
-            modelBuilder.Entity("UMS.Models.Models.AssignRegistrationCourse", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FirstDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SecondDate")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("SectionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("SemesterId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("TeacherId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("SectionId");
-
-                    b.HasIndex("SemesterId");
-
-                    b.HasIndex("TeacherId");
-
-                    b.ToTable("AssignRegistrationCourses");
-                });
-
             modelBuilder.Entity("UMS.Models.Models.Claims", b =>
                 {
                     b.Property<Guid>("Id")
@@ -542,21 +497,6 @@ namespace UMS.Data.Migrations
                     b.ToTable("Semesters");
                 });
 
-            modelBuilder.Entity("UMS.Models.Models.StudentRegisteationCourse", b =>
-                {
-                    b.Property<Guid>("AssignRegiCourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("StudentId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("AssignRegiCourseId", "StudentId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("StudentRegisteationCourses");
-                });
-
             modelBuilder.Entity("UMS.Models.Models.UserDetails", b =>
                 {
                     b.Property<Guid>("Id")
@@ -573,9 +513,7 @@ namespace UMS.Data.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserDetails");
                 });
@@ -664,39 +602,6 @@ namespace UMS.Data.Migrations
                     b.Navigation("Courses");
                 });
 
-            modelBuilder.Entity("UMS.Models.Models.AssignRegistrationCourse", b =>
-                {
-                    b.HasOne("UMS.Models.Models.Course", "Courses")
-                        .WithMany("AssignRegistrationCourses")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UMS.Models.Models.Section", "Section")
-                        .WithMany()
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UMS.Models.Models.Semester", "Semester")
-                        .WithMany("AssignRegistrationCourses")
-                        .HasForeignKey("SemesterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UMS.Models.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("AssignRegistrationCourses")
-                        .HasForeignKey("TeacherId");
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Courses");
-
-                    b.Navigation("Section");
-
-                    b.Navigation("Semester");
-                });
-
             modelBuilder.Entity("UMS.Models.Models.Course", b =>
                 {
                     b.HasOne("UMS.Models.Models.CourseProtoType", "CourseProtoType")
@@ -746,13 +651,13 @@ namespace UMS.Data.Migrations
             modelBuilder.Entity("UMS.Models.Models.PreregistrationCourses", b =>
                 {
                     b.HasOne("UMS.Models.Models.Course", "Course")
-                        .WithMany("PreregistrationCourses")
+                        .WithMany()
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("UMS.Models.Models.Semester", "Semester")
-                        .WithMany("PreregistrationCourses")
+                        .WithMany()
                         .HasForeignKey("SemesterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -760,25 +665,6 @@ namespace UMS.Data.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Semester");
-                });
-
-            modelBuilder.Entity("UMS.Models.Models.StudentRegisteationCourse", b =>
-                {
-                    b.HasOne("UMS.Models.Models.AssignRegistrationCourse", "AssignRegistrationCourse")
-                        .WithMany("StudentRegisteationCourses")
-                        .HasForeignKey("AssignRegiCourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UMS.Models.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("StudentRegisteationCourses")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("AssignRegistrationCourse");
                 });
 
             modelBuilder.Entity("UMS.Models.Models.UserDetails", b =>
@@ -790,26 +676,17 @@ namespace UMS.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("UMS.Models.Models.ApplicationUser", "ApplicationUser")
-                        .WithOne("UserDetails")
-                        .HasForeignKey("UMS.Models.Models.UserDetails", "UserId");
+                        .WithMany("UserDetails")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("UMS.Models.Models.AssignRegistrationCourse", b =>
-                {
-                    b.Navigation("StudentRegisteationCourses");
-                });
-
             modelBuilder.Entity("UMS.Models.Models.Course", b =>
                 {
-                    b.Navigation("AssignRegistrationCourses");
-
                     b.Navigation("CourseToCoursePrerequisites");
-
-                    b.Navigation("PreregistrationCourses");
                 });
 
             modelBuilder.Entity("UMS.Models.Models.CoursePrerequisite", b =>
@@ -829,20 +706,9 @@ namespace UMS.Data.Migrations
                     b.Navigation("PrereristrationCourses");
                 });
 
-            modelBuilder.Entity("UMS.Models.Models.Semester", b =>
-                {
-                    b.Navigation("AssignRegistrationCourses");
-
-                    b.Navigation("PreregistrationCourses");
-                });
-
             modelBuilder.Entity("UMS.Models.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("AssignRegistrationCourses");
-
                     b.Navigation("PreRegistrationCourses");
-
-                    b.Navigation("StudentRegisteationCourses");
 
                     b.Navigation("UserDetails");
                 });

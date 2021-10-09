@@ -28,7 +28,7 @@ namespace UMS.Areas.Admin.Controllers
         public async Task<IActionResult> SectionTable(string searchValue,int pageNo,int pageSize)
         {
             pageNo = pageNo != 0 ? pageNo : 1;
-            pageSize = 1;
+            pageSize = 10;
             var numberOfSection = await _unitOfWrok.Section.CountAsync(searchValue);
             SectionVM sectionVM = new SectionVM()
             {

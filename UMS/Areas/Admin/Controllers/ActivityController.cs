@@ -28,7 +28,7 @@ namespace UMS.Areas.Admin.Controllers
         public async Task<IActionResult>ActivityTable(string searchValue,int pageNo,int pageSize)
         {
             pageNo = pageNo != 0 ? pageNo : 1;
-            pageSize = 1;
+            pageSize = 10;
             var numberOfActivity = await _unitOfWork.Activity.CountAsync(searchValue);
             ActivityVM activityVM = new ActivityVM()
             {
@@ -109,7 +109,7 @@ namespace UMS.Areas.Admin.Controllers
                 await _unitOfWork.Activity.RemoveAsync(activityObj);
                 await _unitOfWork.SaveAsync();
                 int  pageNo =  1;
-                int  pageSize = 1;
+                int  pageSize = 10;
                 var numberOfActivity = await _unitOfWork.Activity.CountAsync(null);
                 ActivityVM activityVM = new ActivityVM()
                 {
@@ -161,7 +161,7 @@ namespace UMS.Areas.Admin.Controllers
                         activityObj.IsActive = true;
                     }
                     await _unitOfWork.SaveAsync();
-                    int pageSize = 1;
+                    int pageSize = 10;
                     var numberOfActivity = await _unitOfWork.Activity.CountAsync(searchValue);
                     ActivityVM activityVM = new ActivityVM()
                     {

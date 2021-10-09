@@ -44,6 +44,7 @@ namespace UMS.Data.Repository
             if(semesterObj!=null)
             {
                 semesterObj.Name = semester.Name;
+                semesterObj.IsActive = semester.IsActive;
             }
         }
     }

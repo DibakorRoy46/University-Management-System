@@ -1,0 +1,127 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model UMS.Models.ViewModels.RegistrationCourseVM
+
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-secondary ">
+            <tr class="table-head">
+                <th>#</th>
+                <th>Section</th>
+                <th>Title</th>
+                <th>Credits</th>
+                <th>Faculty</th>
+                <th>Date & Time</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="table-body">
+            @if (Model.CourseList.Count() > 0)
+            {
+                var i = 0;
+                foreach (var course in Model.CourseList)
+                {
+                    i++;
+                    <tr>
+                        <td>@i</td>
+                        <td>@(course.Courses.Initial).@course.Section.Initial</td>
+                        <td>@course.Courses.Name</td>
+                        <td>@course.Courses.CourseProtoType.Credit</td>
+                        <td>@course.ApplicationUser.Name</td>
+                        <td>
+                            @course.FirstDate<label>-(@course.StartTime.ToString("hh:mm")--@course.EndTime.ToString("hh:mm"))</label>
+                            @course.SecondDate<label>-(@course.StartTime.ToString("hh:mm")--@course.EndTime.ToString("hh:mm"))</label>
+                        </td>
+                        @if (User.IsInRole("Student"))
+                        {
+                            @if (course.IsTaken == true)
+                            {
+
+                                <td>
+                                    <input type="checkbox"  class="select form-check " checked data-id="@course.Id"/>
+                                   
+                                </td>
+                            }
+                            else
+                            {
+
+                                <td>
+                                     <input type="checkbox"  class="select form-check "  data-id="@course.Id"/>
+                                       
+                                </td>
+                            }
+                        }
+                        <td></td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-danger">No Course  Available</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        $(".select").click(function () {
+            if ($(this).is(":checked")) {
+                 $.ajax({
+                    url: '@Url.Action("SelectRegistationCourse", "Registration")',
+                    type: "POST",
+                    data: {
+                        userId: '@Model.User.Id',
+                        courseId: $(this).attr("data-id")
+                     },
+                     success: function (data) {
+                         if (data.success == false) {
+                             toastr.error(data.message);
+                             $(".loader").fadeOut(1000);
+                             $(".wrapper").fadeIn(1000);                            
+                             $("#RegisCourseList").html(response);
+                             stop;
+                         }
+                        
+                     }
+                }).done(function (response) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+                    toastr.success("Successfully Added");
+                    $("#RegisCourseList").html(response);
+
+                })
+                
+            }
+            else {
+                
+                  $.ajax({
+                    url: '@Url.Action("DeleteRegistationCourse", "Registration")',
+                    type: "POST",
+                    data: {
+                        userId: '@Model.User.Id',
+                        courseId: $(this).attr("data-id")
+                    }
+                }).done(function (response) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+                    toastr.success("Successfully Removed");
+                    $("#RegisCourseList").html(response);
+
+                })
+                
+            }
+        });
+    });
+</script>

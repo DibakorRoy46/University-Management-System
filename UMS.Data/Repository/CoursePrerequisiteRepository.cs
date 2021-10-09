@@ -24,7 +24,7 @@ namespace UMS.Data.Repository
             if(!String.IsNullOrEmpty(searchValue))
             {
                 coursePrerequisiteList = await _db.CoursePrerequisites.
-                Where(x => (x.Name.ToLower().Equals(searchValue.ToLower())) ||
+                Where(x => (x.Name.ToLower().Contains(searchValue.ToLower())) ||
                 (x.InitialName.ToLower().Equals(searchValue.ToLower()))).ToListAsync();
             }
             else
@@ -41,8 +41,8 @@ namespace UMS.Data.Repository
             if (!String.IsNullOrEmpty(searchValue))
             {
                 coursePrerequisiteList = await _db.CoursePrerequisites.
-                Where(x => (x.Name.ToLower().Equals(searchValue.ToLower())) ||
-                (x.InitialName.ToLower().Equals(searchValue.ToLower()))).ToListAsync();
+                Where(x => (x.Name.ToLower().Contains(searchValue.ToLower())) ||
+                (x.InitialName.ToLower().Contains(searchValue.ToLower()))).ToListAsync();
             }
             return  coursePrerequisiteList.Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
         }

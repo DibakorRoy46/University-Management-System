@@ -10,11 +10,12 @@ namespace UMS.Models.Models
 {
     public class AssignPreRegistrationCourse
     {
-        public string StudentId { get; set; }
         
+        public string StudentId { get; set; }   
+        [ForeignKey("StudentId")]
         public ApplicationUser ApplicationUser { get; set; }
-        public Guid CourseId { get; set; }
-        public Course Course { get; set; }
-        
+        public Guid PreCourseId { get; set; }
+        public PreregistrationCourses Courses { get; set; } 
+     
     }
 }

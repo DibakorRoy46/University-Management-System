@@ -107,18 +107,24 @@ namespace UMS.Areas.Admin.Controllers
                     {
                         return NotFound();
                     }
-                    await _unitOfWork.Semester.RemoveAsync(semesterObj);
-                    await _unitOfWork.SaveAsync();
-                    int pageNo = 1;
-                    int pageSize = 10;
-                    var numberOfSemester = await _unitOfWork.Semester.CountAsync(null);
-                    SemesterVM semesterVM = new SemesterVM()
+                    if(semesterObj.IsActive==false)
                     {
-                        SemesterList = await _unitOfWork.Semester.SearchAsync(null, pageNo, pageSize),
-                        Search = null,
-                        Pager = new Pager(numberOfSemester, pageNo, pageSize)
-                    };
-                    return PartialView("_SemesterTable", semesterVM);
+                        await _unitOfWork.Semester.RemoveAsync(semesterObj);
+                        await _unitOfWork.SaveAsync();
+                        int pageNo = 1;
+                        int pageSize = 10;
+                        var numberOfSemester = await _unitOfWork.Semester.CountAsync(null);
+                        SemesterVM semesterVM = new SemesterVM()
+                        {
+                            SemesterList = await _unitOfWork.Semester.SearchAsync(null, pageNo, pageSize),
+                            Search = null,
+                            Pager = new Pager(numberOfSemester, pageNo, pageSize)
+                        };
+                        return PartialView("_SemesterTable", semesterVM);
+                    }
+                    return NotFound();
+
+                    
                 }
                 return NotFound();
             }

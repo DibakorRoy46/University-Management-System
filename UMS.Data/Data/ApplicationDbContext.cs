@@ -28,7 +28,9 @@ namespace UMS.Data.Data
         public DbSet<UserDetails> UserDetails { get; set; }
         public DbSet<Claims> Claims { get; set; }
         public DbSet<AssignPreRegistrationCourse> PreRegistrationCourses { get; set; }
-
+        public DbSet<PreregistrationCourses> CourseforPreregistration { get; set; }
+        public DbSet<AssignRegistrationCourse> AssignRegistrationCourses { get; set; }
+        public DbSet<StudentRegisteationCourse> StudentRegisteationCourses { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -45,16 +47,29 @@ namespace UMS.Data.Data
                 WithMany(x => x.CourseToCoursePrerequisites).
                 HasForeignKey(x => x.CoursePreId);
 
-            builder.Entity<AssignPreRegistrationCourse>().HasKey(x => new { x.CourseId, x.StudentId });
+            builder.Entity<AssignPreRegistrationCourse>().HasKey(x => new { x.PreCourseId, x.StudentId });
 
             builder.Entity<AssignPreRegistrationCourse>().
-                HasOne<Course>(x => x.Course).
-                WithMany(x => x.PreRegistrationCourses).
-                HasForeignKey(x => x.CourseId);
+                HasOne<PreregistrationCourses>(x => x.Courses).
+                WithMany(x => x.PrereristrationCourses).
+                HasForeignKey(x => x.PreCourseId);
 
             builder.Entity<AssignPreRegistrationCourse>().
                 HasOne<ApplicationUser>(x => x.ApplicationUser).
                 WithMany(x => x.PreRegistrationCourses).
+                HasForeignKey(x => x.StudentId);
+
+
+            builder.Entity<StudentRegisteationCourse>().HasKey(x => new { x.AssignRegiCourseId, x.StudentId });
+
+            builder.Entity<StudentRegisteationCourse>().
+                HasOne<AssignRegistrationCourse>(x => x.AssignRegistrationCourse).
+                WithMany(x => x.StudentRegisteationCourses).
+                HasForeignKey(x => x.AssignRegiCourseId);
+
+            builder.Entity<StudentRegisteationCourse>().
+                HasOne<ApplicationUser>(x => x.ApplicationUser).
+                WithMany(x => x.StudentRegisteationCourses).
                 HasForeignKey(x => x.StudentId);
 
         }

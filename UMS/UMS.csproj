@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Areas\Admin\Controllers\CoursePreController.cs~RFeb36c47.TMP" />
     <None Remove="Areas\Admin\Controllers\CourseToCourseController.cs~RF7753f9.TMP" />
     <None Remove="Areas\Admin\Views\Semester\_SemesterTable.cshtml~RF2fa6f2a.TMP" />
   </ItemGroup>

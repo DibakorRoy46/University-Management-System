@@ -40,20 +40,42 @@ namespace UMS.Data.Repository
             return courseList;
         }
 
-        public async Task<IEnumerable<AssignPreRegistrationCourse>> GetPreCourses(string userId)
+        public async Task<IEnumerable<AssignPreRegistrationCourse>> GetPreCourses(string userId,Guid semesterId,int year)
         {         
             if(!String.IsNullOrEmpty(userId))
             {
-                var  courseList = await _db.PreRegistrationCourses.Include(x=>x.Course).ThenInclude(x=>x.CourseProtoType)                  
+                var  courseList = await _db.PreRegistrationCourses.Include(x=>x.Courses).ThenInclude(x=>x.Course)
+                    .ThenInclude(x=>x.CourseProtoType)           
                     .Where(x => x.StudentId==userId).ToListAsync();
+                if (semesterId!=Guid.Empty && year!=0)
+                {
+                    courseList = await _db.PreRegistrationCourses.Include(x => x.Courses).
+                        Where(x => x.Courses.SemesterId == semesterId && x.StudentId==userId && x.Courses.Year==year).ToListAsync();
+                    
+                }
                 return courseList.ToList();
             }
             return null;            
         }
-
-        public async Task<IEnumerable<Guid>> SelectPreCourseId(string userId)
+        public async Task<int> CountStudent(Guid id,Guid semesterId,int year)
         {
-            return  _db.PreRegistrationCourses.Where(x => x.StudentId == userId).Select(x => x.CourseId);
+            var courseList=await _db.PreRegistrationCourses.Include(x => x.Courses).
+                Where(x => x.Courses.CourseId == id&& x.Courses.SemesterId==semesterId && x.Courses.Year==year).ToListAsync();
+            return courseList.Count();
+        }
+        public async Task<IEnumerable<Guid>> SelectPreCourseId(string userId, Guid semesterId, int year)
+        {
+            if(!String.IsNullOrEmpty(userId))
+            {
+                return  _db.PreRegistrationCourses.Include(x => x.Courses).
+                Where(x => x.StudentId == userId && x.Courses.SemesterId == semesterId && x.Courses.Year == year).
+                Select(x => x.Courses.CourseId);
+            }
+            return _db.PreRegistrationCourses.Include(x => x.Courses).
+             Where(x =>x.Courses.SemesterId == semesterId && x.Courses.Year == year).
+             Select(x => x.Courses.CourseId);
+
+
         }
     }
 }

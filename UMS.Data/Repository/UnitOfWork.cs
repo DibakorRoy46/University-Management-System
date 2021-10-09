@@ -30,7 +30,11 @@ namespace UMS.Data.Repository
             User = new UserRepository(db);
             Claims = new ClaimRepository(db);
             PreRegistationCourses = new PreRegistrationCourseRepository(db);
-            
+            PreregiCourses = new PreregiCoursesRepository(db);
+            RegistrationCourse = new RegistrationCourseRepository(db);
+            AssignRegistrationCourse = new AssignRegistrationCourseRepository(db);
+
+
         }
         public IDepartmentRepository Department { get; private set; }
 
@@ -60,6 +64,12 @@ namespace UMS.Data.Repository
         public IClaimRepository Claims { get; private set; }
 
         public IPreRegistrationCourseRepository PreRegistationCourses { get; private set; }
+
+        public IPreregiCoursesRepository PreregiCourses { get; private set; }
+
+        public IAssignRegistrationCourseRepository AssignRegistrationCourse { get; private set; }
+
+        public IRegistrationCourseRepository RegistrationCourse { get; private set; }
 
         public void Dispose()
         {

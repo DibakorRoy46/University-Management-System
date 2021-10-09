@@ -39,7 +39,7 @@ namespace UMS.Areas.Admin.Controllers
                 CoursePreList=await _unitOfWork.CoursePrerequisite.SearchAsync(searchValue,pageNo,pageSize),
                 Search=searchValue,
                 Pager=new Pager(numberOfCourePre,pageNo,pageSize)
-            };
+            };          
             return PartialView("_CoursePreTable", coursePreVM);
         }
         #endregion

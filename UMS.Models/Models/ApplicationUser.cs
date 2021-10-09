@@ -21,10 +21,10 @@ namespace UMS.Models.Models
         public  IEnumerable<string> Role { get; set; }
         [NotMapped]
         public IEnumerable<SelectListItem> RoleList { get; set; }
-        public IEnumerable<UserDetails> UserDetails { get; set; }
+        public UserDetails UserDetails { get; set; }
         public IEnumerable<AssignPreRegistrationCourse> PreRegistrationCourses { get; set; }
-
-
+        public IEnumerable<AssignRegistrationCourse> AssignRegistrationCourses { get; set; }
+        public IEnumerable<StudentRegisteationCourse> StudentRegisteationCourses { get; set; }
 
     }
 }

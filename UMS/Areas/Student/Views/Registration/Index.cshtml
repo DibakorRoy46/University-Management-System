@@ -1,0 +1,158 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model UMS.Models.Models.Activity
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" id="main-container">
+    <h2 class="text-center text-primary border-bottom">Registration</h2>
+    <div class="row mt-4">
+        @if (User.IsInRole("Student"))
+        {
+        <div class="col-12 row border mb-4 py-3">
+            @if (Model.StartDate <= DateTime.Now && DateTime.Now <= Model.EndDate && Model.IsActive == true)
+            {
+                <div class="col-12">
+                    <h2 class="ml-2">Registration Course</h2>
+                </div>
+                <div id="RegisCourseList" class="col-12">
+
+                </div>
+                <div class="col-12 border py-5">
+                    <div class="col-6">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="Search..." id="search" />
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fas fa-search"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12" id="CourseList">
+
+                    </div>
+                </div>
+              
+            }
+            else if (Model.IsActive == true)
+            {
+                <div class="col-12 border py-5">
+                    <div class="alert alert-success" role="alert">
+                        <p class="text-center">Your registratoion start form @Model.StartDate to @Model.EndDate</p>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger" role="alert">
+                    <p class="text-center">Info: Your registration start time is not yet declared. For more information contact your coordinator. </p>
+                </div>
+            }
+        </div>
+         }
+         else
+         {
+                <div class="col-12 border py-5">
+                    <div class="col-6">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="Search..." id="search" />
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fas fa-search"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4"></div>
+                    <div class="col-12" id="CourseList">
+
+                    </div>
+                </div>
+            }
+
+        </div>
+</div>
+
+
+@section Scripts{
+
+    <script>
+
+        @{ 
+            bool isTrue = (Model.StartDate <= DateTime.Now && DateTime.Now <= Model.EndDate && Model.IsActive == true);
+        }
+        
+        var execute ='@isTrue';
+            
+        if ('@User.IsInRole("Student")')
+        {
+            if (execute == 'True') {
+                
+                getCourseData();
+                getRegisCourseData();
+                $(".loader").fadeOut(1000);
+                $(".wrapper").fadeIn(1000);
+            }
+            else {
+               
+                $(".loader").fadeOut(1000);
+                $(".wrapper").fadeIn(1000);
+
+            }
+        }
+
+        function getRegisCourseData() {
+                $.ajax({
+                    url: '@Url.Action("SelectRegisCourseTable", "Registration")',
+                    type: "GET"
+                }).done(function (response) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+                    $("#RegisCourseList").html(response);
+                }).fail(function (xhr) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+                    toastr.error("Something went wrong");
+                });
+            }
+
+            function getCourseData() {
+                $.ajax({
+                    url: '@Url.Action("CourseTable", "Registration")',
+                    type: "GET"
+                }).done(function (response) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+                    $("#CourseList").html(response);
+                }).fail(function (xhr) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+                    toastr.error("Something went wrong");
+                })
+            }
+    
+
+
+
+
+
+
+        $("#search").click(function () {
+            var search = $("#search").val();
+            $.ajax({
+                url: '@Url.Action("CourseTable", "Registration")',
+                type: "GET",
+                data: {
+                    searchValue: search
+                }
+            }).done(function (response) {
+                $(".loader").fadeOut(1000);
+                $(".wrapper").fadeIn(1000);
+                $("#CourseList").html(response);
+            }).fail(function (xhr) {
+                $(".loader").fadeOut(1000);
+                $(".wrapper").fadeIn(1000);
+                toastr.error("Something went wrong");
+            })
+        });
+    </script>
+}

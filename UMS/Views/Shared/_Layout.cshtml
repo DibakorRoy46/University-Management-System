@@ -45,7 +45,7 @@
     <div class="sidebar">
         <ul class="sidebar-nav">
             <li class="sidebar-nav-item sidebar-active">
-                <a href="#" class="sidebar-nav-link ">
+                <a asp-action="Index" asp-controller="Home" asp-area="Student" class="sidebar-nav-link ">
                     <div>
                         <i class="fas fa-tachometer-alt"></i>
                     </div>
@@ -173,8 +173,16 @@
                         <span>Claims</span>
                     </a>
                 </li>
-            }
+                <li class="sidebar-nav-item">
+                    <a asp-action="Index" asp-controller="AssignRegistrationCourse" asp-area="Admin" class="sidebar-nav-link">
+                        <div>
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <span>AssignRegistrationCourse</span>
+                    </a>
+                </li>
 
+            }
             <li class="sidebar-nav-item">
                 <a asp-action="Index" asp-controller="PreRegistrationCourse" asp-area="Student" class="sidebar-nav-link ">
                     <div>
@@ -186,6 +194,22 @@
 
                 </a>
             </li>
+            @if (User.IsInRole("Student"))
+            {
+
+                <li class="sidebar-nav-item">
+                    <a asp-action="Index" asp-controller="Registration" asp-area="Student" class="sidebar-nav-link ">
+                        <div>
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <span>
+                            Registration
+                        </span>
+
+                    </a>
+                </li>
+            }
+
             <li class="nav-item has-submenu sidebar-nav-item">
                 <a class="sidebar-nav-link" href="#">
                     <div>
@@ -224,7 +248,7 @@
         </ul>
     </div>
 
-    <div class="wrapper" id="contents">
+    <div class="wrapper mb-5" id="contents">
         <main role="main" class="pb-3 px-3">
             @RenderBody()
         </main>
@@ -242,6 +266,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://kit.fontawesome.com/e19c476714.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.10/datepicker.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
     <!-- end import script -->

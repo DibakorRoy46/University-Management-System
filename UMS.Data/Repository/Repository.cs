@@ -30,6 +30,7 @@ namespace UMS.Data.Repository
             IQueryable<T> query = dbSet;
             if(filter!=null)
             {
+               
                 query = query.Where(filter);
                 if(query.Any())
                 {
@@ -39,6 +40,7 @@ namespace UMS.Data.Repository
             }
             return false;
         }
+       
 
         public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter = null, string includeProperties = null, bool isAsNoTracking = false)
         {
@@ -156,5 +158,6 @@ namespace UMS.Data.Repository
         {
             dbSet.RemoveRange(entity);
         }
+        
     }
 }

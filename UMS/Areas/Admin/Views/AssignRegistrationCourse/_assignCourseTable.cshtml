@@ -1,40 +1,44 @@
-﻿@model UMS.Models.ViewModels.SemesterVM
+﻿@model UMS.Models.ViewModels.AssignCourseTableVM
 
 <div class="table-responsive">
     <table class="table table-hover">
-        <thead class="table-secondary">
-            <tr>
+        <thead class="table-secondary ">
+            <tr class="table-head">
                 <th>#</th>
-                <th>Name</th>          
-                <th>IsActive</th>          
+                <th>Name</th>
+                <th>Department</th>
+                <th>Faculty</th>
+                <th>Semester</th>
+                <th>Section</th>
+                <th>Day</th>
+                <th>TIme</th>
+                <th>Count</th>
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody>
-            @if (Model.SemesterList.Count() > 0)
+        <tbody class="table-body">
+            @if (Model.AssignRegistrationCourseList.Count() > 0)
             {
-                int i = 0;
-                foreach (var semester in Model.SemesterList)
+                var i = 0;
+                foreach (var course in Model.AssignRegistrationCourseList)
                 {
                     i++;
-
                     <tr>
-                        <td>@(i)</td>
-                        <td>@semester.Name</td>
+                        <td>@i</td>
+                        <td>@course.Courses.Name<span>(@course.Courses.Initial)</span> </td>                      
+                        <td>@course.Courses.Department.Initial</td>
+                        <td>@course.ApplicationUser.Name</td>
+                        <td>@course.Semester.Name<span>-</span> @course.Year  </td>
+                        <td>@course.Section.Name</td>
+                        <td>@course.FirstDate<span> and </span>@course.SecondDate</td>
+                        <td>@course.StartTime.TimeOfDay<span>-</span>@course.EndTime.TimeOfDay</td>  
+                        <td>@course.Count</td>
                         <td>
-                            @if (semester.IsActive == true)
-                            {
-                                <input type="checkbox" class="form-control" checked  disabled/>
-                            }
-                            else
-                            {
-                                <input type="checkbox" class="form-control" disabled />
-                            }
+                            
+                            <a class="btn btn-primary" asp-action="Upsert" asp-route-id="@course.Id"><i class="fas fa-edit"></i></a>
+                            <button class="btn btn-danger deleteBtn" data-id="@course.Id"><i class="fas fa-trash-alt"></i></button>
                         </td>
-                        <td>
-                            <a class="btn btn-primary" asp-action="Upsert" asp-route-id="@semester.Id"><i class="fas fa-edit"></i></a>
-                            <button class="btn btn-danger deleteBtn" data-id="@semester.Id"><i class="fas fa-trash-alt"></i></button>
-                        </td>
+                        
                     </tr>
                 }
             }
@@ -42,21 +46,29 @@
             {
                 <tr>
                     <td></td>
-                    <td class="text-danger">No Semesters Available</td>
                     <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-danger">No Course  Available</td>
+                    <th></th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    
                 </tr>
             }
         </tbody>
     </table>
 </div>
 
-<div class="text-center">
+<div class="text-center col-12">
     @if (Model.Pager != null && Model.Pager.TotalPages > 1)
     {
         @if (Model.Pager.CurrentPage > 1)
         {
             <button class="btn btn-outline-info page-buttons" data-pageNo="1">First</button>
-            <button class="btn btn-outline-info page-buttons" data-pageNo="@(Model.Pager.CurrentPage-1)">Previous</button>
+            <button class="btn btn-outline-info page-buttons" data-pageNo="@(Model.Pager.CurrentPage+1)">Next</button>
         }
         for (int page = Model.Pager.StartPage; page <= Model.Pager.EndPage; page++)
         {
@@ -72,8 +84,8 @@
 </div>
 
 <script>
-    $(document).ready(function () {
 
+    $(document).ready(function () {
         $(".deleteBtn").click(function () {
             swal({
                 title: "Are you sure that you want to delete this data",
@@ -84,12 +96,17 @@
             }).then((willDelete) => {
                 if (willDelete) {
                     $.ajax({
-                        url: '@Url.Action("Delete", "Semester")',
+                        url: '@Url.Action("Delete", "AssignRegistrationCourse")',
                         type: "POST",
                         data: {
-                            id: $(this).attr("data-id")
+                            id: $(this).attr("data-id"),
+                            searchValue: '@Model.Search',
+                            departmentId: '@Model.DepartmentId',
+                            semesterId: '@Model.SemesterId',
+                            year: '@Model.Year'
                         }
                     }).done(function (response) {
+
                         swal("Successfully Deleted", {
                             icon: "success"
                         });
@@ -105,12 +122,15 @@
             })
         });
 
-        $(".page-buttons").click(function () {
+         $(".page-buttons").click(function () {
             $.ajax({
-                url: '@Url.Action("SemesterTable", "Semester")',
+                url: '@Url.Action("AssignCourseTable", "AssignRegistrationCourse")',
                 data: {
                     pageNo: $(this).attr("data-pageNo"),
-                    searchValue: '@Model.Search'
+                    searchValue: '@Model.Search',
+                    departmentId: '@Model.DepartmentId',
+                    semesterId: '@Model.SemesterId',
+                    year: '@Model.Year'
                 }
             }).done(function (response) {
                 $(".loader").fadeOut(1000);
@@ -123,6 +143,4 @@
             })
         })
     });
-
-
 </script>

@@ -20,7 +20,7 @@
             <div class="col-md-10 col-lg-8 col-sm-12  pt-4">
                 <div class="row form-group my-3">
                     <div class="col-3">
-                        <label>Course Type Name</label>
+                        <label>Semester Name</label>
                     </div>
                     <div class="col-8">
                         <input class="form-control" asp-for="Name" id="name" autocomplete="off" />
@@ -28,7 +28,18 @@
                         <label id="name-span" class="text-danger"></label>
                     </div>
                 </div>
-               
+
+                <div class="row form-group my-3">
+                    <div class="col-3">
+                        <label>IsActive</label>
+                    </div>
+                    <div class="col-8">
+                        <input class="form-control" asp-for="IsActive"  autocomplete="off" />
+                        <span asp-validation-for="IsActive" class="text-danger"></span>
+                        
+                    </div>
+                </div>
+
 
                 <div class="row form-group offset-3 my-3">
                     <div class="col-6">

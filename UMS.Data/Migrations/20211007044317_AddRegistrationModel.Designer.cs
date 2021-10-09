@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UMS.Data.Data;
 
 namespace UMS.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211007044317_AddRegistrationModel")]
+    partial class AddRegistrationModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -282,9 +284,6 @@ namespace UMS.Data.Migrations
                     b.Property<string>("SecondDate")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("SectionId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("SemesterId")
                         .HasColumnType("uniqueidentifier");
 
@@ -300,8 +299,6 @@ namespace UMS.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("SectionId");
 
                     b.HasIndex("SemesterId");
 
@@ -672,12 +669,6 @@ namespace UMS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UMS.Models.Models.Section", "Section")
-                        .WithMany()
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("UMS.Models.Models.Semester", "Semester")
                         .WithMany("AssignRegistrationCourses")
                         .HasForeignKey("SemesterId")
@@ -691,8 +682,6 @@ namespace UMS.Data.Migrations
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("Courses");
-
-                    b.Navigation("Section");
 
                     b.Navigation("Semester");
                 });

@@ -1,4 +1,4 @@
-﻿@model UMS.Models.ViewModels.PreCourseVM
+﻿@model UMS.Models.ViewModels.SelectRegistrationCourseVM
 <div class="table-responsive">
     <table class="table table-hover">
         <thead class="table-secondary ">
@@ -6,7 +6,7 @@
                 <th>#</th>
                 <th>Code</th>
                 <th>Title</th>
-                <th>Credits</th>             
+                <th>Credits</th>
             </tr>
         </thead>
         <tbody class="table-body">
@@ -18,9 +18,9 @@
                     i++;
                     <tr>
                         <td>@i</td>
-                        <td>@course.Courses.Course.Initial</td>
-                        <td>@course.Courses.Course.Name</td>
-                        <td>@course.Courses.Course.CourseProtoType.Credit</td>
+                        <td>@(course.AssignRegistrationCourse.Courses.Initial).@course.AssignRegistrationCourse.Section.Initial</td>
+                        <td>@course.AssignRegistrationCourse.Courses.Name</td>
+                        <td>@course.AssignRegistrationCourse.Courses.CourseProtoType.Credit</td>
                     </tr>
                 }
             }
@@ -30,7 +30,7 @@
                     <td></td>
                     <td></td>
                     <td class="text-danger">No Course  Available</td>
-                    <td></td>                 
+                    <td></td>
                 </tr>
             }
         </tbody>

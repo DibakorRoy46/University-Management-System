@@ -1,4 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity 
+@model UMS.Models.Models.Activity
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,29 +9,97 @@
 <div class="container" id="main-container">
     <h2 class="text-center text-primary border-bottom">Preregistration</h2>
     <div class="row mt-4">
-        @if(User.IsInRole("Student"))
+        @if (User.IsInRole("Student"))
         {
-            <div class="col-12 border mb-4 py-3">
-                <h2 class="text-center">Preregistration Course</h2>
-                <div id="PreCourseList">
+        <div class="col-12 row border mb-4 py-3">
+            @if (Model.StartDate <= DateTime.Now && DateTime.Now <= Model.EndDate && Model.IsActive == true)
+            {
+                <div class="col-12">
+                    <h2 class="ml-2">Preregistration Course</h2>
+                </div>
+            }
+            else
+            {
+                <div class="col-4">
+                    <h2 class="ml-2">Preregistration Course</h2>
+                </div>
+                <div class="col-3">
+                    <select class="form-control text-center" id="semester">
+                        <option disabled selected value="">---Select Semester---</option>
+                        @foreach (var item in ViewBag.SemesterList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-3">
+                    <select class="form-control text-center" id="year">
+                        <option disabled selected value="">---Select Year---</option>
+                        @foreach (var item in ViewBag.YearList)
+                        {
+
+                            <option value="@item.Text">@item.Value</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-2 text-center">
+                    <input class="btn btn-primary form-control" type="submit" value="Search" id="search" />
+
+                </div>
+            }
+            <div id="PreCourseList" class="col-12">
+
+            </div>
+        </div>
+            <div class="col-12 border py-5">
+                @if (Model.StartDate <=DateTime.Now && DateTime.Now <= Model.EndDate && Model.IsActive == true)
+                {
+                    <div class="col-6">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="Search..." id="search" />
+                            <div class="input-group-prepend">
+                                <div class="input-group-text"><i class="fas fa-search"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4"></div>
+                    <div class="col-12" id="CourseList">
+
+                    </div>
+
+                }
+                else if (Model.IsActive == true)
+                {
+                    <div class="alert alert-success" role="alert">
+                        <p class="text-center">Your Preregistratoion start form @Model.StartDate to @Model.EndDate</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <p class="text-center">Info: Your preregistration start time is not yet declared. For more information contact your coordinator. </p>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="col-12 border py-5">
+                <div class="col-6">
+                    <div class="input-group">
+                        <input class="form-control" placeholder="Search..." id="search" />
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="fas fa-search"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4"></div>
+                <div class="col-12" id="CourseList">
 
                 </div>
             </div>
         }
-        <div class="col-12 border py-5">
-            <div class="col-6">
-                <div class="input-group">
-                    <input class="form-control" placeholder="Search..." id="search" />
-                    <div class="input-group-prepend">
-                        <div class="input-group-text"><i class="fas fa-search"></i></div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4"></div>
-            <div class="col-12" id="CourseList">
 
-            </div>
-        </div>
     </div>
 </div>
 
@@ -74,5 +144,28 @@
                 })
             }
         }
+
+        $("#search").click(function () {
+            var semesterId = $("#semester").val();
+
+            var year = $("#year").val();
+             $.ajax({
+                 url: '@Url.Action("SelectPreCourseTable", "PreRegistrationCourse")',
+                 type: "GET",
+                 data: {
+                     semesterId: semesterId,
+                     year: year
+                 }
+                }).done(function (response) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+                    $("#PreCourseList").html(response);
+                }).fail(function (xhr) {
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+                    toastr.error("Something went wrong");
+                })
+
+        })
     </script>
 }
