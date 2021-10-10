@@ -16,6 +16,7 @@ namespace UMS.Controllers
 {
     [Area("Student")]
     [Authorize]
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -34,13 +35,45 @@ namespace UMS.Controllers
             var semesterObj = await _unitOfWork.Semester.FirstOrDefaultAsync(x => x.IsActive == true);
             if (User.IsInRole("Student"))
             {
-                var registerCourseList = await _unitOfWork.RegistrationCourse.
-                   GetRegisteredCourses(userId, semesterObj.Id, DateTime.Now.Year);
-                var preregisterCourseList = await _unitOfWork.PreRegistationCourses.
+                var preCourseList  = await _unitOfWork.PreRegistationCourses.
                     GetPreCourses(userId, semesterObj.Id, DateTime.Now.Year);
+                var regisCourseList = await _unitOfWork.RegistrationCourse.
+                   GetRegisteredCourses(userId, semesterObj.Id, DateTime.Now.Year);
+                DashboardVM studentVM = new DashboardVM()
+                {
+                    RegistrationCourseList = regisCourseList.Count(),
+                    PreregistrationCourseList = preCourseList.Count()                   
+                };
+                return View(studentVM);
             }
+            if(User.IsInRole("Faculty"))
+            {
+                var courseList = await _unitOfWork.AssignRegistrationCourse.GetAllAsync(x => x.TeacherId == userId);
+                DashboardVM facultyVM = new DashboardVM()
+                {
+                    AssignCourseList = courseList.Count()
+                };
+                return View(facultyVM);
+            }
+            if(User.IsInRole("Admin") || User.IsInRole("Super Admin"))
+            {
+                var studentList = await _unitOfWork.AdminDashboard.StudentList();
+                var teacherList = await _unitOfWork.AdminDashboard.TeacherList();
+                var employeeList = await _unitOfWork.AdminDashboard.EmployeeList();
+                var departmentList = await _unitOfWork.Department.GetAllAsync();
+                var roleList = await _unitOfWork.AdminDashboard.RoleList();
+                DashboardVM adminVM = new DashboardVM()
+                {
+                    Student = studentList.Count(),
+                    Teacher = teacherList.Count(),
+                    Employee = employeeList.Count(),
+                    Department = departmentList.Count(),
+                    Role = roleList.Count(),
+                };
+                return View(adminVM);
+            }
+        
             return View();
-
         }
 
         public IActionResult Privacy()

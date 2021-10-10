@@ -25,6 +25,7 @@ namespace UMS.Areas.Admin.Controllers
             _db = db;
         }
         #region Index
+        [Route("Course")]
         public async Task<IActionResult> Index()
         {
             ViewBag.DepartmentList = await _unitOfWork.Department.GetAllAsync();
@@ -55,6 +56,7 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
 
         #region Upsert
+        [Route("Course/Upsert")]
         public async Task<IActionResult>Upsert(Guid id)
         {
             try
@@ -119,6 +121,7 @@ namespace UMS.Areas.Admin.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("Course/Upsert")]
         public async Task<IActionResult>Upsert(CourseUpsertVM courseUpsertVM)
         {
             try
@@ -146,30 +149,45 @@ namespace UMS.Areas.Admin.Controllers
                                 await _unitOfWork.SaveAsync();
                             }                         
                         }                                   
-                        TempData["message"] = "Successfully Created";                       
+                        TempData["message"] = "Successfully Created";
+                        return RedirectToAction(nameof(Index));
                     }
                     else
                     {
+                        var courseObj = await _unitOfWork.Course.FirstOrDefaultAsync(x => x.Id == courseUpsertVM.Course.Id);
+                        var coursePreObj = await _unitOfWork.CoursePrerequisite.FirstOrDefaultAsync(x => x.Name == courseObj.Name);
                         await _unitOfWork.Course.UpdateAsync(courseUpsertVM.Course);
-                        TempData["message"] = "Successfully Updated";
+                        coursePreObj.Name = courseUpsertVM.Course.Name;
+                        coursePreObj.InitialName = courseUpsertVM.Course.Initial;
+                        await _unitOfWork.CoursePrerequisite.UpdateAsync(coursePreObj);               
                         await _unitOfWork.SaveAsync();
                         if(courseUpsertVM.Course.CoursePreId==null)
                         {
                             return RedirectToAction(nameof(Index));
                         }
-                        if (courseUpsertVM.Course.CoursePreId != null && !courseUpsertVM.Course.CoursePreId.Equals(Guid.Empty) )
+                        if (courseUpsertVM.Course.CoursePreId != null && !courseUpsertVM.Course.CoursePreId.Equals(Guid.Empty))
                         {
+
+                            var courseList = await _unitOfWork.CourseToCoursePrerequisite.
+                                GetAllAsync(x=>x.CourseId== courseUpsertVM.Course.Id);
+                            await _unitOfWork.CourseToCoursePrerequisite.RemoveRangeAsync(courseList);
+                            
                             foreach (var course in courseUpsertVM.Course.CoursePreId)
-                            {
-                                CourseToCoursePrerequisite courseToCoursePre = new CourseToCoursePrerequisite();
-                                courseToCoursePre.CourseId = courseUpsertVM.Course.Id;
-                                courseToCoursePre.CoursePreId = course;
-                                await _unitOfWork.CourseToCoursePrerequisite.AddAsync(courseToCoursePre);
-                                await _unitOfWork.SaveAsync();                             
+                            {                                     
+                                    CourseToCoursePrerequisite courseToCoursePre = new CourseToCoursePrerequisite();
+                                    courseToCoursePre.CourseId = courseUpsertVM.Course.Id;
+                                    courseToCoursePre.CoursePreId = course;
+                                    await _unitOfWork.CourseToCoursePrerequisite.AddAsync(courseToCoursePre);
+                                    await _unitOfWork.SaveAsync();
+                                                             
                             }
-                        }                     
+                        }
+                        TempData["message"] = "Successfully Updated";
+                        return RedirectToAction(nameof(Index));
+                     
+                       
                     }
-                    return RedirectToAction(nameof(Index));
+                
 
                 }
                 else
@@ -299,6 +317,7 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
 
         #region AssginPrerequisite
+        [Route("Course/ManagePrerequisite")]
         public async Task<IActionResult> ManagePrerequisite(Guid id)
         {
             try
@@ -343,6 +362,7 @@ namespace UMS.Areas.Admin.Controllers
 
         }
         [HttpPost]
+        [Route("Course/ManagePrerequisite")]
         public async Task<IActionResult> ManagePrerequisite(Guid courseId,Guid preCourseId )
         {
             try

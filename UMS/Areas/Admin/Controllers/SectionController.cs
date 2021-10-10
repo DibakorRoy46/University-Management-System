@@ -21,6 +21,7 @@ namespace UMS.Areas.Admin.Controllers
             _unitOfWrok = unitOfWork;
         }
         #region Index
+        [Route("Section")]
         public async Task<IActionResult> Index()
         {
             return View();
@@ -40,6 +41,7 @@ namespace UMS.Areas.Admin.Controllers
         }
         #endregion
         #region Upsert
+        [Route("Section/Upsert")]
         public async Task<IActionResult>Upsert(Guid id)
         {
             try
@@ -65,6 +67,8 @@ namespace UMS.Areas.Admin.Controllers
             }
         }
         [HttpPost]
+        [Route("Section/Upsert")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult>Upsert(Section section)
         {
             try

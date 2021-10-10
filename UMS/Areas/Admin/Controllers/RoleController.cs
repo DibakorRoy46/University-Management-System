@@ -24,6 +24,7 @@ namespace UMS.Areas.Admin.Controllers
             _db = db;
         }
         #region Index
+        [Route("Role")]
         public async Task<IActionResult> Index()
         {
             return View();
@@ -58,6 +59,7 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
         #region Upsert
         [HttpGet]
+        [Route("Role/Upsert")]
         public async Task<IActionResult> Upsert(string id)
         {
             if (String.IsNullOrEmpty(id))
@@ -74,6 +76,7 @@ namespace UMS.Areas.Admin.Controllers
 
         [HttpPost]
 
+        [Route("Role/Upsert")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Upsert(IdentityRole roleObj)
         {         

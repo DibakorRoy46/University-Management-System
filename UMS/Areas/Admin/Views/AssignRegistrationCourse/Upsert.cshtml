@@ -270,13 +270,14 @@
                         type: "GET",
                         data: {
                             departmentId: $("#departmentId").val(),
+                            Id: '@Model.AssignRegistrationCourse.Id'
                         },
                         success: function (data) {
-                           
+
                             var teacherId = teacher.val();
-                            var teacherName = teacher.text();
+                            var teacherName = $("#teacherId option:selected").text();
                             teacher.empty();
-                            teacher.append($('<option>').val(teacherId).text()).prop("selected", true);
+                            teacher.append($('<option>').val(teacherId).text(teacherName).prop("selected", true));
                             $.each(data, function (key, value) {
                                 teacher.append('<option value="' + value.id + '">' + value.name + '</option>');
                             })

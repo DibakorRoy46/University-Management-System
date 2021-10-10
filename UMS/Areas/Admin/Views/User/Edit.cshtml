@@ -3,6 +3,7 @@
    
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<span id="message" class="d-none">@TempData["UserUpdate"]</span>
 <div class="container" id="main-container">
     <form method="post" enctype="multipart/form-data">
         <div class="row">
@@ -61,5 +62,11 @@
 <script>
     $(".loader").fadeOut(1000);
     $(".wrapper").fadeIn(1000);
+
+
+    var message = $("#message").text();
+    if (message != "") {
+        toastr.success(message);
+    }
 </script>
 }

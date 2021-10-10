@@ -1112,3 +1112,4 @@ E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\UMS.dll
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\ref\UMS.dll
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\UMS.pdb
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\UMS.genruntimeconfig.cache
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\CourseContent\Index.cshtml.g.cs

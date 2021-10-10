@@ -1,12 +1,155 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@{
-    ViewData["Title"] = "Home Page";
-}
+
+@model UMS.Models.ViewModels.DashboardVM
 <span class="d-none" id="message">@TempData["LoginSuccess"]</span>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <h3>@User.IsInRole("Super Admin")</h3>
+<div class="container" id="main-container">
+
+
+ <div class="bg-primary text-white p-3 rounded mb-3">
+     <h3 class="text-center">DashBoard</h3>
+
+ </div>
+ <div class="row">
+     @if (User.IsInRole("Admin") || User.IsInRole("Super Admin"))
+     {
+         <div class="col-lg-4 col-md-6 ">
+             <div class="card text-center bg-light">
+                 <div class="card-body">
+                     <h1 class="card-title">@Model.Department</h1>
+                     <div>
+                         <h3 class="font-light mb-0">Department</h3>
+                     </div>
+                     <hr />
+                     <a asp-action="Index" asp-controller="Department" asp-area="Admin">See All Departments </a>
+                 </div>
+             </div>
+         </div>
+         <div class="col-lg-4 col-md-6">
+             <div class="card text-center bg-light">
+                 <div class="card-body">
+                     <h1 class="card-title">@Model.Role</h1>
+                     <div>
+                         <h3 class="font-light mb-0">Roles</h3>
+                     </div>
+                     <hr />
+                     <a asp-action="Index" asp-controller="Role" asp-area="Admin">See All Roles </a>
+                 </div>
+             </div>
+         </div>
+
+         <div class="col-lg-4 col-md-6">
+             <div class="card text-center bg-light">
+                 <div class="card-body">
+                     <h1 class="card-title">@Model.Student</h1>
+                     <div>
+                         <h3 class="font-light mb-0">Students</h3>
+                     </div>
+                     <hr />
+                     <a asp-action="Index" asp-controller="User" asp-area="Admin">See All Students </a>
+                 </div>
+             </div>
+         </div>
+
+         <div class="col-lg-4 col-md-6 mt-3">
+             <div class="card text-center bg-light">
+                 <div class="card-body">
+                     <h1 class="card-title">@Model.Teacher</h1>
+                     <div>
+                         <h3 class="font-light mb-0">Faculties</h3>
+                     </div>
+                     <hr />
+                     <a asp-action="Index" asp-controller="User" asp-area="Admin">See All Faculties </a>
+                 </div>
+             </div>
+         </div>
+
+         <div class="col-lg-4 col-md-6 mt-3">
+             <div class="card text-center bg-light">
+                 <div class="card-body">
+                     <h1 class="card-title">@Model.Employee</h1>
+                     <div>
+                         <h3 class="font-light mb-0">Employees</h3>
+                     </div>
+                     <hr />
+                     <a asp-action="Index" asp-controller="User" asp-area="Admin">See All Employee </a>
+                 </div>
+             </div>
+         </div>
+     }
+     else if (User.IsInRole("Student"))
+     {
+         <div class="col-lg-4 col-md-6 ">
+             <div class="card text-center bg-light">
+                 <div class="card-body">
+                     <h1 class="card-title">@Model.PreregistrationCourseList</h1>
+                     <div>
+                         <h3 class="font-light mb-0">Pre-registration Courses</h3>
+                     </div>
+                     <hr />
+                     <a asp-action="Index" asp-controller="PreregistrationCourse" asp-area="Student">See All Pre-registration Courses </a>
+                 </div>
+             </div>
+         </div>
+
+         <div class="col-lg-4 col-md-6 ">
+             <div class="card text-center bg-light">
+                 <div class="card-body">
+                     <h1 class="card-title">@Model.RegistrationCourseList</h1>
+                     <div>
+                         <h3 class="font-light mb-0">Registration Courses</h3>
+                     </div>
+                     <hr />
+                     <a asp-action="Index" asp-controller="Registration" asp-area="Student">See All Registration Courses </a>
+                 </div>
+             </div>
+         </div>
+     }
+     else if (User.IsInRole("Faculty"))
+     {
+         <div class="col-lg-4 col-md-6 ">
+             <div class="card text-center bg-light">
+                 <div class="card-body">
+                     <h1 class="card-title">@Model.AssignCourseList</h1>
+                     <div>
+                         <h3 class="font-light mb-0">Teaching Courses</h3>
+                     </div>
+                     <hr />
+                     <a asp-action="Index" asp-controller="PreregistrationCourse" asp-area="Student">See All Teaching Courses </a>
+                 </div>
+             </div>
+         </div>
+     }
+     else
+     {
+         <div class="col-lg-4 col-md-6">
+             <div class="card text-center bg-light">
+                 <div class="card-body">
+                     <h1 class="card-title">@Model.Student</h1>
+                     <div>
+                         <h3 class="font-light mb-0">Students</h3>
+                     </div>
+                     <hr />
+                     <a asp-action="Index" asp-controller="User" asp-area="Admin">See All Students </a>
+                 </div>
+             </div>
+         </div>
+
+         <div class="col-lg-4 col-md-6 mt-3">
+             <div class="card text-center bg-light">
+                 <div class="card-body">
+                     <h1 class="card-title">@Model.Teacher</h1>
+                     <div>
+                         <h3 class="font-light mb-0">Faculties</h3>
+                     </div>
+                     <hr />
+                     <a asp-action="Index" asp-controller="User" asp-area="Admin">See All Faculties </a>
+                 </div>
+             </div>
+         </div>
+     }
+ </div>
+   
+
 </div>
 @section Scripts
 {

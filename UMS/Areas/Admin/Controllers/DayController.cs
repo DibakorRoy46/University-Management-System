@@ -21,6 +21,7 @@ namespace UMS.Areas.Admin.Controllers
             _unitOfWrok = unitOfWork;
         }
         #region Index
+        [Route("Day")]
         public async Task<IActionResult> Index()
         {
             return View();
@@ -40,6 +41,7 @@ namespace UMS.Areas.Admin.Controllers
         }
         #endregion
         #region Upsert
+        [Route("Day/Upsert")]
         public async Task<IActionResult>Upsert(Guid id)
         {
             try
@@ -65,6 +67,7 @@ namespace UMS.Areas.Admin.Controllers
             }
         }
         [HttpPost]
+        [Route("Day/Upsert")]
         public async Task<IActionResult>Upsert(Day day)
         {
             try

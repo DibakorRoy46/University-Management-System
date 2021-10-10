@@ -12,7 +12,7 @@ namespace UMS.Data.IRepository
         Task UpdateAsync(AssignRegistrationCourse assignRegistrationCourse);
         Task<int> CountAsync(string searchValue, Guid departmentId, Guid semesterId, int year);
         Task<IEnumerable<AssignRegistrationCourse>> SearchAsync(string searchValue, Guid departmentId, Guid semesterId, int year,int pageNo,int pageSize);
-        Task<IEnumerable<ApplicationUser>> GetAllFaculty(Guid departmentId);
+        Task<IEnumerable<ApplicationUser>> GetAllFaculty(Guid departmentId,Guid id);
         Task<IEnumerable<Course>> GetAllCourse(Guid departmentId);
     }
 }

@@ -25,6 +25,7 @@ namespace UMS.Areas.Admin.Controllers
             _unitOfWork = unitOfWork;
         }
         #region INDEX
+        [Route("CoursePrerequisite")]
         public IActionResult Index()
         {
             return View();

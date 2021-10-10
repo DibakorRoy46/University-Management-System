@@ -36,6 +36,7 @@ namespace UMS.Areas.Admin.Controllers
             _userManager = userManager;
         }
         #region Index
+        [Route("User")]
         public async Task<IActionResult> Index()
         {
             ViewBag.RoleList = await _db.Roles.ToListAsync();
@@ -59,7 +60,7 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
 
         #region Edit 
-        [Route("User/Edit/")]
+        [Route("User/Edit")]
         
         public async Task<IActionResult> Edit(string Id)
         {
@@ -82,7 +83,8 @@ namespace UMS.Areas.Admin.Controllers
                 return BadRequest();
             }
         }
-        [Route("User/Edit/")]
+        [Route("User/Edit")]
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult>Edit(ApplicationUser user)
         {
@@ -96,7 +98,7 @@ namespace UMS.Areas.Admin.Controllers
                         TempData["UserUpdate"] = "Successfully Updated";
                     }
                     await _unitOfWork.SaveAsync();
-                    if(User.IsInRole("Admin"))
+                    if(User.IsInRole("Super Admin"))
                     {
                         return RedirectToAction(nameof(Index));
                     }
@@ -224,6 +226,7 @@ namespace UMS.Areas.Admin.Controllers
 
         #region ManageRole
         [Authorize(Roles = "Super Admin,Admin")]
+        [Route("User/Managerole")]
         public async Task<IActionResult> ManageRole(string id)
         {
             var roleList = await _db.Roles.ToListAsync();
@@ -277,6 +280,7 @@ namespace UMS.Areas.Admin.Controllers
         
         [HttpPost]
         [Authorize(Roles = "Super Admin,Admin")]
+        [Route("User/Managerole")]
         public async Task<IActionResult> ManageRole(string userId,string roleId)
         {
             if(!String.IsNullOrEmpty(userId)&&!String.IsNullOrEmpty(roleId))
@@ -348,6 +352,7 @@ namespace UMS.Areas.Admin.Controllers
 
         #region AssignClaimtoRole
         [Authorize(Roles = "Super Admin,Admin")]
+        [Route("User/Manageclaim")]
         public async Task<IActionResult> AssignClaimToUser(string id)
         {
             var cliamList = await _unitOfWork.Claims.GetAllAsync();
@@ -379,6 +384,7 @@ namespace UMS.Areas.Admin.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Super Admin,Admin")]
+        [Route("User/Manageclaim")]
         public async Task<IActionResult> AssignClaimToUser(string userId,Guid claimId)
         {
             if(!String.IsNullOrEmpty(userId)&& Guid.Empty!=claimId)

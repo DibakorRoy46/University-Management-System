@@ -43,8 +43,13 @@
 
     </div>
     <div class="sidebar">
+
+        @{
+            var dashClass = ViewContext.RouteData.Values["Controller"].ToString() == "Home" 
+          ? "sidebar-active" : String.Empty;
+        }
         <ul class="sidebar-nav">
-            <li class="sidebar-nav-item sidebar-active">
+            <li class="sidebar-nav-item @dashClass">
                 <a asp-action="Index" asp-controller="Home" asp-area="Student" class="sidebar-nav-link ">
                     <div>
                         <i class="fas fa-tachometer-alt"></i>
@@ -57,7 +62,13 @@
             </li>
             @if (User.IsInRole("Admin") || User.IsInRole("Super Admin") || User.IsInRole("Program Officer"))
             {
-                <li class="sidebar-nav-item">
+
+                var userClass = ViewContext.RouteData.Values["Controller"].ToString() == "User" ||
+                ViewContext.RouteData.Values["Action"].ToString()=="Register"
+                 ? "sidebar-active" : String.Empty;
+
+
+                <li class="sidebar-nav-item @userClass">
                     <a asp-action="Index" asp-controller="User" asp-area="Admin" class="sidebar-nav-link ">
                         <div>
                             <i class="fas fa-tachometer-alt"></i>
@@ -71,10 +82,10 @@
             }
             @if (User.IsInRole("Admin") || User.IsInRole("Super Admin"))
             {
+                var departmentClass = ViewContext.RouteData.Values["Controller"].ToString() == "Department"
 
-
-
-                <li class="sidebar-nav-item">
+                 ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @departmentClass">
                     <a asp-action="Index" asp-controller="Department" asp-area="Admin" class="sidebar-nav-link">
                         <div>
                             <i class="fas fa-building"></i>
@@ -82,8 +93,10 @@
                         <span>Department</span>
                     </a>
                 </li>
+                var CourseTypeClass = ViewContext.RouteData.Values["Controller"].ToString() == "CourseType"
 
-                <li class="sidebar-nav-item">
+                 ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @CourseTypeClass">
                     <a asp-action="Index" asp-controller="CourseType" asp-area="Admin" class="sidebar-nav-link">
                         <div>
                             <i class="fas fa-tasks"></i>
@@ -91,7 +104,10 @@
                         <span>CourseType</span>
                     </a>
                 </li>
-                <li class="sidebar-nav-item">
+                var CourseProTypeClass = ViewContext.RouteData.Values["Controller"].ToString() == "CourseProtoType"
+
+               ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @CourseProTypeClass">
                     <a asp-action="Index" asp-controller="CourseProtoType" asp-area="Admin" class="sidebar-nav-link">
                         <div>
                             <i class="fas fa-spinner"></i>
@@ -99,7 +115,10 @@
                         <span>CourseProtoType</span>
                     </a>
                 </li>
-                <li class="sidebar-nav-item">
+                var CourseClass = ViewContext.RouteData.Values["Controller"].ToString() == "Course"
+
+              ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @CourseClass">
                     <a asp-action="Index" asp-controller="Course" asp-area="Admin" class="sidebar-nav-link">
                         <div>
                             <i class="fas fa-check-circle"></i>
@@ -108,8 +127,10 @@
 
                     </a>
                 </li>
+                var CoursePreClass = ViewContext.RouteData.Values["Controller"].ToString() == "CoursePre"
 
-                <li class="sidebar-nav-item">
+              ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @CoursePreClass">
                     <a asp-action="Index" asp-controller="CoursePre" asp-area="Admin" class="sidebar-nav-link">
                         <div>
                             <i class="fas fa-check-circle"></i>
@@ -117,7 +138,11 @@
                         <span>CourePrerequisite</span>
                     </a>
                 </li>
-                <li class="sidebar-nav-item">
+                var semesterClass = ViewContext.RouteData.Values["Controller"].ToString() == "Semester"
+
+             ? "sidebar-active" : String.Empty;
+
+                <li class="sidebar-nav-item @semesterClass">
                     <a asp-action="Index" asp-controller="Semester" asp-area="Admin" class="sidebar-nav-link">
                         <div>
                             <i class="fas fa-check-circle"></i>
@@ -125,7 +150,10 @@
                         <span>Semesters</span>
                     </a>
                 </li>
-                <li class="sidebar-nav-item">
+                var ClassTimeClass = ViewContext.RouteData.Values["Controller"].ToString() == "ClassTime"
+
+           ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @ClassTimeClass">
                     <a asp-action="Index" asp-controller="ClassTime" asp-area="Admin" class="sidebar-nav-link">
                         <div>
                             <i class="fas fa-check-circle"></i>
@@ -133,7 +161,10 @@
                         <span>Class Times</span>
                     </a>
                 </li>
-                <li class="sidebar-nav-item">
+                var DayClass = ViewContext.RouteData.Values["Controller"].ToString() == "Day"
+
+           ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @DayClass">
                     <a asp-action="Index" asp-controller="Day" asp-area="Admin" class="sidebar-nav-link">
                         <div>
                             <i class="fas fa-check-circle"></i>
@@ -141,7 +172,10 @@
                         <span>Days</span>
                     </a>
                 </li>
-                <li class="sidebar-nav-item">
+                var SectionClass = ViewContext.RouteData.Values["Controller"].ToString() == "Section"
+
+           ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @SectionClass">
                     <a asp-action="Index" asp-controller="Section" asp-area="Admin" class="sidebar-nav-link">
                         <div>
                             <i class="fas fa-check-circle"></i>
@@ -149,7 +183,10 @@
                         <span>Sections</span>
                     </a>
                 </li>
-                <li class="sidebar-nav-item">
+                var ActivityClass = ViewContext.RouteData.Values["Controller"].ToString() == "Activity"
+
+           ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @ActivityClass">
                     <a asp-action="Index" asp-controller="Activity" asp-area="Admin" class="sidebar-nav-link">
                         <div>
                             <i class="fas fa-bug"></i>
@@ -157,7 +194,10 @@
                         <span>Activities</span>
                     </a>
                 </li>
-                <li class="sidebar-nav-item">
+                var RoleClass = ViewContext.RouteData.Values["Controller"].ToString() == "Role"
+
+           ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @RoleClass" >
                     <a asp-action="Index" asp-controller="Role" asp-area="Admin" class="sidebar-nav-link">
                         <div>
                             <i class="fas fa-chart-line"></i>
@@ -165,7 +205,10 @@
                         <span>Roles</span>
                     </a>
                 </li>
-                <li class="sidebar-nav-item">
+                var claimClass = ViewContext.RouteData.Values["Controller"].ToString() == "Claim"
+
+           ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @claimClass">
                     <a asp-action="Index" asp-controller="Claim" asp-area="Admin" class="sidebar-nav-link">
                         <div>
                             <i class="fas fa-chart-line"></i>
@@ -173,7 +216,10 @@
                         <span>Claims</span>
                     </a>
                 </li>
-                <li class="sidebar-nav-item">
+                var AssignRegistrationCourseClass = ViewContext.RouteData.Values["Controller"].ToString() == "AssignRegistrationCourse"
+
+           ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @AssignRegistrationCourseClass">
                     <a asp-action="Index" asp-controller="AssignRegistrationCourse" asp-area="Admin" class="sidebar-nav-link">
                         <div>
                             <i class="fas fa-chart-line"></i>
@@ -183,7 +229,12 @@
                 </li>
 
             }
-            <li class="sidebar-nav-item">
+            @{
+                var PreRegistrationCourseClass = ViewContext.RouteData.Values["Controller"].ToString() == "PreRegistrationCourse"
+
+           ? "sidebar-active" : String.Empty;
+            }
+            <li class="sidebar-nav-item @PreRegistrationCourseClass">
                 <a asp-action="Index" asp-controller="PreRegistrationCourse" asp-area="Student" class="sidebar-nav-link ">
                     <div>
                         <i class="fas fa-tachometer-alt"></i>
@@ -196,8 +247,10 @@
             </li>
             @if (User.IsInRole("Student"))
             {
+                var RegistrationClass = ViewContext.RouteData.Values["Controller"].ToString() == "Registration"
 
-                <li class="sidebar-nav-item">
+          ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @RegistrationClass">
                     <a asp-action="Index" asp-controller="Registration" asp-area="Student" class="sidebar-nav-link ">
                         <div>
                             <i class="fas fa-tachometer-alt"></i>

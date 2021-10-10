@@ -13,6 +13,7 @@ namespace UMS.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles ="Admin, Super Admin")]
+
     public class CourseTypeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -21,6 +22,7 @@ namespace UMS.Areas.Admin.Controllers
             _unitOfWork = unitOfWork;
         }
         #region Index
+        [Route("CourseType")]
         public async Task<IActionResult> Index()
         {
             return View();
@@ -42,6 +44,7 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
 
         #region Upsert
+        [Route("CourseType/Upsert")]
         public async Task<IActionResult> Upsert(Guid id)
         {
             try
@@ -69,6 +72,7 @@ namespace UMS.Areas.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("CourseType/Upsert")]
         public async Task<IActionResult> Upsert(CourseType courseType)
         {
             try

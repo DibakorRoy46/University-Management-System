@@ -29,6 +29,7 @@ namespace UMS.Areas.Admin.Controllers
             _userManager = userManager;
         }
         #region Index
+        [Route("Claim")]
         public async Task<IActionResult> Index()
         {
             return View();
@@ -49,6 +50,7 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
 
         #region Upsert
+        [Route("Claim/Upsert")]
         public async Task<IActionResult> Upsert(Guid id)
         {
             try
@@ -74,6 +76,7 @@ namespace UMS.Areas.Admin.Controllers
             }
         }
         [HttpPost]
+        [Route("Cliam/Upsert")]
         public async Task<IActionResult> Upsert(Claims claims)
         {
             try

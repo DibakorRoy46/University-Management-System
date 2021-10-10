@@ -26,6 +26,7 @@ namespace UMS.Areas.Admin.Controllers
            
         }
         #region Index
+        [Route("AssignRegisterCourse")]
         public async Task<IActionResult> Index()
         {
             var semesterList = await _unitofWork.Semester.GetAllAsync();
@@ -78,6 +79,7 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
 
         #region Upsert
+        [Route("AssignRegisterCourse/Upsert")]
         public async Task<IActionResult>Upsert(Guid id)
         {
             try
@@ -85,7 +87,7 @@ namespace UMS.Areas.Admin.Controllers
                 var semesterList = await _unitofWork.Semester.GetAllAsync();
                 var courseList = await _unitofWork.Course.GetAllAsync();
                 var sectionList = await _unitofWork.Section.GetAllAsync();
-                var teacherList = await _unitofWork.AssignRegistrationCourse.GetAllFaculty(Guid.Empty);
+                var teacherList = await _unitofWork.AssignRegistrationCourse.GetAllFaculty(Guid.Empty,Guid.Empty);
                 var departmentList = await _unitofWork.Department.GetAllAsync();
                 var dayList = await _unitofWork.Day.GetAllAsync();
                 AssginRegistrationCourseUpsertVM assginRegistrationCourseUpsertVM = new AssginRegistrationCourseUpsertVM()
@@ -150,6 +152,7 @@ namespace UMS.Areas.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("AssignRegisterCourse/Upsert")]
         public async Task<IActionResult> Upsert(AssginRegistrationCourseUpsertVM assginRegistrationCourseUpsertVM)
         {
             try
@@ -176,12 +179,21 @@ namespace UMS.Areas.Admin.Controllers
         }
         #endregion
         #region Cascade
-        public async Task<IEnumerable<ApplicationUser>>GetFacultyByDepartment(Guid departmentId)
+        public async Task<IEnumerable<ApplicationUser>>GetFacultyByDepartment(Guid departmentId,Guid id)
         {
-            return await _unitofWork.AssignRegistrationCourse.GetAllFaculty(departmentId);
+            if(id!=Guid.Empty)
+            {
+                return await _unitofWork.AssignRegistrationCourse.GetAllFaculty(departmentId,id);
+            }
+            else
+            {
+                return await _unitofWork.AssignRegistrationCourse.GetAllFaculty(departmentId, id);
+            }
+            
         }
         public async Task<IEnumerable<Course>>GetCourseByDepartment(Guid departmentId)
         {
+
             return await _unitofWork.AssignRegistrationCourse.GetAllCourse(departmentId);
         }
 

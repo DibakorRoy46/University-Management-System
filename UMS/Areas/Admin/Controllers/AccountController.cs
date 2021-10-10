@@ -135,14 +135,14 @@ namespace UMS.Areas.Admin.Controllers
 
         #region Login
         [Route("Login")] 
-        [Route("Admin/Account/Login")]
+      
         [AllowAnonymous]
         public async Task<IActionResult>Login()
         {
             return View();
         }
         [Route("Login")]
-        [Route("Admin/Account/Login")]
+      
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]

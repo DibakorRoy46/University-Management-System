@@ -34,6 +34,7 @@ namespace UMS.Data.Repository
             RegistrationCourse = new RegistrationCourseRepository(db);
             AssignRegistrationCourse = new AssignRegistrationCourseRepository(db);
             CourseContent = new CourseContentRepository(db);
+            AdminDashboard = new AdminDashboardRepository(db);
 
         }
         public IDepartmentRepository Department { get; private set; }
@@ -72,6 +73,8 @@ namespace UMS.Data.Repository
         public IRegistrationCourseRepository RegistrationCourse { get; private set; }
 
         public ICourseContentRepository CourseContent { get; private set; }
+
+        public IAdminDashboardRepository AdminDashboard { get; private set; }
 
         public void Dispose()
         {

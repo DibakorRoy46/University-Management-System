@@ -233,26 +233,55 @@ namespace UMS.Data.Repository
             }
         }
 
-        public async Task<IEnumerable<ApplicationUser>> GetAllFaculty(Guid departmentId)
+        public async Task<IEnumerable<ApplicationUser>> GetAllFaculty(Guid departmentId,Guid id)
         {
-            if(departmentId!=Guid.Empty)
+            if(id!=Guid.Empty)
             {
-                 return await (from users in _db.ApplicationUsers join
-                                    userDetails in _db.UserDetails on users.Id equals userDetails.UserId
-                                     join aspnetUserRoles in _db.UserRoles on users.Id equals aspnetUserRoles.UserId
-                                     join roles in _db.Roles on aspnetUserRoles.RoleId equals roles.Id where
-                                     roles.Name == "Faculty" && userDetails.DepartmentId == departmentId 
-                                     select users).ToListAsync();
+                var assignCourseObj = await _db.AssignRegistrationCourses.FirstOrDefaultAsync(x => x.Id == id);
+                if(departmentId!=Guid.Empty)
+                {
+                     return await (from users in _db.ApplicationUsers join
+                                        userDetails in _db.UserDetails on users.Id equals userDetails.UserId
+                                         join aspnetUserRoles in _db.UserRoles on users.Id equals aspnetUserRoles.UserId
+                                         join roles in _db.Roles on aspnetUserRoles.RoleId equals roles.Id where
+                                         roles.Name == "Faculty" && userDetails.DepartmentId == departmentId 
+                                         && users.Id!=assignCourseObj.TeacherId
+                                         select users).ToListAsync();
+                }
+                else
+                {
+                     return await (from users in _db.ApplicationUsers join
+                                        userDetails in _db.UserDetails on users.Id equals userDetails.UserId
+                                         join aspnetUserRoles in _db.UserRoles on users.Id equals aspnetUserRoles.UserId
+                                         join roles in _db.Roles on aspnetUserRoles.RoleId equals roles.Id where
+                                         roles.Name == "Faculty" && users.Id != assignCourseObj.TeacherId
+                                         select users).ToListAsync();
+                }
+
             }
             else
             {
-                 return await (from users in _db.ApplicationUsers join
-                                    userDetails in _db.UserDetails on users.Id equals userDetails.UserId
-                                     join aspnetUserRoles in _db.UserRoles on users.Id equals aspnetUserRoles.UserId
-                                     join roles in _db.Roles on aspnetUserRoles.RoleId equals roles.Id where
-                                     roles.Name == "Faculty"
-                                     select users).ToListAsync();
+                if(departmentId!=Guid.Empty)
+                {
+                     return await (from users in _db.ApplicationUsers join
+                                        userDetails in _db.UserDetails on users.Id equals userDetails.UserId
+                                         join aspnetUserRoles in _db.UserRoles on users.Id equals aspnetUserRoles.UserId
+                                         join roles in _db.Roles on aspnetUserRoles.RoleId equals roles.Id where
+                                         roles.Name == "Faculty" && userDetails.DepartmentId == departmentId 
+                                         select users).ToListAsync();
+                }
+                else
+                {
+                     return await (from users in _db.ApplicationUsers join
+                                        userDetails in _db.UserDetails on users.Id equals userDetails.UserId
+                                         join aspnetUserRoles in _db.UserRoles on users.Id equals aspnetUserRoles.UserId
+                                         join roles in _db.Roles on aspnetUserRoles.RoleId equals roles.Id where
+                                         roles.Name == "Faculty"
+                                         select users).ToListAsync();
+                }
+
             }
+            
            
 
 
@@ -263,5 +292,7 @@ namespace UMS.Data.Repository
         {
             return await _db.Courses.Where(x => x.DepartmentId == departmentId).ToListAsync();
         }
+
+        
     }
 }

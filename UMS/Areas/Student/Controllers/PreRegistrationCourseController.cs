@@ -114,8 +114,8 @@ namespace UMS.Areas.Student.Controllers
             userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var semesterObj = await _unitOfWork.Semester.FirstOrDefaultAsync(x => x.IsActive == true);
             var activityObj = await _unitOfWork.Activity.FirstOrDefaultAsync(x => x.Name == "Preregistration");
-
-            if(activityObj.StartDate<=DateTime.Now &&activityObj.EndDate<=DateTime.Now&&activityObj.IsActive==true)
+           
+            if(activityObj.StartDate<=DateTime.Now &&activityObj.EndDate>=DateTime.Now&&activityObj.IsActive==true)
             {
                 PreCourseVM preCourseVM = new PreCourseVM()
                 {
