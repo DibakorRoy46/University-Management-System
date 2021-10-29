@@ -216,7 +216,7 @@ namespace UMS.Areas.Admin.Controllers
 
         #region AccessDenied
         [HttpGet]
-        [Authorize]
+        [AllowAnonymous]
         [Route("AccessDenied")]
         public IActionResult AccessDenied()
         {

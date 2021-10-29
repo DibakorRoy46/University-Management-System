@@ -45,8 +45,8 @@
     <div class="sidebar">
 
         @{
-            var dashClass = ViewContext.RouteData.Values["Controller"].ToString() == "Home" 
-          ? "sidebar-active" : String.Empty;
+            var dashClass = ViewContext.RouteData.Values["Controller"].ToString() == "Home"
+            ? "sidebar-active" : String.Empty;
         }
         <ul class="sidebar-nav">
             <li class="sidebar-nav-item @dashClass">
@@ -64,7 +64,7 @@
             {
 
                 var userClass = ViewContext.RouteData.Values["Controller"].ToString() == "User" ||
-                ViewContext.RouteData.Values["Action"].ToString()=="Register"
+                ViewContext.RouteData.Values["Action"].ToString() == "Register"
                  ? "sidebar-active" : String.Empty;
 
 
@@ -106,7 +106,7 @@
                 </li>
                 var CourseProTypeClass = ViewContext.RouteData.Values["Controller"].ToString() == "CourseProtoType"
 
-               ? "sidebar-active" : String.Empty;
+                ? "sidebar-active" : String.Empty;
                 <li class="sidebar-nav-item @CourseProTypeClass">
                     <a asp-action="Index" asp-controller="CourseProtoType" asp-area="Admin" class="sidebar-nav-link">
                         <div>
@@ -117,7 +117,7 @@
                 </li>
                 var CourseClass = ViewContext.RouteData.Values["Controller"].ToString() == "Course"
 
-              ? "sidebar-active" : String.Empty;
+                ? "sidebar-active" : String.Empty;
                 <li class="sidebar-nav-item @CourseClass">
                     <a asp-action="Index" asp-controller="Course" asp-area="Admin" class="sidebar-nav-link">
                         <div>
@@ -129,7 +129,7 @@
                 </li>
                 var CoursePreClass = ViewContext.RouteData.Values["Controller"].ToString() == "CoursePre"
 
-              ? "sidebar-active" : String.Empty;
+                ? "sidebar-active" : String.Empty;
                 <li class="sidebar-nav-item @CoursePreClass">
                     <a asp-action="Index" asp-controller="CoursePre" asp-area="Admin" class="sidebar-nav-link">
                         <div>
@@ -140,7 +140,7 @@
                 </li>
                 var semesterClass = ViewContext.RouteData.Values["Controller"].ToString() == "Semester"
 
-             ? "sidebar-active" : String.Empty;
+                ? "sidebar-active" : String.Empty;
 
                 <li class="sidebar-nav-item @semesterClass">
                     <a asp-action="Index" asp-controller="Semester" asp-area="Admin" class="sidebar-nav-link">
@@ -152,7 +152,7 @@
                 </li>
                 var ClassTimeClass = ViewContext.RouteData.Values["Controller"].ToString() == "ClassTime"
 
-           ? "sidebar-active" : String.Empty;
+                ? "sidebar-active" : String.Empty;
                 <li class="sidebar-nav-item @ClassTimeClass">
                     <a asp-action="Index" asp-controller="ClassTime" asp-area="Admin" class="sidebar-nav-link">
                         <div>
@@ -163,7 +163,7 @@
                 </li>
                 var DayClass = ViewContext.RouteData.Values["Controller"].ToString() == "Day"
 
-           ? "sidebar-active" : String.Empty;
+                ? "sidebar-active" : String.Empty;
                 <li class="sidebar-nav-item @DayClass">
                     <a asp-action="Index" asp-controller="Day" asp-area="Admin" class="sidebar-nav-link">
                         <div>
@@ -174,7 +174,7 @@
                 </li>
                 var SectionClass = ViewContext.RouteData.Values["Controller"].ToString() == "Section"
 
-           ? "sidebar-active" : String.Empty;
+                ? "sidebar-active" : String.Empty;
                 <li class="sidebar-nav-item @SectionClass">
                     <a asp-action="Index" asp-controller="Section" asp-area="Admin" class="sidebar-nav-link">
                         <div>
@@ -185,7 +185,7 @@
                 </li>
                 var ActivityClass = ViewContext.RouteData.Values["Controller"].ToString() == "Activity"
 
-           ? "sidebar-active" : String.Empty;
+                ? "sidebar-active" : String.Empty;
                 <li class="sidebar-nav-item @ActivityClass">
                     <a asp-action="Index" asp-controller="Activity" asp-area="Admin" class="sidebar-nav-link">
                         <div>
@@ -196,8 +196,8 @@
                 </li>
                 var RoleClass = ViewContext.RouteData.Values["Controller"].ToString() == "Role"
 
-           ? "sidebar-active" : String.Empty;
-                <li class="sidebar-nav-item @RoleClass" >
+                ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @RoleClass">
                     <a asp-action="Index" asp-controller="Role" asp-area="Admin" class="sidebar-nav-link">
                         <div>
                             <i class="fas fa-chart-line"></i>
@@ -207,7 +207,7 @@
                 </li>
                 var claimClass = ViewContext.RouteData.Values["Controller"].ToString() == "Claim"
 
-           ? "sidebar-active" : String.Empty;
+                ? "sidebar-active" : String.Empty;
                 <li class="sidebar-nav-item @claimClass">
                     <a asp-action="Index" asp-controller="Claim" asp-area="Admin" class="sidebar-nav-link">
                         <div>
@@ -218,7 +218,7 @@
                 </li>
                 var AssignRegistrationCourseClass = ViewContext.RouteData.Values["Controller"].ToString() == "AssignRegistrationCourse"
 
-           ? "sidebar-active" : String.Empty;
+                ? "sidebar-active" : String.Empty;
                 <li class="sidebar-nav-item @AssignRegistrationCourseClass">
                     <a asp-action="Index" asp-controller="AssignRegistrationCourse" asp-area="Admin" class="sidebar-nav-link">
                         <div>
@@ -232,24 +232,28 @@
             @{
                 var PreRegistrationCourseClass = ViewContext.RouteData.Values["Controller"].ToString() == "PreRegistrationCourse"
 
-           ? "sidebar-active" : String.Empty;
+                ? "sidebar-active" : String.Empty;
             }
-            <li class="sidebar-nav-item @PreRegistrationCourseClass">
-                <a asp-action="Index" asp-controller="PreRegistrationCourse" asp-area="Student" class="sidebar-nav-link ">
-                    <div>
-                        <i class="fas fa-tachometer-alt"></i>
-                    </div>
-                    <span>
-                        Preregistration
-                    </span>
+            @if (User.IsInRole("Admin") || User.IsInRole("Super Admin") || User.IsInRole("Student"))
+            {
+                <li class="sidebar-nav-item @PreRegistrationCourseClass">
+                    <a asp-action="Index" asp-controller="PreRegistrationCourse" asp-area="Student" class="sidebar-nav-link ">
+                        <div>
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <span>
+                            Preregistration
+                        </span>
 
-                </a>
-            </li>
+                    </a>
+                </li>
+            }
+
             @if (User.IsInRole("Student"))
             {
                 var RegistrationClass = ViewContext.RouteData.Values["Controller"].ToString() == "Registration"
 
-          ? "sidebar-active" : String.Empty;
+                ? "sidebar-active" : String.Empty;
                 <li class="sidebar-nav-item @RegistrationClass">
                     <a asp-action="Index" asp-controller="Registration" asp-area="Student" class="sidebar-nav-link ">
                         <div>
@@ -257,6 +261,53 @@
                         </div>
                         <span>
                             Registration
+                        </span>
+
+                    </a>
+                </li>
+                var gradeClass = ViewContext.RouteData.Values["Controller"].ToString() == "Grade"
+
+                ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @gradeClass">
+                    <a asp-action="Index" asp-controller="Grade" asp-area="Student" class="sidebar-nav-link ">
+                        <div>
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <span>
+                            Grade
+                        </span>
+
+                    </a>
+                </li>
+            }
+            @if (User.IsInRole("Faculty"))
+            {
+                var courseAdviseClass = ViewContext.RouteData.Values["Controller"].ToString() == "TeacherCourse"
+                    && (ViewContext.RouteData.Values["Action"].ToString() == "CourseList"||
+                     ViewContext.RouteData.Values["Action"].ToString() == "StudentList")
+                    ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @courseAdviseClass">
+                    <a asp-action="CourseList" asp-controller="TeacherCourse" asp-area="Teacher" class="sidebar-nav-link ">
+                        <div>
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <span>
+                            AdviseCourse
+                        </span>
+
+                    </a>
+                </li>
+                var courseAdvisePriClass = ViewContext.RouteData.Values["Controller"].ToString() == "TeacherCourse"
+                    && (ViewContext.RouteData.Values["Action"].ToString() == "PreviousCourseList"||
+                    ViewContext.RouteData.Values["Action"].ToString() == "PreviousStudentList")
+                    ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @courseAdvisePriClass">
+                    <a asp-action="PreviousCourseList" asp-controller="TeacherCourse" asp-area="Teacher" class="sidebar-nav-link ">
+                        <div>
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <span>
+                            Previous AdviseCourse
                         </span>
 
                     </a>

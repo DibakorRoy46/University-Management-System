@@ -134,6 +134,7 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
 
         #region Login
+        [Route("")]
         [Route("Login")] 
       
         [AllowAnonymous]
@@ -141,8 +142,8 @@ namespace UMS.Areas.Admin.Controllers
         {
             return View();
         }
-        [Route("Login")]
-      
+        [Route("")]
+        [Route("Login")]   
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]

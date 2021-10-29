@@ -17,5 +17,6 @@ namespace UMS.Models.ViewModels
         public int RegistrationCourseList { get; set; }
         public int PreregistrationCourseList { get; set; }
         public int AssignCourseList { get; set; }
+        public int PreviousAdvisedCourseList { get; set; }
     }
 }

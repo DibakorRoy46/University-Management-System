@@ -19,21 +19,11 @@ namespace UMS.Data.Repository
             _db = db;
         }
 
-        public async Task<IEnumerable<Guid>> SelectCourseId(Guid courseId, Guid semesterId, int year)
+        public async Task<IEnumerable<Guid>> SelectCourseId(Guid courseId, Guid semesterId)
         {
             return  _db.CourseforPreregistration.
-                Where(x => x.CourseId == courseId && x.SemesterId == semesterId && x.Year == year).Select(x => x.CourseId); 
+                Where(x => x.CourseId == courseId && x.SemesterId == semesterId).Select(x => x.CourseId); 
         }
-        public async Task<IEnumerable<int>> SelectYear(string userId=null)
-        {
-            if(!String.IsNullOrEmpty(userId))
-            {
-                return _db.PreRegistrationCourses.Include(x => x.ApplicationUser).Include(x => x.Courses).
-                Where(x => x.ApplicationUser.Id == userId).Select(x => x.Courses.Year).Distinct();
-            }
-            return _db.PreRegistrationCourses.Select(x => x.Courses.Year).Distinct();
-
-
-        }
+       
     }
 }

@@ -281,7 +281,27 @@ section {
     background-size: cover;
     background-position: center center;
 }
-
+#grade-head {
+    width: 300px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius:  10px 10px 0px 0px;
+    background: #f2f2f2;
+}
+#grade {
+    width: 300px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0px 0px 10px 10px;
+    background: #f2f2f2;
+}
+#grade-detials{
+    border:2px solid #000000;
+}
 .form-container {
     position: absolute;
     top: 50%;
@@ -529,7 +549,9 @@ a {
 .sidebar {
     width: 82px;
     position: fixed;
-    margin-top: 68px;
+    margin-top: 60px;
+    margin-bottom:0;
+    height:100%;
     background: #ffffff;
     box-shadow: rgba(0,0,0,0.12) 0px 1px 4px 1px;
     overflow-y:auto;

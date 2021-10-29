@@ -9,12 +9,12 @@ namespace UMS.Data.IRepository
 {
     public interface IRegistrationCourseRepository:IRepository<StudentRegisteationCourse>
     {
-         Task<IEnumerable<StudentRegisteationCourse>> GetRegisteredCourses(string userId, Guid semesterId, int year);
-        Task<IEnumerable<AssignRegistrationCourse>> GetAllCourses(string searchValue, Guid departmentId);
-      
+        Task<IEnumerable<StudentRegisteationCourse>> GetRegisteredCourses(string userId, Guid semesterId);
+        Task<IEnumerable<AssignRegistrationCourse>> GetAllCourses(string searchValue, Guid departmentId, Guid semesterId);     
         Task<IEnumerable<Guid>> SelectRegistrationCourseId(string userId);
-        Task<IEnumerable<int>> SelectRegistrationYear(string userId);
         Task<IEnumerable<Guid>> TakenCourseId(string userId);
         Task<int> CountRegistered(Guid courseId);
+        Task UpdateAsync(StudentRegisteationCourse studentRegisteationCourse);
+        Task<bool> GetTimeAvilabity(string userId, Guid semesterId, string firstDate, string secondDate, DateTime startTime);
     }
 }

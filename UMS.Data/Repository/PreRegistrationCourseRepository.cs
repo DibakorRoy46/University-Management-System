@@ -23,7 +23,7 @@ namespace UMS.Data.Repository
                     Include(x => x.CourseProtoType).Include(x => x.CourseType).Include(x => x.CourseToCoursePrerequisites).ToListAsync();
             if (!String.IsNullOrEmpty(searchValue))
             {
-                courseList = await _db.Courses.Where(x => x.Name.Contains(searchValue) && x.DepartmentId == departmentId).
+                courseList = await _db.Courses.Where(x => (x.Name.Contains(searchValue) || x.Initial.Contains(searchValue)) && x.DepartmentId == departmentId).
                   Include(x => x.CourseProtoType).Include(x => x.CourseType).Include(x => x.CourseToCoursePrerequisites).ToListAsync();
             }
             return courseList;
@@ -40,42 +40,39 @@ namespace UMS.Data.Repository
             return courseList;
         }
 
-        public async Task<IEnumerable<AssignPreRegistrationCourse>> GetPreCourses(string userId,Guid semesterId,int year)
+        public async Task<IEnumerable<AssignPreRegistrationCourse>> GetPreCourses(string userId,Guid semesterId)
         {         
             if(!String.IsNullOrEmpty(userId))
             {
                 var  courseList = await _db.PreRegistrationCourses.Include(x=>x.Courses).ThenInclude(x=>x.Course)
                     .ThenInclude(x=>x.CourseProtoType)           
                     .Where(x => x.StudentId==userId).ToListAsync();
-                if (semesterId!=Guid.Empty && year!=0)
+                if (semesterId!=Guid.Empty)
                 {
                     courseList = await _db.PreRegistrationCourses.Include(x => x.Courses).
-                        Where(x => x.Courses.SemesterId == semesterId && x.StudentId==userId && x.Courses.Year==year).ToListAsync();
-                    
+                        Where(x => x.Courses.SemesterId == semesterId && x.StudentId==userId).ToListAsync();                  
                 }
                 return courseList.ToList();
             }
             return null;            
         }
-        public async Task<int> CountStudent(Guid id,Guid semesterId,int year)
+        public async Task<int> CountStudent(Guid id,Guid semesterId)
         {
             var courseList=await _db.PreRegistrationCourses.Include(x => x.Courses).
-                Where(x => x.Courses.CourseId == id&& x.Courses.SemesterId==semesterId && x.Courses.Year==year).ToListAsync();
+                Where(x => x.Courses.CourseId == id&& x.Courses.SemesterId==semesterId).ToListAsync();
             return courseList.Count();
         }
-        public async Task<IEnumerable<Guid>> SelectPreCourseId(string userId, Guid semesterId, int year)
+        public async Task<IEnumerable<Guid>> SelectPreCourseId(string userId, Guid semesterId)
         {
             if(!String.IsNullOrEmpty(userId))
             {
                 return  _db.PreRegistrationCourses.Include(x => x.Courses).
-                Where(x => x.StudentId == userId && x.Courses.SemesterId == semesterId && x.Courses.Year == year).
+                Where(x => x.StudentId == userId && x.Courses.SemesterId == semesterId).
                 Select(x => x.Courses.CourseId);
             }
             return _db.PreRegistrationCourses.Include(x => x.Courses).
-             Where(x =>x.Courses.SemesterId == semesterId && x.Courses.Year == year).
+             Where(x =>x.Courses.SemesterId == semesterId).
              Select(x => x.Courses.CourseId);
-
-
         }
     }
 }

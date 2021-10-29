@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,6 +47,7 @@ namespace UMS
                 config.LoginPath = new PathString("/Login"); 
                 config.LogoutPath =new PathString("/Logout");
                 config.AccessDeniedPath = new PathString("/AccessDenied"); 
+                
 
             });
           
@@ -58,7 +61,11 @@ namespace UMS
             {
                 option.TokenLifespan = TimeSpan.FromMinutes(5);
             });
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            
+            services.AddControllersWithViews(o =>
+            {
+                o.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build()));
+            }).AddRazorRuntimeCompilation();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
            
             services.AddHttpContextAccessor();
@@ -69,6 +76,11 @@ namespace UMS
                     policy => policy.RequireAssertion(context =>
                     context.User.IsInRole("Super Admin") ||context.User.IsInRole("Admin")||
                     context.User.HasClaim(claim => claim.Type == "Register")));
+
+                options.AddPolicy("PriviousCourseEdit",
+                    policy => policy.RequireAssertion(context =>
+                      context.User.IsInRole("Super Admin") || context.User.IsInRole("Admin") ||
+                      (context.User.IsInRole("Faculty") && context.User.HasClaim(claim => claim.Type == "Previous Advise Course Edit"))));
 
                 
                 
@@ -102,7 +114,7 @@ namespace UMS
             {              
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{area=Student}/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area=Admin}/{controller=Account}/{action=Login}/{id?}");
                
                 endpoints.MapRazorPages();
             });

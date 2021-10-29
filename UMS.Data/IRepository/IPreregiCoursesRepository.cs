@@ -9,8 +9,8 @@ namespace UMS.Data.IRepository
 {
     public interface IPreregiCoursesRepository:IRepository<PreregistrationCourses>
     {
-        Task<IEnumerable<Guid>> SelectCourseId(Guid courseId, Guid semesterId, int year);
-        Task<IEnumerable<int>> SelectYear(string userId=null);
+        Task<IEnumerable<Guid>> SelectCourseId(Guid courseId, Guid semesterId);
+        
 
     }
 }

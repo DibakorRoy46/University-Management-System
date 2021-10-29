@@ -31,7 +31,6 @@ namespace UMS.Areas.Admin.Controllers
         {
             var semesterList = await _unitofWork.Semester.GetAllAsync();
             var departmentList = await _unitofWork.Department.GetAllAsync();
-            var yearList = await _unitofWork.PreregiCourses.SelectYear();
 
             AssinRegistrationCourseVM assinRegistrationCourseVM = new AssinRegistrationCourseVM()
             {
@@ -45,29 +44,23 @@ namespace UMS.Areas.Admin.Controllers
                     Text = x.Name,
                     Value = x.Id.ToString()
                 }),
-                YearList = yearList.Select(x => new SelectListItem()
-                {
-                    Text = x.ToString(),
-                    Value = x.ToString()
-                }),
+               
             };
             return View(assinRegistrationCourseVM);
         }
-
-        public async Task<IActionResult>AssignCourseTable(string searchValue,Guid departmentId,Guid semesterId,int year,int pageNo,int pageSize)
+        public async Task<IActionResult>AssignCourseTable(string searchValue,Guid departmentId,Guid semesterId,int pageNo,int pageSize)
         {
             pageNo = pageNo != 0 ? pageNo : 1;
             pageSize = 10;
             var numberOfAssignCourse = await _unitofWork.
-                AssignRegistrationCourse.CountAsync(searchValue, departmentId, semesterId, year);
+                AssignRegistrationCourse.CountAsync(searchValue, departmentId, semesterId);
             AssignCourseTableVM assignCourseTableVM = new AssignCourseTableVM()
             {
                 AssignRegistrationCourseList = await _unitofWork.AssignRegistrationCourse.
-                        SearchAsync(searchValue, departmentId, semesterId, year, pageNo, pageSize),
+                        SearchAsync(searchValue, departmentId, semesterId, pageNo, pageSize),
                 Search = searchValue,
                 DepartmentId = departmentId,
                 SemesterId = semesterId,
-                Year = year,
                 Pager = new Pager(numberOfAssignCourse, pageNo, pageSize)
             };
             foreach (var course in assignCourseTableVM.AssignRegistrationCourseList)
@@ -196,12 +189,10 @@ namespace UMS.Areas.Admin.Controllers
 
             return await _unitofWork.AssignRegistrationCourse.GetAllCourse(departmentId);
         }
-
         #endregion
-
         #region Delete
         [HttpPost]
-        public async Task<IActionResult>Delete(Guid id,int pageNo,string searchValue,Guid departmentId,Guid semesterId,int year)
+        public async Task<IActionResult>Delete(Guid id,int pageNo,string searchValue,Guid departmentId,Guid semesterId)
         {
             try
             {
@@ -218,15 +209,14 @@ namespace UMS.Areas.Admin.Controllers
                     pageNo = pageNo != 0 ? pageNo : 1;
                     int pageSize = 10;
                     var numberOfAssignCourse = await _unitofWork.
-                        AssignRegistrationCourse.CountAsync(searchValue, departmentId, semesterId, year);
+                        AssignRegistrationCourse.CountAsync(searchValue, departmentId, semesterId);
                     AssignCourseTableVM assignCourseTableVM = new AssignCourseTableVM()
                     {
                         AssignRegistrationCourseList = await _unitofWork.AssignRegistrationCourse.
-                                SearchAsync(searchValue, departmentId, semesterId, year, pageNo, pageSize),
+                                SearchAsync(searchValue, departmentId, semesterId, pageNo, pageSize),
                         Search = searchValue,
                         DepartmentId = departmentId,
                         SemesterId = semesterId,
-                        Year = year,
                         Pager = new Pager(numberOfAssignCourse, pageNo, pageSize)
                     };
                     return PartialView("_assignCourseTable", assignCourseTableVM);
@@ -238,6 +228,36 @@ namespace UMS.Areas.Admin.Controllers
                 return BadRequest();
             }
 
+        }
+        #endregion
+
+        #region ValidOrInvalid
+        public async Task<IActionResult>SectionValidity(Guid semesterId, Guid courseId, Guid sectionId)
+        {
+            var isValid = await _unitofWork.AssignRegistrationCourse.GetSectionValidity(semesterId, courseId, sectionId);
+            if(isValid==true)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
+        public async Task<IActionResult>FacultySlotValidity(string teacherId, Guid semesterId, string firstDate, string secondDate, DateTime startTime)
+        {
+            var isValid = await _unitofWork.AssignRegistrationCourse.GetTeacherSlotValidity(teacherId, semesterId, firstDate, secondDate, startTime);
+            if(isValid==true)
+            {
+                return Json(new { success = false });
+            }
+            return Json(new { success = true });
+        }
+        public async Task<IActionResult>CourseType(Guid courseId)
+        {
+            var courseType = await _unitofWork.AssignRegistrationCourse.GetCourseType(courseId);
+            if(courseType==1)
+            {
+                return Json(new { type = "lab" });
+            }
+            return Json(new { type = "else" });
         }
         #endregion
     }

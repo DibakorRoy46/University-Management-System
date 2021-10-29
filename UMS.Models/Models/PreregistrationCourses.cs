@@ -15,8 +15,7 @@ namespace UMS.Models.Models
         public Course Course { get; set; }
         public Guid SemesterId { get; set; }
         [ForeignKey("SemesterId")]
-        public Semester Semester { get; set; }
-        public int Year { get; set; }
+        public Semester Semester { get; set; }    
         public IEnumerable<AssignPreRegistrationCourse> PrereristrationCourses { get; set; }
         
     }

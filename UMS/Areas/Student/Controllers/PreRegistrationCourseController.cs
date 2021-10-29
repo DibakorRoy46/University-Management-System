@@ -27,44 +27,51 @@ namespace UMS.Areas.Student.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var activity = await _unitOfWork.Activity.FirstOrDefaultAsync(x => x.Name == "Preregistration");
-            var semesterList=await _unitOfWork.Semester.GetAllAsync();
+            var semesterList = await _unitOfWork.Semester.GetAllAsync();
+            if(User.IsInRole("Admin,Super Admin"))
+            {
+                semesterList = await _unitOfWork.Semester.GetStudentSemester(userId);
+            }           
+            var deparmentList = await _unitOfWork.Department.GetAllAsync();
+            
             ViewBag.SemesterList = semesterList.Select(x => new SelectListItem()
             {
                 Text = x.Name,
                 Value = x.Id.ToString()
             });
-            var yearList = await _unitOfWork.PreregiCourses.SelectYear(userId);
-            ViewBag.YearList =  yearList.Select(x=>new SelectListItem()
-            { 
-                Text=x.ToString(),
-                Value=x.ToString()
+            ViewBag.DepartmentList = deparmentList.Select(x => new SelectListItem()
+            {
+                Text = x.Name,
+                Value = x.Id.ToString()
             });
-
             return View(activity);
         }
-        public async Task<IActionResult> CourseTable(string searchValue,Guid departmentId)
+        public async Task<IActionResult> CourseTable(string searchValue,Guid departmentId,Guid semesterId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _unitOfWork.ApplicationUser.FirstOrDefaultAsync(x => x.Id == userId, includeProperties: "UserDetails");
-            var userDetailsObj = await _unitOfWork.UserDetials.FirstOrDefaultAsync(x => x.UserId == userId);
+            var userDetailsObj = await _unitOfWork.UserDetials.FirstOrDefaultAsync(x => x.UserId == userId);           
             var semesterObj = await _unitOfWork.Semester.FirstOrDefaultAsync(x => x.IsActive == true);
+          
+            semesterId = semesterId != Guid.Empty ? semesterId : semesterObj.Id;
             if (userDetailsObj != null)
             {
-
                 PreRegistrationVM preRegistrationVM = new PreRegistrationVM()
                 {
                     User = user,
                     CourseList = await _unitOfWork.PreRegistationCourses.GetAllCourses(searchValue, userDetailsObj.DepartmentId),
-                };
-                var courseIdList = await _unitOfWork.PreRegistationCourses.SelectPreCourseId(userId,semesterObj.Id,DateTime.Now.Year);
-                foreach (var course in preRegistrationVM.CourseList)
+                };              
+                if(preRegistrationVM.CourseList.Count()>0)
                 {
-                    if (courseIdList.Contains(course.Id))
+                    var courseIdList = await _unitOfWork.PreRegistationCourses.SelectPreCourseId(userId, semesterId);
+                    foreach (var course in preRegistrationVM.CourseList)
                     {
-                        course.IsTaken = true;
-                       
+                        if (courseIdList.Contains(course.Id))
+                        {
+                            course.IsTaken = true;
+                        }
                     }
-                }
+                }            
                 return PartialView("_CourseTable", preRegistrationVM);
             }
             else
@@ -76,12 +83,12 @@ namespace UMS.Areas.Student.Controllers
                         User = user,
                         CourseList = await _unitOfWork.PreRegistationCourses.GetAllCourses(searchValue,departmentId),
                     };
-                    var courseIdList = await _unitOfWork.PreRegistationCourses.SelectPreCourseId(null, semesterObj.Id, DateTime.Now.Year);
+                    var courseIdList = await _unitOfWork.PreRegistationCourses.SelectPreCourseId(null, semesterId);
                     foreach (var course in preRegistrationVM.CourseList)
                     {
                         if (courseIdList.Contains(course.Id))
                         {                           
-                            course.Count = await _unitOfWork.PreRegistationCourses.CountStudent(course.Id, semesterObj.Id, DateTime.Now.Year);
+                            course.Count = await _unitOfWork.PreRegistationCourses.CountStudent(course.Id, semesterId);
                         }
                     }
 
@@ -95,13 +102,12 @@ namespace UMS.Areas.Student.Controllers
                         CourseList = await _unitOfWork.PreRegistationCourses.GetAllCourses(searchValue),
                     };
                     var courseIdList = await _unitOfWork.PreRegistationCourses.
-                        SelectPreCourseId(null, semesterObj.Id, DateTime.Now.Year);
+                        SelectPreCourseId(null, semesterId);
                     foreach (var course in preRegistrationVM.CourseList)
                     {
                         if (courseIdList.Contains(course.Id))
-                        {
-                            
-                            course.Count = await _unitOfWork.PreRegistationCourses.CountStudent(course.Id, semesterObj.Id, DateTime.Now.Year);
+                        {                           
+                            course.Count = await _unitOfWork.PreRegistationCourses.CountStudent(course.Id, semesterId);
                         }
                     }
                     return PartialView("_CourseTable", preRegistrationVM);
@@ -109,35 +115,29 @@ namespace UMS.Areas.Student.Controllers
                 
             }
         }
-        public async Task<IActionResult> SelectPreCourseTable(string userId,Guid semesterId,int year)
+        public async Task<IActionResult> SelectPreCourseTable(string userId,Guid semesterId)
         {
             userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var semesterObj = await _unitOfWork.Semester.FirstOrDefaultAsync(x => x.IsActive == true);
             var activityObj = await _unitOfWork.Activity.FirstOrDefaultAsync(x => x.Name == "Preregistration");
-           
+            
             if(activityObj.StartDate<=DateTime.Now &&activityObj.EndDate>=DateTime.Now&&activityObj.IsActive==true)
             {
                 PreCourseVM preCourseVM = new PreCourseVM()
                 {
                     CourseList = await _unitOfWork.PreRegistationCourses.
-                         GetPreCourses(userId, semesterObj.Id, DateTime.Now.Year),
+                         GetPreCourses(userId, semesterObj.Id),
                     StudentId = userId
                 };
                 return PartialView("_SelectPreCourseTable", preCourseVM);
             }
             else
             {
-                semesterId = semesterId == Guid.Empty ? semesterObj.Id : semesterId;
-                year = year == 0 ? DateTime.Now.Year : year;
-                var yearList= await _unitOfWork.PreregiCourses.SelectYear(userId);
-                if(!yearList.Contains(year))
-                {
-                    year = year - 1;
-                }              
+                semesterId = semesterId == Guid.Empty ? semesterObj.Id : semesterId;              
                 PreCourseVM preCourseVM = new PreCourseVM()
                 {
                     CourseList = await _unitOfWork.PreRegistationCourses.
-                         GetPreCourses(userId, semesterId, year),
+                         GetPreCourses(userId, semesterId),
                     StudentId = userId
                 };
                 return PartialView("_SelectPreCourseTable", preCourseVM);
@@ -158,13 +158,12 @@ namespace UMS.Areas.Student.Controllers
                         if (!String.IsNullOrEmpty(userId) && courseId != Guid.Empty)
                         {                         
                             var assignPreCourseObj = await _unitOfWork.PreregiCourses
-                                .SelectCourseId(courseId, semesterObj.Id, DateTime.Now.Year);
+                                .SelectCourseId(courseId, semesterObj.Id);
                             if(!assignPreCourseObj.Contains(courseId))
                             {
                                 PreregistrationCourses preCourseObj = new PreregistrationCourses();
                                 preCourseObj.CourseId = courseId;
-                                preCourseObj.SemesterId = semesterObj.Id;
-                                preCourseObj.Year = DateTime.Now.Year;
+                                preCourseObj.SemesterId = semesterObj.Id;                              
                                 await _unitOfWork.PreregiCourses.AddAsync(preCourseObj);
                                 await _unitOfWork.SaveAsync();
                                 AssignPreRegistrationCourse preCourse = new AssignPreRegistrationCourse();
@@ -175,7 +174,7 @@ namespace UMS.Areas.Student.Controllers
                                 PreCourseVM preCourseVM = new PreCourseVM()
                                 {
                                     CourseList = await _unitOfWork.PreRegistationCourses.
-                                    GetPreCourses(userId, semesterObj.Id, DateTime.Now.Year),
+                                    GetPreCourses(userId, semesterObj.Id),
                                     StudentId = userId
                                 };
                                 return PartialView("_SelectPreCourseTable", preCourseVM);
@@ -183,8 +182,7 @@ namespace UMS.Areas.Student.Controllers
                             else
                             {
                                 var preCourseId = await _unitOfWork.PreregiCourses.
-                                    FirstOrDefaultAsync(x => x.CourseId == courseId && x.SemesterId == semesterObj.Id
-                                    && x.Year == DateTime.Now.Year);
+                                    FirstOrDefaultAsync(x => x.CourseId == courseId && x.SemesterId == semesterObj.Id);
                                 AssignPreRegistrationCourse preCourse = new AssignPreRegistrationCourse();
                                 preCourse.PreCourseId = preCourseId.Id;
                                 preCourse.StudentId = userId;
@@ -193,7 +191,7 @@ namespace UMS.Areas.Student.Controllers
                                 PreCourseVM preCourseVM = new PreCourseVM()
                                 {
                                     CourseList = await _unitOfWork.PreRegistationCourses.
-                                    GetPreCourses(userId, semesterObj.Id, DateTime.Now.Year),
+                                    GetPreCourses(userId, semesterObj.Id),
                                     StudentId = userId
                                 };
                                 return PartialView("_SelectPreCourseTable", preCourseVM);
@@ -229,7 +227,7 @@ namespace UMS.Areas.Student.Controllers
                             var semesterObj = await _unitOfWork.Semester.FirstOrDefaultAsync(x => x.IsActive == true);
 
                             var preCourseObj = await _unitOfWork.PreregiCourses.
-                                FirstOrDefaultAsync(x => x.CourseId == courseId && x.SemesterId == semesterObj.Id && x.Year == DateTime.Now.Year);
+                                FirstOrDefaultAsync(x => x.CourseId == courseId && x.SemesterId == semesterObj.Id);
                             var selectPreCourseObj = await _unitOfWork.PreRegistationCourses.
                                 FirstOrDefaultAsync(x => x.PreCourseId == preCourseObj.Id && x.StudentId == userId);
                             if (preCourseObj == null)
@@ -241,7 +239,7 @@ namespace UMS.Areas.Student.Controllers
                             PreCourseVM preCourseVM = new PreCourseVM()
                             {
                                 CourseList = await _unitOfWork.PreRegistationCourses.
-                                GetPreCourses(userId,semesterObj.Id,DateTime.Now.Year),
+                                GetPreCourses(userId,semesterObj.Id),
                                 StudentId = userId
                             };
                             return PartialView("_SelectPreCourseTable", preCourseVM);

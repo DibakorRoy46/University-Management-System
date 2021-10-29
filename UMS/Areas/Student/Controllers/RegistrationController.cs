@@ -40,7 +40,7 @@ namespace UMS.Areas.Student.Controllers
                 RegistrationCourseVM registrationCourseVM = new RegistrationCourseVM()
                 {
                     User = user,
-                    CourseList = await _unitOfWork.RegistrationCourse.GetAllCourses(searchValue, userDetailsObj.DepartmentId),
+                    CourseList = await _unitOfWork.RegistrationCourse.GetAllCourses(searchValue, userDetailsObj.DepartmentId,semesterObj.Id),
                 };
                 var courseIdList = await _unitOfWork.RegistrationCourse.SelectRegistrationCourseId(userId);
                 foreach (var course in registrationCourseVM.CourseList)
@@ -59,7 +59,7 @@ namespace UMS.Areas.Student.Controllers
                     RegistrationCourseVM registrationCourseVM = new RegistrationCourseVM()
                     {
                         User = user,
-                        CourseList = await _unitOfWork.RegistrationCourse.GetAllCourses(searchValue, departmentId),
+                        CourseList = await _unitOfWork.RegistrationCourse.GetAllCourses(searchValue, departmentId,semesterObj.Id),
                     };
                     return PartialView("_CourseTable", registrationCourseVM);
                 }
@@ -68,7 +68,7 @@ namespace UMS.Areas.Student.Controllers
                     RegistrationCourseVM registrationCourseVM = new RegistrationCourseVM()
                     {
                         User = user,
-                        CourseList = await _unitOfWork.RegistrationCourse.GetAllCourses(searchValue, departmentId),
+                        CourseList = await _unitOfWork.RegistrationCourse.GetAllCourses(searchValue, departmentId,semesterObj.Id),
                     };
                     return PartialView("_CourseTable", registrationCourseVM);
                 }
@@ -80,12 +80,12 @@ namespace UMS.Areas.Student.Controllers
             var semesterObj = await _unitOfWork.Semester.FirstOrDefaultAsync(x => x.IsActive == true);
             var activityObj = await _unitOfWork.Activity.FirstOrDefaultAsync(x => x.Name == "Registration");
 
-            if (activityObj.StartDate <= DateTime.Now && DateTime.Now <=activityObj.EndDate && activityObj.IsActive == true)
+            if (activityObj.StartDate <= DateTime.Now && DateTime.Now <= activityObj.EndDate && activityObj.IsActive == true)
             {
                 SelectRegistrationCourseVM regisCourseVM = new SelectRegistrationCourseVM()
                 {
                     CourseList = await _unitOfWork.RegistrationCourse.
-                         GetRegisteredCourses(userId, semesterObj.Id, DateTime.Now.Year),
+                         GetRegisteredCourses(userId, semesterObj.Id),
                     UserId = userId
                 };
                 return PartialView("_SelectRegisCourseTable", regisCourseVM);
@@ -107,8 +107,11 @@ namespace UMS.Areas.Student.Controllers
                         {
                             var courseIdList = await _unitOfWork.RegistrationCourse.TakenCourseId(userId);
                             var assignCourseList = await _unitOfWork.AssignRegistrationCourse.
-                                FirstOrDefaultAsync(x => x.Id == courseId);
-                            if(!courseIdList.Contains(assignCourseList.CourseId))
+                                FirstOrDefaultAsync(x => x.Id == courseId);                           
+                            var timeValidity = await _unitOfWork.RegistrationCourse.
+                                GetTimeAvilabity(userId, semesterObj.Id,assignCourseList.FirstDate,assignCourseList.SecondDate, assignCourseList.StartTime);
+                            var takenActive = await _unitOfWork.StudentRegisteationCourse.GetPrerequisiteCourseChecker(userId,courseId);
+                            if (!courseIdList.Contains(assignCourseList.CourseId)&& timeValidity==true && takenActive==true)
                             {
                                 StudentRegisteationCourse regisCourse = new StudentRegisteationCourse();
                                 regisCourse.AssignRegiCourseId = courseId;
@@ -118,12 +121,27 @@ namespace UMS.Areas.Student.Controllers
                                 SelectRegistrationCourseVM regisCourseVM = new SelectRegistrationCourseVM()
                                 {
                                     CourseList = await _unitOfWork.RegistrationCourse.
-                                         GetRegisteredCourses(userId, semesterObj.Id, DateTime.Now.Year),
+                                         GetRegisteredCourses(userId, semesterObj.Id),
                                     UserId = userId
                                 };
                                 return PartialView("_SelectRegisCourseTable", regisCourseVM);
                             }
-                            return Json(new { success=false, message = "You are already taken this course" });
+                            else if(courseIdList.Contains(assignCourseList.CourseId))
+                            {
+                                return Json(new { success = false, message = "You are already taken this course" });
+                            }
+                            else if(timeValidity==false)
+                            {
+                                return Json(new { success = false, message = "You are already taken a course at this time" });
+                            }
+                            else if(takenActive==false)
+                            {
+                                return Json(new { success = false, message = "Prerequisites Course Incompleted" });
+                            }
+                            else
+                            {
+                                return Json(new { success = false, message = "Something Error" });
+                            }                      
                         }
                         return BadRequest();
                     }
@@ -152,9 +170,9 @@ namespace UMS.Areas.Student.Controllers
                         {
                             var semesterObj = await _unitOfWork.Semester.FirstOrDefaultAsync(x => x.IsActive == true);
 
-                            
+
                             var selectCourseObj = await _unitOfWork.RegistrationCourse.
-                                FirstOrDefaultAsync(x => x.AssignRegiCourseId==courseId && x.StudentId == userId);
+                                FirstOrDefaultAsync(x => x.AssignRegiCourseId == courseId && x.StudentId == userId);
                             if (selectCourseObj == null)
                             {
                                 return NotFound();
@@ -164,7 +182,7 @@ namespace UMS.Areas.Student.Controllers
                             SelectRegistrationCourseVM regisCourseVM = new SelectRegistrationCourseVM()
                             {
                                 CourseList = await _unitOfWork.RegistrationCourse.
-                                      GetRegisteredCourses(userId, semesterObj.Id, DateTime.Now.Year),
+                                      GetRegisteredCourses(userId, semesterObj.Id),
                                 UserId = userId
                             };
                             return PartialView("_SelectRegisCourseTable", regisCourseVM);

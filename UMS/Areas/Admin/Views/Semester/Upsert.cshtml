@@ -34,9 +34,9 @@
                         <label>IsActive</label>
                     </div>
                     <div class="col-8">
-                        <input class="form-control" asp-for="IsActive"  autocomplete="off" />
+                        <input class="form-control" id="isActive" asp-for="IsActive"  autocomplete="off" />
                         <span asp-validation-for="IsActive" class="text-danger"></span>
-                        
+                      
                     </div>
                 </div>
 
@@ -64,12 +64,12 @@
 @section Scripts{ 
     <partial name="_ValidationScriptsPartial"/>   
     <script>
-        
+
         $(document).ready(function () {
             $(".loader").fadeOut(1000);
             $(".wrapper").fadeIn(1000);
             $("#name").keyup(function () {
-                var alphabaticString = new RegExp("^[a-zA-Z]+$");
+                var alphabaticString = new RegExp("^[a-zA-Z0-9 ]+$");
                 var name = $("#name").val();
                 $.ajax({
                     url: '@Url.Action("ExistsName", "Semester")',
@@ -97,10 +97,31 @@
                             $("#name-span").removeClass("text-success");
                             $("#name-span").addClass("text-danger");
                             $("#submitBtn").attr("disabled", true);
-                        }                     
+                        }
                     }
                 })
-            });          
+            });
+
+            $("#isActive").click(function () {
+                if ($("#isActive").is(":checked")) {
+                    $.ajax({
+                        url: '@Url.Action("IsActive", "Semester")',
+                        type: "GET",
+                        success: function (data) {
+                            if (data.success == false) {
+                                toastr.error("Already a semester active");
+                                $("#submitBtn").attr("disabled", true);
+                            }
+                            else {
+                                $("#submitBtn").attr("disabled", false);
+                            }
+                        }
+                    })
+                }
+                else {
+                    $("#submitBtn").attr("disabled", false);
+                }
+            })
         });
     </script>
 }

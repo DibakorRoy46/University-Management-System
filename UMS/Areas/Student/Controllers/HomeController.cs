@@ -11,7 +11,6 @@ using UMS.Data.IRepository;
 using UMS.Data.Repository;
 using UMS.Models;
 using UMS.Models.ViewModels;
-
 namespace UMS.Controllers
 {
     [Area("Student")]
@@ -28,7 +27,8 @@ namespace UMS.Controllers
             _logger = logger;
             _unitOfWork = unitOfWork;
         }
-
+        [Route("Dashboard")]
+       
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -36,9 +36,9 @@ namespace UMS.Controllers
             if (User.IsInRole("Student"))
             {
                 var preCourseList  = await _unitOfWork.PreRegistationCourses.
-                    GetPreCourses(userId, semesterObj.Id, DateTime.Now.Year);
+                    GetPreCourses(userId, semesterObj.Id);
                 var regisCourseList = await _unitOfWork.RegistrationCourse.
-                   GetRegisteredCourses(userId, semesterObj.Id, DateTime.Now.Year);
+                   GetRegisteredCourses(userId, semesterObj.Id);
                 DashboardVM studentVM = new DashboardVM()
                 {
                     RegistrationCourseList = regisCourseList.Count(),
@@ -48,10 +48,12 @@ namespace UMS.Controllers
             }
             if(User.IsInRole("Faculty"))
             {
-                var courseList = await _unitOfWork.AssignRegistrationCourse.GetAllAsync(x => x.TeacherId == userId);
+                var courseList = await _unitOfWork.AssignRegistrationCourse.GetAllAsync(x => x.TeacherId == userId && x.SemesterId == semesterObj.Id);
+                var priviousCourseList = await _unitOfWork.AssignRegistrationCourse.GetAllAsync(x => x.TeacherId == userId && x.SemesterId != semesterObj.Id);
                 DashboardVM facultyVM = new DashboardVM()
                 {
-                    AssignCourseList = courseList.Count()
+                    AssignCourseList = courseList.Count(),
+                    PreviousAdvisedCourseList = priviousCourseList.Count()
                 };
                 return View(facultyVM);
             }

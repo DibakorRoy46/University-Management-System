@@ -27,6 +27,17 @@ namespace UMS.Data.Repository
             
             return semesterList.Count();
         }
+        public async Task<bool>IsActiveExist()
+        {
+            var semesterIsActive = await _db.Semesters.Select(x => x.IsActive).ToListAsync();
+            
+            if (semesterIsActive.Contains(true))
+            {
+                return false;
+            }
+            return true;
+
+        }
 
         public async Task<IEnumerable<Semester>> SearchAsync(string searchValue, int pageNo, int pageSize)
         {
@@ -46,6 +57,24 @@ namespace UMS.Data.Repository
                 semesterObj.Name = semester.Name;
                 semesterObj.IsActive = semester.IsActive;
             }
+        }
+        public async Task<IEnumerable<Semester>>GetStudentSemester(string userId)
+        {
+                      
+             var semesterList=await (from semester in _db.Semesters join preCourse in _db.CourseforPreregistration on
+                                     semester.Id equals preCourse.SemesterId join assignPreCourse in _db.PreRegistrationCourses
+                                     on preCourse.Id equals assignPreCourse.PreCourseId where assignPreCourse.StudentId==userId 
+                                     select semester).Distinct().ToListAsync();
+            return semesterList;
+        }
+        public async Task<IEnumerable<Semester>>GetStudentRegisterSemester(string userId)
+        {
+            var semesterList=await (from semester in _db.Semesters join assignCourse in _db.AssignRegistrationCourses on
+                                     semester.Id equals assignCourse.SemesterId join regisCourse in _db.StudentRegisteationCourses
+                                     on assignCourse.Id equals regisCourse.AssignRegiCourseId where regisCourse.StudentId==userId 
+                                     select semester).Distinct().ToListAsync();
+             
+            return semesterList;
         }
     }
 }

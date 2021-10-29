@@ -76,7 +76,8 @@ namespace UMS.Areas.Admin.Controllers
             }
         }
         [HttpPost]
-        [Route("Cliam/Upsert")]
+        [ValidateAntiForgeryToken]
+        [Route("Claim/Upsert")]
         public async Task<IActionResult> Upsert(Claims claims)
         {
             try

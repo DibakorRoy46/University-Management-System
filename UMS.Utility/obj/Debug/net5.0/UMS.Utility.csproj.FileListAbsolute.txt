@@ -14,7 +14,6 @@ E:\Project\New folder\UMS\UMS.Utility\bin\Debug\net5.0\UMS.Utility.deps.json
 E:\Project\New folder\UMS\UMS.Utility\bin\Debug\net5.0\UMS.Utility.dll
 E:\Project\New folder\UMS\UMS.Utility\bin\Debug\net5.0\ref\UMS.Utility.dll
 E:\Project\New folder\UMS\UMS.Utility\bin\Debug\net5.0\UMS.Utility.pdb
-E:\Project\New folder\UMS\UMS.Utility\obj\Debug\net5.0\UMS.Utility.csproj.AssemblyReference.cache
 E:\Project\New folder\UMS\UMS.Utility\obj\Debug\net5.0\UMS.Utility.GeneratedMSBuildEditorConfig.editorconfig
 E:\Project\New folder\UMS\UMS.Utility\obj\Debug\net5.0\UMS.Utility.AssemblyInfoInputs.cache
 E:\Project\New folder\UMS\UMS.Utility\obj\Debug\net5.0\UMS.Utility.AssemblyInfo.cs

@@ -1,0 +1,113 @@
+﻿@model UMS.Models.Models.StudentRegisteationCourse
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container"  id="main-container">
+    <form method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-12 text-center">
+                
+                    <input asp-for="@Model.StudentId" hidden  />
+                    <input asp-for="@Model.AssignRegiCourseId" hidden  />
+               
+                <h3 class="text-primary">Student Mark Detials</h3>
+            </div>
+
+            <div class="col-12  mt-4">
+                <div class="row">
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-3">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Student Name</label>
+                            </div>
+                            <div class="col-8">
+                                <input asp-for="@Model.ApplicationUser.Name" readonly class="form-control" />
+                                <span asp-validation-for="@Model.ApplicationUser.Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-3">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Attendance Mark</label>
+                            </div>
+                            <div class="col-8">
+                                <input asp-for="@Model.AttendanceMark" class="form-control" />
+                                <span asp-validation-for="@Model.AttendanceMark" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-3">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Assignment Mark</label>
+                            </div>
+                            <div class="col-8">
+                                <input asp-for="@Model.AssignmentMark" class="form-control" />
+                                <span asp-validation-for="@Model.AssignmentMark" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-3">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Mid-term Mark</label>
+                            </div>
+                            <div class="col-8">
+                                <input asp-for="@Model.MidTermMark" class="form-control" />
+                                <span asp-validation-for="@Model.MidTermMark" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-3">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Final Mark</label>
+                            </div>
+                            <div class="col-8">
+                                <input asp-for="@Model.FinalTermMark" class="form-control" />
+                                <span asp-validation-for="@Model.FinalTermMark" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-3">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Completed</label>
+                            </div>
+                            <div class="col-8">
+                                <input asp-for="@Model.IsCompleted" class="form-control" />
+                                <span asp-validation-for="@Model.IsCompleted" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row col-8 form-group offset-2 my-3">
+                        <div class="col-6">
+
+                            <input type="submit" value="Submit" id="submitBtn" class="form-control btn btn-success" />
+
+                        </div>
+                        <div class="col-6">
+                            <a class="form-control btn btn-primary" asp-action="StudentList" asp-route-id="@Model.AssignRegiCourseId"><i class="fas fa-arrow-left"></i> Back to List</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+
+        $(document).ready(function () {
+            $(".loader").fadeOut(1000);
+            $(".wrapper").fadeIn(1000);
+      
+        });
+    </script>
+}

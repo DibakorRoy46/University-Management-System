@@ -1,0 +1,47 @@
+﻿@model UMS.Models.ViewModels.FacultyCourseVM
+@{
+    ViewData["Title"] = "CourseList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" id="main-container">
+    <div class="bg-primary text-white p-3 rounded mb-3">
+        <h3 class="text-center">Previous Advising Courses</h3>
+
+
+    </div>
+    <div class="row">
+        @if (Model.PreviousCourseList.Count() > 0)
+        {
+            foreach (var course in Model.PreviousCourseList)
+            {
+
+                <div class="col-lg-4 col-md-6 mb-2">
+                    <div class="card text-center bg-light">
+                        <div class="card-body">
+                            <h1 class="card-title">@course.Courses.Initial.@course.Section.Initial</h1>
+                            <div>
+                                <h3 class="font-light mb-0">@course.Courses.Name</h3>
+                            </div>
+                            <hr />
+                            <a href="PreviousStudentList/@course.Id">See All Students </a>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        }
+        else
+        {
+            <p class="text-center text-danger">No Course Advised at privious time</p>
+        }
+
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(".loader").fadeOut(1000);
+        $(".wrapper").fadeIn(1000);
+    </script>
+}

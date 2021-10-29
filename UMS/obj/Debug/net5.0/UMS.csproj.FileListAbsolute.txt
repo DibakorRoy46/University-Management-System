@@ -1037,7 +1037,6 @@ E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\Section\_
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\Semester\Index.cshtml.g.cs
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\Semester\Upsert.cshtml.g.cs
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\Semester\_SemesterTable.cshtml.g.cs
-E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\User\AccessDenied.cshtml.g.cs
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\User\AssignClaimToUser.cshtml.g.cs
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\User\Edit.cshtml.g.cs
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\User\Index.cshtml.g.cs
@@ -1113,3 +1112,15 @@ E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\ref\UMS.dll
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\UMS.pdb
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\UMS.genruntimeconfig.cache
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\CourseContent\Index.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\TeacherCourse\CourseList.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\TeacherCourse\StudentList.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\TeacherCourse\_StudentListPartial.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\TeacherCourse\Detials.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\_ViewImports.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\_ViewStart.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Student\Views\Grade\Index.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\TeacherCourse\PreviousCourseList.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\TeacherCourse\_PreviousStudentListPartial.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\TeacherCourse\PreviousStudentList.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\TeacherCourse\PreviousDetials.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Views\Shared\AccessDenied.cshtml.g.cs

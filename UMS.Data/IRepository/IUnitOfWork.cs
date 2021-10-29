@@ -30,6 +30,8 @@ namespace UMS.Data.IRepository
         public IRegistrationCourseRepository RegistrationCourse { get; }
         public ICourseContentRepository CourseContent { get; }
         public IAdminDashboardRepository AdminDashboard { get; }
+        public ITeacherCourseRepository TeacherCourse { get; }
+        public IStudentRegisteationCourseRepository StudentRegisteationCourse { get;  }
         Task SaveAsync();
     }
 }

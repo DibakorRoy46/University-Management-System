@@ -1,0 +1,65 @@
+﻿@model UMS.Models.ViewModels.StudentListofCourseVM
+@using Microsoft.AspNetCore.Identity
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-secondary">
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Attendance(5)</th>
+                <th>Assignment(25)</th>
+                <th>Mid-Term(30)</th>
+                <th>Final(40)</th>
+                <th>Grade</th>               
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.StudentList.Count() > 0)
+            {
+                int i = 0;
+                foreach (var student in Model.StudentList)
+                {
+                    i++;
+
+                    <tr>
+                        <td>@(i)</td>
+                        <td>@student.ApplicationUser.Name</td>
+                        <td>@student.AttendanceMark</td>
+                        <td>@student.AssignmentMark</td>
+                        <td>@student.MidTermMark</td>
+                        <td>@student.FinalTermMark</td>
+                        <td>@student.Grade</td>  
+                       
+                        <td>
+                            <a class="btn btn-primary" href="~/Teacher/TeacherCourse/Detials?studentId=@student.StudentId
+                               &courseId=@student.AssignRegiCourseId">
+                                <i class="fas fa-edit"></i>
+                            </a>                                                                
+                        </td>
+                        
+                        
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-danger">No Student Registered</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+
+

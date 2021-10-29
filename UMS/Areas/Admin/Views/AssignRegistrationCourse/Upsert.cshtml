@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="col-8" id="departmentdiv">
                                     <select class="form-control" id="departmentId" asp-for="AssignRegistrationCourse.DepartmentId" asp-items="Model.DepartemntList">
-                                        <option selected disabled value="#">--Select Course--</option>
+                                        <option selected disabled value="#">--Select Department--</option>
                                     </select>
                                     <span asp-validation-for="AssignRegistrationCourse.DepartmentId" class=" text-danger"></span>
                                 </div>
@@ -121,17 +121,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
-                        <div class="row form-group">
-                            <div class="col-3">
-                                <label>Year</label>
-                            </div>
-                            <div class="col-8">
-                                <input asp-for="AssignRegistrationCourse.Year" class="form-control" />
-                                <span asp-validation-for="AssignRegistrationCourse.SectionId" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
                         <div class="row form-group">
@@ -139,7 +129,7 @@
                                 <label>First Day</label>
                             </div>
                             <div class="col-8">
-                                <select asp-for="AssignRegistrationCourse.FirstDate" class="form-control" asp-items="Model.DayList">
+                                <select asp-for="AssignRegistrationCourse.FirstDate" id="firstDate" class="form-control" asp-items="Model.DayList">
                                     <option value="#">--Select First Day--</option>
                                 </select>
                                 <span asp-validation-for="AssignRegistrationCourse.FirstDate" class="text-danger"></span>
@@ -153,7 +143,7 @@
                                 <label>Second Day</label>
                             </div>
                             <div class="col-8">
-                                <select asp-for="AssignRegistrationCourse.SecondDate" class="form-control" asp-items="Model.DayList">
+                                <select asp-for="AssignRegistrationCourse.SecondDate" id="secondDate" class="form-control" asp-items="Model.DayList">
                                     <option value="#">--Select Second Day--</option>
                                 </select>
                                 <span asp-validation-for="AssignRegistrationCourse.SecondDate" class="text-danger"></span>
@@ -182,6 +172,17 @@
                             <div class="col-8">
                                 <input type="time" id="endTime" asp-for="AssignRegistrationCourse.EndTime" class="form-control" />
                                 <span asp-validation-for="AssignRegistrationCourse.EndTime" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-lg-6 col-md-6  mb-5">
+                        <div class="row form-group">
+                            <div class="col-3">
+                                <label>Validity</label>
+                            </div>
+                            <div class="col-8">
+                                <input type="checkbox" id="validity"  />
+                                <span class="text-primary">please click 2 times</span>
                             </div>
                         </div>
                     </div>
@@ -215,10 +216,13 @@
         $(document).ready(function () {
             $(".loader").fadeOut(1000);
             $(".wrapper").fadeIn(1000);
+            $("#submitBtn").prop("disabled", true);
+
 
             var department = $("#departmentId");
             var course = $("#courseId");
             var teacher = $("#teacherId");
+            $("#sectionId").prop("disabled", true);
             if ('@Model.AssignRegistrationCourse.Id' == '@Guid.Empty') {
                 course.prop('disabled', true);
                 teacher.prop('disabled', true);
@@ -285,7 +289,7 @@
                         }
                     });
             }
-
+            $("#endTime").prop("disabled", true);
 
             $("#endTime").change(function () {
                 var startTime = $("#startTime").val();
@@ -294,23 +298,124 @@
                     $("#submitBtn").prop("disabled", true);
                     toastr.error("End Time is less than Start Time");
                 }
-                else {
-                    $("#submitBtn").prop("disabled", false);
-                }
-
             })
             $("#startTime").change(function () {
+                $("#endTime").prop("disabled", false);
                 var startTime = $("#startTime").val();
                 var endTime = $("#endTime").val();
                 if (startTime > endTime) {
                     $("#submitBtn").prop("disabled", true);
                     toastr.error("End Time is less than Start Time");
                 }
+            });
+            $("#courseId").change(function () {
+                $("#sectionId").prop("disabled", false);
+            });
+            $("#secondDate").prop("disabled", true);
+            $("#courseId").change(function () {
+                var courseId = $("#courseId").val();
+                $.ajax({
+                    url: '@Url.Action("CourseType", "AssignRegistrationCourse")',
+                    type: "GET",
+                    data: {
+                        courseId: courseId
+                    },
+                    success: function (data) {
+                        if (data.type == "lab") {
+                            $("#secondDate").prop("disabled", true);
+                        }
+                        else {
+                            $("#secondDate").prop("disabled", false);
+                        }
+                    }
+                })
+            })
+            var sectionValid = false;
+            $("#validity").click(function () {
+                var semesterId = $("#semesterId").val();
+                var courseId = $("#courseId").val();
+                var sectionId = $("#sectionId").val();
+                
+                if (semesterId != null && courseId != null && sectionId != null)
+                {
+                    $.ajax({
+                        url: '@Url.Action("SectionValidity", "AssignRegistrationCourse")',
+                        type: "GET",
+                        data: {
+                            semesterId: semesterId,
+                            courseId: courseId,
+                            sectionId: sectionId
+                        },
+                        success: function (data) {
+                            if (data.success == true) {
+                                toastr.success("Section Is Available");
+                                sectionValid = true;
+                                $("#validity").prop("checked", true);
+                                
+                            }
+                            else {
+                                toastr.error("Section Is Not Available");
+                                $("#validity").prop("checked", false);
+                                sectionValid = false;
+                                
+                            }
+                        }
+                    });                   
+                }
                 else {
+                    toastr.error("Please fill all the information");
+                    $("#validity").prop("checked", false);
+                }
+            });
+            var slotValid = false;
+            $("#validity").click(function () {
+                var semesterId = $("#semesterId").val();
+                var teacherId = $("#teacherId").val();
+                var firstDate = $("#firstDate").val();
+                var secondDate = $("#secondDate").val();
+                var startTime = $("#startTime").val();
+               
+                if (semesterId != null && teacherId != null && firstDate != null && startTime != null && endTime != null) {
+                    $.ajax({
+                        url: '@Url.Action("FacultySlotValidity", "AssignRegistrationCourse")',
+                        type: "GET",
+                        data: {
+                            teacherId: teacherId,
+                            semesterId: semesterId,                         
+                            firstDate: firstDate,
+                            secondDate: secondDate,
+                            startTime: startTime,
+                            
+                        },
+                        success: function (data) {
+                            if (data.success == true) {
+                                slotValid = true;
+                                toastr.success("Slot Is Available");
+                                $("#validity").prop("checked", true);
+                            }
+                            else {
+                                toastr.error("Slot Is Not Available");
+                                slotValid = false;
+                                $("#validity").prop("checked", false);
+                                
+                            }
+                        }
+                    });
+                }
+                else {
+                    toastr.error("Please fill all the information ");
+                    $("#validity").prop("checked", false);
+                }
+            })
+            $("#validity").click(function () {
+                if (sectionValid == true && slotValid == true) {
+
                     $("#submitBtn").prop("disabled", false);
                 }
-
-            })
+                else {
+                    $("#submitBtn").prop("disabled", true);
+                }              
+            });
         });
     </script>
 }

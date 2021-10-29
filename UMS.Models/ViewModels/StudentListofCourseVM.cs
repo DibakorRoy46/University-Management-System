@@ -7,8 +7,8 @@ using UMS.Models.Models;
 
 namespace UMS.Models.ViewModels
 {
-    public class FacultyDashboardVM
+    public class StudentListofCourseVM
     {
-        public int CourseList { get; set; }
+        public IEnumerable<StudentRegisteationCourse> StudentList { get; set; }
     }
 }

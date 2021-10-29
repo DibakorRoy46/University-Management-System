@@ -1,0 +1,84 @@
+﻿@model UMS.Models.ViewModels.GradeVM
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container" id="main-container">
+    <h2 class="text-primary text-center">Grades</h2>
+    <div id="grade-head" class="bg-primary pt-2">
+        <h4 class="text-white" >Grade Summary</h4>
+    </div>
+    <div id="grade" class="row" >
+        <div class="col-12">
+            <p>Credits Completed<span>        &nbsp; &nbsp; &nbsp;   @Model.CreditCompletd </span></p>
+        </div>
+        <div class="col-12">
+            <p>Credits Attempted<span>        &nbsp; &nbsp; &nbsp;   @Model.CreditAttempted</span></p>
+        </div>
+        <div class="col-12">
+            <p>CGPA (By Credit Completed)<span>        &nbsp; &nbsp; &nbsp;   146 </span></p>
+        </div>
+        <div class="col-12">
+            <p>CGPA (By Credit Attempted)<span>        &nbsp; &nbsp; &nbsp;   146 </span></p>
+        </div>
+           
+   
+    </div>
+
+    <div class="container " >
+        <div  class="bg-primary py-2">
+            <h4 class="text-white text-center">See detailed course grade information</h4>
+        </div>
+        <div id="grade-detials " class="table-responsive">
+            @{int i = 0; var courseObj = Guid.Empty; int count = Model.CourseCount.ElementAt(i); }
+            <table class="table table-bordered">
+                @foreach (var course in Model.courseList)
+                {
+                    if (course.AssignRegistrationCourse.SemesterId == courseObj)
+                    {
+                        count = 0;
+                    }
+                    else
+                    {
+                        count = Model.CourseCount.ElementAt(i++);
+                    }
+                    <tr>
+                        @if (count > 0)
+                        {
+                            <td rowspan="@count" class="text-center" >@course.AssignRegistrationCourse.Semester.Name </td>
+                            <td>@course.AssignRegistrationCourse.Courses.Name</td>
+                            <td>@course.AssignRegistrationCourse.Courses.Initial</td>
+                            <td>@course.AssignRegistrationCourse.Courses.CourseProtoType.Name</td>
+                            <td>@course.AssignRegistrationCourse.Courses.CourseProtoType.Credit</td>
+                            <td>@course.AssignRegistrationCourse.Courses.CourseType.Name</td>
+                            <td>@course.Grade</td>
+                            <td>@course.GPA</td>
+                            count = 0;
+                            courseObj = course.AssignRegistrationCourse.SemesterId;
+                        }
+                        else
+                        {
+                            <td>@course.AssignRegistrationCourse.Courses.Name</td>
+                            <td>@course.AssignRegistrationCourse.Courses.Initial</td>
+                            <td>@course.AssignRegistrationCourse.Courses.CourseProtoType.Name</td>
+                            <td>@course.AssignRegistrationCourse.Courses.CourseProtoType.Credit</td>
+                            <td>@course.AssignRegistrationCourse.Courses.CourseType.Name</td>
+                            <td>@course.Grade</td>
+                            <td>@course.GPA</td>
+                            courseObj = course.AssignRegistrationCourse.SemesterId;
+                        }
+
+                    </tr>
+
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+                <script>
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+                </script>
+            }

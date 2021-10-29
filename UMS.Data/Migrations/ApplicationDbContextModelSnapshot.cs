@@ -294,9 +294,6 @@ namespace UMS.Data.Migrations
                     b.Property<string>("TeacherId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
@@ -516,9 +513,6 @@ namespace UMS.Data.Migrations
                     b.Property<Guid>("SemesterId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
@@ -571,6 +565,27 @@ namespace UMS.Data.Migrations
 
                     b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<double?>("AssignmentMark")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("AttendanceMark")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("FinalTermMark")
+                        .HasColumnType("float");
+
+                    b.Property<double>("GPA")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Grade")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<double?>("MidTermMark")
+                        .HasColumnType("float");
 
                     b.HasKey("AssignRegiCourseId", "StudentId");
 

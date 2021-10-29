@@ -29,12 +29,12 @@ namespace UMS.Data.Repository
                     Include(x=>x.CourseType).Include(x=>x.CourseProtoType).
                     Include(x=>x.CourseToCoursePrerequisites).
                     ThenInclude(x=>x.CoursePrerequisite).
-                    Where(x => ((x.Name.ToLower().Equals(searchValue.ToLower())))||
-                    (x.Initial.ToLower().Equals(searchValue.ToLower()))||
-                    (x.Department.Name.ToLower().Equals(searchValue.ToLower()))||
-                    (x.Department.Initial.ToLower().Equals(searchValue.ToLower())) ||
-                    (x.CourseProtoType.Name.ToLower().Equals(searchValue.ToLower()))||
-                    (x.CourseType.Name.ToLower().Equals(searchValue.ToLower()))).ToListAsync();
+                    Where(x => ((x.Name.ToLower().Contains(searchValue.ToLower())))||
+                    (x.Initial.ToLower().Contains(searchValue.ToLower()))||
+                    (x.Department.Name.ToLower().Contains(searchValue.ToLower()))||
+                    (x.Department.Initial.ToLower().Contains(searchValue.ToLower())) ||
+                    (x.CourseProtoType.Name.ToLower().Contains(searchValue.ToLower()))||
+                    (x.CourseType.Name.ToLower().Contains(searchValue.ToLower()))).ToListAsync();
                 if(!depaertmentId.Equals(Guid.Empty))
                 {
                     couseList = couseList.Where(x => x.DepartmentId.Equals(depaertmentId)).ToList();

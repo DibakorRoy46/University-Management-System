@@ -24,7 +24,7 @@ namespace UMS.Models.Models
         public Guid SectionId { get; set; }
         [ForeignKey("SectionId")]
         public Section Section { get; set; }
-        public int Year { get; set; }  
+         
         [Required]
         public string FirstDate { get; set; }
         public string SecondDate { get; set; }

@@ -13,5 +13,9 @@ namespace UMS.Data.IRepository
         Task<int> CountAsync(string searchValue);
         Task<IEnumerable<Semester>> SearchAsync(string searchValue, int pageNo, int pageSize);
         Task UpdateAsync(Semester semester);
+        Task<bool> IsActiveExist();
+        Task<IEnumerable<Semester>> GetStudentSemester(string userId);
+        Task<IEnumerable<Semester>> GetStudentRegisterSemester(string userId);
     }
+
 }

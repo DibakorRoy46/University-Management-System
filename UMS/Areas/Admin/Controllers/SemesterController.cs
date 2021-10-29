@@ -162,6 +162,15 @@ namespace UMS.Areas.Admin.Controllers
             }
 
         }
+        public async Task<IActionResult>IsActive()
+        {
+            var isActive = await _unitOfWork.Semester.IsActiveExist();
+            if(isActive==true)
+            {
+                return Json( new { success=true} );
+            }
+            return Json(new { success = false });
+        }
         #endregion
 
     }

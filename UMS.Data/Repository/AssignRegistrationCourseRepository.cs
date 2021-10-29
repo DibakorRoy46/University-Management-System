@@ -18,7 +18,7 @@ namespace UMS.Data.Repository
             _db = db;
         }
 
-        public async Task<int> CountAsync(string searchValue, Guid departmentId, Guid semesterId, int year)
+        public async Task<int> CountAsync(string searchValue, Guid departmentId, Guid semesterId)
         {
             var courseList = await _db.AssignRegistrationCourses.Include(x => x.Semester).
                 Include(x => x.ApplicationUser).Include(x => x.Courses).ThenInclude(x => x.CourseProtoType).
@@ -27,25 +27,18 @@ namespace UMS.Data.Repository
             {
                 courseList = await _db.AssignRegistrationCourses.Include(x => x.Semester).
                 Include(x => x.ApplicationUser).Include(x => x.Courses).ThenInclude(x => x.CourseProtoType).
-                Where(x=>x.Courses.Name==searchValue).ToListAsync();
+                Where(x=>x.Courses.Name==searchValue || x.Courses.Initial.Contains(searchValue)).ToListAsync();
                 if(departmentId!=Guid.Empty)
                 {
                     courseList = courseList.Where(x => x.Courses.DepartmentId == departmentId).ToList();
                     if(semesterId!=Guid.Empty)
                     {
                         courseList = courseList.Where(x => x.SemesterId == semesterId).ToList();
-                        if(year!=0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }    
+                         
                     }
                     else
                     {
                         courseList = courseList.ToList();
-                        if (year != 0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }
                     }
                 }
                 else
@@ -54,18 +47,12 @@ namespace UMS.Data.Repository
                     if (semesterId != Guid.Empty)
                     {
                         courseList = courseList.Where(x => x.SemesterId == semesterId).ToList();
-                        if (year != 0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }
+                       
                     }
                     else
                     {
                         courseList = courseList.ToList();
-                        if (year != 0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }
+                       
                     }
                 }
             }
@@ -78,18 +65,12 @@ namespace UMS.Data.Repository
                     if (semesterId != Guid.Empty)
                     {
                         courseList = courseList.Where(x => x.SemesterId == semesterId).ToList();
-                        if (year != 0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }
+                        
                     }
                     else
                     {
                         courseList = courseList.ToList();
-                        if (year != 0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }
+                        
                     }
                 }
                 else
@@ -98,25 +79,19 @@ namespace UMS.Data.Repository
                     if (semesterId != Guid.Empty)
                     {
                         courseList = courseList.Where(x => x.SemesterId == semesterId).ToList();
-                        if (year != 0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }
+                      
                     }
                     else
                     {
                         courseList = courseList.ToList();
-                        if (year != 0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }
+                        
                     }
                 }
             }
             return courseList.Count();
         }
 
-        public async Task<IEnumerable<AssignRegistrationCourse>> SearchAsync(string searchValue, Guid departmentId, Guid semesterId, int year, int pageNo, int pageSize)
+        public async Task<IEnumerable<AssignRegistrationCourse>> SearchAsync(string searchValue, Guid departmentId, Guid semesterId, int pageNo, int pageSize)
         {
             var courseList = await _db.AssignRegistrationCourses.Include(x => x.Semester).Include(x=>x.Section).
                 Include(x => x.ApplicationUser).Include(x => x.Courses).ThenInclude(x => x.CourseProtoType).
@@ -127,25 +102,19 @@ namespace UMS.Data.Repository
                 courseList = await _db.AssignRegistrationCourses.Include(x => x.Semester).
                 Include(x => x.ApplicationUser).Include(x => x.Courses).ThenInclude(x => x.CourseProtoType).
                 Include(x => x.Courses).ThenInclude(x => x.Department).
-                Where(x => x.Courses.Name.Contains(searchValue)).ToListAsync();
+                Where(x => x.Courses.Name.Contains(searchValue) || x.Courses.Initial.Contains(searchValue)).ToListAsync();
                 if (departmentId != Guid.Empty)
                 {
                     courseList = courseList.Where(x => x.Courses.DepartmentId == departmentId).ToList();
                     if (semesterId != Guid.Empty)
                     {
                         courseList = courseList.Where(x => x.SemesterId == semesterId).ToList();
-                        if (year != 0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }
+                       
                     }
                     else
                     {
                         courseList = courseList.ToList();
-                        if (year != 0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }
+                       
                     }
                 }
                 else
@@ -154,18 +123,12 @@ namespace UMS.Data.Repository
                     if (semesterId != Guid.Empty)
                     {
                         courseList = courseList.Where(x => x.SemesterId == semesterId).ToList();
-                        if (year != 0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }
+                        
                     }
                     else
                     {
                         courseList = courseList.ToList();
-                        if (year != 0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }
+                        
                     }
                 }
             }
@@ -178,18 +141,12 @@ namespace UMS.Data.Repository
                     if (semesterId != Guid.Empty)
                     {
                         courseList = courseList.Where(x => x.SemesterId == semesterId).ToList();
-                        if (year != 0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }
+                       
                     }
                     else
                     {
                         courseList = courseList.ToList();
-                        if (year != 0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }
+                       
                     }
                 }
                 else
@@ -198,18 +155,12 @@ namespace UMS.Data.Repository
                     if (semesterId != Guid.Empty)
                     {
                         courseList = courseList.Where(x => x.SemesterId == semesterId).ToList();
-                        if (year != 0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }
+                       
                     }
                     else
                     {
                         courseList = courseList.ToList();
-                        if (year != 0)
-                        {
-                            courseList = courseList.Where(x => x.Year == year).ToList();
-                        }
+                       
                     }
                 }
             }
@@ -225,7 +176,6 @@ namespace UMS.Data.Repository
                 assignRegistrationCourseObj.TeacherId = assignRegistrationCourse.TeacherId;
                 assignRegistrationCourseObj.SemesterId = assignRegistrationCourse.SemesterId;
                 assignRegistrationCourseObj.SectionId = assignRegistrationCourse.SectionId;
-                assignRegistrationCourseObj.Year = assignRegistrationCourse.Year;
                 assignRegistrationCourseObj.FirstDate = assignRegistrationCourse.FirstDate;
                 assignRegistrationCourseObj.SecondDate = assignRegistrationCourse.SecondDate;
                 assignRegistrationCourseObj.StartTime = assignRegistrationCourse.StartTime;
@@ -293,6 +243,36 @@ namespace UMS.Data.Repository
             return await _db.Courses.Where(x => x.DepartmentId == departmentId).ToListAsync();
         }
 
+        public async Task<bool>GetSectionValidity(Guid semesterId,Guid courseId,Guid sectionId)
+        {
+            var sectionList = await _db.AssignRegistrationCourses.Where(x => x.SemesterId == semesterId && x.CourseId == courseId).
+                Select(x => x.SectionId).ToListAsync();
+            
+            if(sectionList.Contains(sectionId))
+            {
+                return true;
+            }
+            return false;
+        }
+        
+        public async Task<bool>GetTeacherSlotValidity(string teacherId,Guid semesterId,string firstDate,string secondDate,DateTime startTime)
+        {
+            var courseList = await _db.AssignRegistrationCourses.Where(x => x.TeacherId == teacherId && x.SemesterId == semesterId
+                          &&(x.FirstDate.ToLower().Equals(firstDate.ToLower()) || x.SecondDate.ToLower().Equals(firstDate.ToLower())
+                          || x.SecondDate.ToLower().Equals(secondDate.ToLower()) || x.FirstDate.ToLower().Equals(secondDate.ToLower())) &&
+                          x.StartTime.TimeOfDay<=startTime.TimeOfDay && x.EndTime.TimeOfDay>startTime.TimeOfDay).ToListAsync();
+                        
+            if(courseList.Count()>0)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<int>GetCourseType(Guid courseId)
+        {
+            return await _db.Courses.Where(x => x.Id == courseId).Select(x => x.CourseProtoType.Credit).FirstOrDefaultAsync();
+            
+        }
         
     }
 }

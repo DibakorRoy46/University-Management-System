@@ -12,7 +12,7 @@
  <div class="row">
      @if (User.IsInRole("Admin") || User.IsInRole("Super Admin"))
      {
-         <div class="col-lg-4 col-md-6 ">
+         <div class="col-lg-4 col-md-6 my-2">
              <div class="card text-center bg-light">
                  <div class="card-body">
                      <h1 class="card-title">@Model.Department</h1>
@@ -24,7 +24,7 @@
                  </div>
              </div>
          </div>
-         <div class="col-lg-4 col-md-6">
+         <div class="col-lg-4 col-md-6 my-2">
              <div class="card text-center bg-light">
                  <div class="card-body">
                      <h1 class="card-title">@Model.Role</h1>
@@ -37,7 +37,7 @@
              </div>
          </div>
 
-         <div class="col-lg-4 col-md-6">
+         <div class="col-lg-4 col-md-6 my-2">
              <div class="card text-center bg-light">
                  <div class="card-body">
                      <h1 class="card-title">@Model.Student</h1>
@@ -50,7 +50,7 @@
              </div>
          </div>
 
-         <div class="col-lg-4 col-md-6 mt-3">
+         <div class="col-lg-4 col-md-6 my-2">
              <div class="card text-center bg-light">
                  <div class="card-body">
                      <h1 class="card-title">@Model.Teacher</h1>
@@ -63,7 +63,7 @@
              </div>
          </div>
 
-         <div class="col-lg-4 col-md-6 mt-3">
+         <div class="col-lg-4 col-md-6 my-2">
              <div class="card text-center bg-light">
                  <div class="card-body">
                      <h1 class="card-title">@Model.Employee</h1>
@@ -78,7 +78,7 @@
      }
      else if (User.IsInRole("Student"))
      {
-         <div class="col-lg-4 col-md-6 ">
+         <div class="col-lg-4 col-md-6  my-2">
              <div class="card text-center bg-light">
                  <div class="card-body">
                      <h1 class="card-title">@Model.PreregistrationCourseList</h1>
@@ -91,7 +91,7 @@
              </div>
          </div>
 
-         <div class="col-lg-4 col-md-6 ">
+         <div class="col-lg-4 col-md-6 my-2 ">
              <div class="card text-center bg-light">
                  <div class="card-body">
                      <h1 class="card-title">@Model.RegistrationCourseList</h1>
@@ -106,7 +106,7 @@
      }
      else if (User.IsInRole("Faculty"))
      {
-         <div class="col-lg-4 col-md-6 ">
+         <div class="col-lg-4 col-md-6  my-2">
              <div class="card text-center bg-light">
                  <div class="card-body">
                      <h1 class="card-title">@Model.AssignCourseList</h1>
@@ -114,14 +114,29 @@
                          <h3 class="font-light mb-0">Teaching Courses</h3>
                      </div>
                      <hr />
-                     <a asp-action="Index" asp-controller="PreregistrationCourse" asp-area="Student">See All Teaching Courses </a>
+                     <a asp-action="CourseList" asp-controller="TeacherCourse" asp-area="Teacher">See All Teaching Courses </a>
                  </div>
              </div>
          </div>
+         @if (Model.PreviousAdvisedCourseList > 0)
+         {
+             <div class="col-lg-4 col-md-6  my-2">
+                 <div class="card text-center bg-light">
+                     <div class="card-body">
+                         <h1 class="card-title">@Model.PreviousAdvisedCourseList</h1>
+                         <div>
+                             <h3 class="font-light mb-0">Previous Advise Courses</h3>
+                         </div>
+                         <hr />
+                         <a asp-action="PreviousCourseList" asp-controller="TeacherCourse" asp-area="Teacher">See All  Courses </a>
+                     </div>
+                 </div>
+             </div>
+         }
      }
      else
      {
-         <div class="col-lg-4 col-md-6">
+         <div class="col-lg-4 col-md-6 my-2">
              <div class="card text-center bg-light">
                  <div class="card-body">
                      <h1 class="card-title">@Model.Student</h1>
@@ -134,7 +149,7 @@
              </div>
          </div>
 
-         <div class="col-lg-4 col-md-6 mt-3">
+         <div class="col-lg-4 col-md-6 my-2">
              <div class="card text-center bg-light">
                  <div class="card-body">
                      <h1 class="card-title">@Model.Teacher</h1>

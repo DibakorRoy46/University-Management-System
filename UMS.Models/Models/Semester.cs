@@ -12,7 +12,7 @@ namespace UMS.Models.Models
         [Key]
         public Guid Id { get; set; }
         [Required]
-        [RegularExpression(@"^[a-zA-Z ]+$")]
+        [RegularExpression(@"^[a-zA-Z0-9 ]+$")]
         public string Name { get; set; }
         public bool IsActive { get; set; }
         public IEnumerable<PreregistrationCourses> PreregistrationCourses { get; set; }
