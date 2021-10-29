@@ -29,16 +29,19 @@ namespace UMS.Areas.Student.Controllers
                 UserId = userId,
                 CreditAttempted=await _unitOfWork.StudentRegisteationCourse.CreditAtempeted(userId),
                 CreditCompletd=await _unitOfWork.StudentRegisteationCourse.CreditCompleted(userId),
-                SemesterList=await _unitOfWork.StudentRegisteationCourse.GetSemesterList(userId)               
+                SemesterList=await _unitOfWork.StudentRegisteationCourse.GetSemesterList(userId) ,
+                AttempedCGPA=await _unitOfWork.StudentRegisteationCourse.GetAttempedCGPA(userId),
+                CompletedCGPA=await _unitOfWork.StudentRegisteationCourse.GetCompletedCGPA(userId)
             };
             var semsterList = await _unitOfWork.Semester.GetStudentRegisterSemester(userId);
                      
-            foreach (var semeter in semsterList)
+            foreach (var semester in semsterList)
             {
-                var courseListBysemester = await _unitOfWork.StudentRegisteationCourse.GetCourseBySemester(userId, semeter.Id);
+                var courseListBysemester = await _unitOfWork.StudentRegisteationCourse.GetCourseBySemester(userId, semester.Id);
+                var semesterGPA = await _unitOfWork.StudentRegisteationCourse.GetSemesterGPA(userId, semester.Id);
                 gradeVM.CourseCount.Add(courseListBysemester);
-            }
-          
+                gradeVM.SemesterGPA.Add(semesterGPA);
+            }      
             return View(gradeVM) ;
         }
     }

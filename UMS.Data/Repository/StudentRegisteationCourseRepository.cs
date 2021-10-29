@@ -40,9 +40,42 @@ namespace UMS.Data.Repository
                 Include(x => x.AssignRegistrationCourse).ThenInclude(x => x.Courses).ThenInclude(x => x.CourseProtoType).
                 Include(x => x.AssignRegistrationCourse).ThenInclude(x => x.Courses).ThenInclude(x => x.CourseType).
                 Where(x => x.StudentId == userId &&x.IsCompleted==true).Distinct().ToListAsync();
-            return courseList;
+            return courseList;               
+        }
+        public async Task<double>GetCompletedCGPA(string userId)
+        {
+            var courseStudentList = await _db.StudentRegisteationCourses.Where(x => x.StudentId == userId && x.IsCompleted == true
+                   && x.Grade != "F").ToListAsync();
+            var creditCompleted = 0;
+            var gainGPA = 0.0;
+            var totalCGPA = 0.0;
+            foreach (var credit in courseStudentList)
+            {
+                creditCompleted = creditCompleted + credit.AssignRegistrationCourse.Courses.CourseProtoType.Credit;
+                gainGPA = credit.GPA * credit.AssignRegistrationCourse.Courses.CourseProtoType.Credit;
+                totalCGPA = totalCGPA + gainGPA;
+            }
+            var completedCGPA = totalCGPA / creditCompleted;
 
-                
+            return Math.Round(completedCGPA,3); 
+            
+        }
+        public async Task<double> GetAttempedCGPA(string userId)
+        {
+            var courseStudentList = await _db.StudentRegisteationCourses.Where(x => x.StudentId == userId && x.IsCompleted == true
+                   ).ToListAsync();
+            var creditCompleted = 0;
+            var gainGPA = 0.0;
+            var totalCGPA = 0.0;
+            foreach (var credit in courseStudentList)
+            {
+                creditCompleted = creditCompleted + credit.AssignRegistrationCourse.Courses.CourseProtoType.Credit;
+                gainGPA = credit.GPA * credit.AssignRegistrationCourse.Courses.CourseProtoType.Credit;
+                totalCGPA = totalCGPA + gainGPA;
+            }
+            var completedCGPA = totalCGPA / creditCompleted;
+            return Math.Round(completedCGPA,3);
+
         }
         public async Task<int> GetCourseBySemester(string userId,Guid semesterId)
         {
@@ -113,6 +146,23 @@ namespace UMS.Data.Repository
             }
             
             return isTrue;
+        }
+        public async Task<double>GetSemesterGPA(string userId,Guid semesterId)
+        {
+            var courseStudentList = await _db.StudentRegisteationCourses.Where(x => x.StudentId == userId && x.IsCompleted == true
+                    && x.AssignRegistrationCourse.SemesterId==semesterId).ToListAsync();
+
+            var creditCompleted = 0;
+            var gainGPA = 0.0;
+            var totalCGPA = 0.0;
+            foreach (var credit in courseStudentList)
+            {
+                creditCompleted = creditCompleted + credit.AssignRegistrationCourse.Courses.CourseProtoType.Credit;
+                gainGPA = credit.GPA * credit.AssignRegistrationCourse.Courses.CourseProtoType.Credit;
+                totalCGPA = totalCGPA + gainGPA;
+            }
+            var completedCGPA = totalCGPA / creditCompleted;
+            return Math.Round(completedCGPA, 3);
         }
     }
 }

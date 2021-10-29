@@ -16,7 +16,8 @@ namespace UMS.Data.IRepository
         Task<int> GetCourseBySemester(string userId, Guid semesterId);
         Task<IEnumerable<string>> GetSemesterList(string userId);
         Task<bool> GetPrerequisiteCourseChecker(string userId, Guid courseId);
-
-
+        Task<double> GetCompletedCGPA(string userId);
+        Task<double> GetAttempedCGPA(string userId);
+        Task<double> GetSemesterGPA(string userId, Guid semesterId);
     }
 }

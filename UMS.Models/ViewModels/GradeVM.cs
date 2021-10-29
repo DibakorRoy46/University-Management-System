@@ -16,5 +16,8 @@ namespace UMS.Models.ViewModels
         public IEnumerable<string> SemesterList { get; set; }
         public IEnumerable<int> YearList { get; set; }
         public List<int> CourseCount = new List<int>();
+        public double AttempedCGPA { get; set; }
+        public double CompletedCGPA { get; set; }
+        public List<double> SemesterGPA = new List<double>();
     }
 }
