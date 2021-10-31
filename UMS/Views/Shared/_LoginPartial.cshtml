@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-
+@using System.Security.Claims;
 @if (SignInManager.IsSignedIn(User))
 {
 
@@ -11,6 +11,8 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" asp-area="Admin" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
+            <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="Edit"
+               asp-route-id="@(User.FindFirstValue(ClaimTypes.NameIdentifier))">Edit Profile</a>
             <a class="dropdown-item" asp-area="Admin" asp-controller="Account" asp-action="Logout">Logout</a>
         </div>
     </li>

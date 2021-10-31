@@ -336,14 +336,14 @@ h1 {
 .control .btn {
     color: #fff;
     text-transform: uppercase;
-    background: crimson;
+    background: var(--primary-color);
     opacity: .7;
     transition: opacity 1s ease;
 }
 
 .btn:focus {
     opacity: 1;
-    background:red;
+    background: var(--primary-color);)
 }
 
 
@@ -449,7 +449,7 @@ a {
 }
 
     .dropdown-menu-item:hover {
-        background: var(--danger-color);
+        background: var(--primary-color);
     }
 
 .dropdown-menu-link {
@@ -550,8 +550,8 @@ a {
     width: 82px;
     position: fixed;
     margin-top: 60px;
-    margin-bottom:0;
     height:100%;
+    margin-bottom:0;
     background: #ffffff;
     box-shadow: rgba(0,0,0,0.12) 0px 1px 4px 1px;
     overflow-y:auto;
@@ -613,7 +613,7 @@ a {
 
 
     .sidebar ul li ul li:hover {
-        background: var(--danger-color);
+        background: var(--primary-color);
         text-decoration: none;
         color: white;
     }
@@ -659,13 +659,13 @@ a {
     
 
     .sidebar-nav-link:hover {
-        background: var(--danger-color);
+        background: var(--primary-color);
         text-decoration: none;
         color: white;
     }
 
     .sidebar-active {
-        background: var(--danger-color);
+        background: var(--primary-color);
         color: white;
         transition: all 1s ease;
     }

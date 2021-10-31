@@ -1,7 +1,7 @@
 ﻿@model UMS.Models.ViewModels.AssignCourseTableVM
 
 <div class="table-responsive">
-    <table class="table table-hover">
+    <table class="table table-hover table-bordered">
         <thead class="table-secondary ">
             <tr class="table-head">
                 <th>#</th>
@@ -11,8 +11,8 @@
                 <th>Semester</th>
                 <th>Section</th>
                 <th>Day</th>
-                <th>TIme</th>
-                <th>Count</th>
+                <th style="margin-right:-5px;">TIme</th>
+                <th >Count</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -30,13 +30,12 @@
                         <td>@course.ApplicationUser.Name</td>
                         <td>@course.Semester.Name </td>
                         <td>@course.Section.Name</td>
-                        <td>@course.FirstDate<span> and </span>@course.SecondDate</td>
+                        <td>@course.FirstDate<span>-</span>@course.SecondDate</td>
                         <td>@course.StartTime.TimeOfDay<span>-</span>@course.EndTime.TimeOfDay</td>  
                         <td>@course.Count</td>
-                        <td>
-                            
-                            <a class="btn btn-primary" asp-action="Upsert" asp-route-id="@course.Id"><i class="fas fa-edit"></i></a>
-                            <button class="btn btn-danger deleteBtn" data-id="@course.Id"><i class="fas fa-trash-alt"></i></button>
+                        <td>                           
+                            <a class="btn  btn-primary" asp-action="Upsert" asp-route-id="@course.Id" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i></a>
+                            <button class="btn btn-danger deleteBtn" data-toggle="tooltip" data-placement="top" title="Delete" data-id="@course.Id"><i class="fas fa-trash-alt"></i></button>
                         </td>
                         
                     </tr>
@@ -103,7 +102,7 @@
                             searchValue: '@Model.Search',
                             departmentId: '@Model.DepartmentId',
                             semesterId: '@Model.SemesterId',
-                            year: '@Model.Year'
+                            
                         }
                     }).done(function (response) {
 
@@ -129,8 +128,7 @@
                     pageNo: $(this).attr("data-pageNo"),
                     searchValue: '@Model.Search',
                     departmentId: '@Model.DepartmentId',
-                    semesterId: '@Model.SemesterId',
-                    year: '@Model.Year'
+                    semesterId: '@Model.SemesterId',                   
                 }
             }).done(function (response) {
                 $(".loader").fadeOut(1000);

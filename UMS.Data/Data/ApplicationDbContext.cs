@@ -25,13 +25,15 @@ namespace UMS.Data.Data
         public DbSet<Section> Sections { get; set; }
         public DbSet<Activity> Activities { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-        public DbSet<UserDetails> UserDetails { get; set; }
+        public DbSet<StudentDetails> UserDetails { get; set; }
         public DbSet<Claims> Claims { get; set; }
         public DbSet<AssignPreRegistrationCourse> PreRegistrationCourses { get; set; }
         public DbSet<PreregistrationCourses> CourseforPreregistration { get; set; }
         public DbSet<AssignRegistrationCourse> AssignRegistrationCourses { get; set; }
         public DbSet<StudentRegisteationCourse> StudentRegisteationCourses { get; set; }
         public DbSet<CourseContent> CourseContents { get; set; }
+        public DbSet<StudentSemesterFee> StudentSemesterFees { get; set; }
+        public DbSet<EmployeeDetials> EmployeeDetials { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

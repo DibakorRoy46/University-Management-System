@@ -490,6 +490,9 @@ namespace UMS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("PricePerCredit")
+                        .HasColumnType("int");
+
                     b.Property<int>("RequireCourseToComplete")
                         .HasColumnType("int");
 
@@ -499,6 +502,39 @@ namespace UMS.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("UMS.Models.Models.EmployeeDetials", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DepartmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("JoiningDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LeavingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Salary")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EmployeeDetials");
                 });
 
             modelBuilder.Entity("UMS.Models.Models.PreregistrationCourses", b =>
@@ -546,6 +582,9 @@ namespace UMS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Batch")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -553,9 +592,45 @@ namespace UMS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("StudentSemesterFeeId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("StudentSemesterFeeId");
+
                     b.ToTable("Semesters");
+                });
+
+            modelBuilder.Entity("UMS.Models.Models.StudentDetails", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DepartmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SemesterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("SemesterId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
+
+                    b.ToTable("UserDetails");
                 });
 
             modelBuilder.Entity("UMS.Models.Models.StudentRegisteationCourse", b =>
@@ -594,27 +669,25 @@ namespace UMS.Data.Migrations
                     b.ToTable("StudentRegisteationCourses");
                 });
 
-            modelBuilder.Entity("UMS.Models.Models.UserDetails", b =>
+            modelBuilder.Entity("UMS.Models.Models.StudentSemesterFee", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<Guid>("SemesterId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("DepartmentId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("TotalPrice")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
-
-                    b.ToTable("UserDetails");
+                    b.ToTable("StudentSemesterFees");
                 });
 
             modelBuilder.Entity("UMS.Models.Models.ApplicationUser", b =>
@@ -791,6 +864,21 @@ namespace UMS.Data.Migrations
                     b.Navigation("CoursePrerequisite");
                 });
 
+            modelBuilder.Entity("UMS.Models.Models.EmployeeDetials", b =>
+                {
+                    b.HasOne("UMS.Models.Models.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId");
+
+                    b.HasOne("UMS.Models.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Department");
+                });
+
             modelBuilder.Entity("UMS.Models.Models.PreregistrationCourses", b =>
                 {
                     b.HasOne("UMS.Models.Models.Course", "Course")
@@ -806,6 +894,36 @@ namespace UMS.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Course");
+
+                    b.Navigation("Semester");
+                });
+
+            modelBuilder.Entity("UMS.Models.Models.Semester", b =>
+                {
+                    b.HasOne("UMS.Models.Models.StudentSemesterFee", null)
+                        .WithMany("SemesterList")
+                        .HasForeignKey("StudentSemesterFeeId");
+                });
+
+            modelBuilder.Entity("UMS.Models.Models.StudentDetails", b =>
+                {
+                    b.HasOne("UMS.Models.Models.Department", "Department")
+                        .WithMany("UserDetails")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("UMS.Models.Models.Semester", "Semester")
+                        .WithMany("StudentDetails")
+                        .HasForeignKey("SemesterId");
+
+                    b.HasOne("UMS.Models.Models.ApplicationUser", "ApplicationUser")
+                        .WithOne("UserDetails")
+                        .HasForeignKey("UMS.Models.Models.StudentDetails", "UserId");
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Department");
 
                     b.Navigation("Semester");
                 });
@@ -827,23 +945,6 @@ namespace UMS.Data.Migrations
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("AssignRegistrationCourse");
-                });
-
-            modelBuilder.Entity("UMS.Models.Models.UserDetails", b =>
-                {
-                    b.HasOne("UMS.Models.Models.Department", "Department")
-                        .WithMany("UserDetails")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("UMS.Models.Models.ApplicationUser", "ApplicationUser")
-                        .WithOne("UserDetails")
-                        .HasForeignKey("UMS.Models.Models.UserDetails", "UserId");
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("UMS.Models.Models.AssignRegistrationCourse", b =>
@@ -884,6 +985,13 @@ namespace UMS.Data.Migrations
                     b.Navigation("AssignRegistrationCourses");
 
                     b.Navigation("PreregistrationCourses");
+
+                    b.Navigation("StudentDetails");
+                });
+
+            modelBuilder.Entity("UMS.Models.Models.StudentSemesterFee", b =>
+                {
+                    b.Navigation("SemesterList");
                 });
 
             modelBuilder.Entity("UMS.Models.Models.ApplicationUser", b =>

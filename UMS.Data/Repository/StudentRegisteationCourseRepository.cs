@@ -77,15 +77,16 @@ namespace UMS.Data.Repository
             return Math.Round(completedCGPA,3);
 
         }
-        public async Task<int> GetCourseBySemester(string userId,Guid semesterId)
+        public async Task<IEnumerable<StudentRegisteationCourse>> GetCourseBySemester(string userId,Guid semesterId)
         {
             var courseList = await _db.StudentRegisteationCourses.Include(x => x.ApplicationUser).
                 Include(x => x.AssignRegistrationCourse).ThenInclude(x => x.Semester).
                 Include(x => x.AssignRegistrationCourse).ThenInclude(x => x.Courses).ThenInclude(x => x.CourseProtoType).
                 Include(x => x.AssignRegistrationCourse).ThenInclude(x => x.Courses).ThenInclude(x => x.CourseType).
+                Include(x=>x.AssignRegistrationCourse).ThenInclude(x=>x.Courses).ThenInclude(x=>x.Department).
                 Where(x => x.StudentId == userId && x.IsCompleted == true &&x.AssignRegistrationCourse.SemesterId==semesterId).
                 Distinct().ToListAsync();
-            return courseList.Count();
+            return courseList;
 
 
         }
@@ -164,5 +165,26 @@ namespace UMS.Data.Repository
             var completedCGPA = totalCGPA / creditCompleted;
             return Math.Round(completedCGPA, 3);
         }
+
+        public async Task<int> GetSemesterCredits(string userId, Guid semesterId)
+        {
+            var courseStudentList = await _db.StudentRegisteationCourses.Where(x => x.StudentId == userId && x.IsCompleted == true
+                    && x.AssignRegistrationCourse.SemesterId == semesterId).ToListAsync();
+
+            var creditCompleted = 0;
+            foreach (var credit in courseStudentList)
+            {
+                creditCompleted = creditCompleted + credit.AssignRegistrationCourse.Courses.CourseProtoType.Credit;
+
+            }
+            return creditCompleted;
+        }
+
+        public async Task<Guid>GetSemester(Guid courseId)
+        {
+            var semesterObj = await _db.AssignRegistrationCourses.Where(x => x.Id == courseId).Select(x => x.SemesterId).FirstOrDefaultAsync();
+            return semesterObj;
+        }
+        
     }
 }

@@ -42,14 +42,18 @@ namespace UMS.Data.Repository
         }
        
 
-        public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter = null, string includeProperties = null, bool isAsNoTracking = false)
+        public async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null, bool isAsNoTracking = false)
         {
             IQueryable<T> query = dbSet;
             if(filter!=null)
             {
                 query = query.Where(filter);
             }
-            if(includeProperties!=null)
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+            if (includeProperties!=null)
             {
                 foreach (var includeProp in includeProperties.Split(new char[] { ','},StringSplitOptions.RemoveEmptyEntries))
                 {
@@ -62,6 +66,7 @@ namespace UMS.Data.Repository
             }
             return await query.FirstOrDefaultAsync();
         }
+        
 
         public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null, bool isAsNoTracking = false)
         {

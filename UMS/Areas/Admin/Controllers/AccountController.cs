@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -53,7 +56,6 @@ namespace UMS.Areas.Admin.Controllers
             ViewData["ReturnUrl"] = returnurl;
             var roleList = await _roleManager.Roles.ToListAsync();
             var departemntList = await _unitOfWork.Department.GetAllAsync();
-
             RegisterVM registerVM = new RegisterVM()
             {
                 RoleList = roleList.Select(x => new SelectListItem()
@@ -67,6 +69,7 @@ namespace UMS.Areas.Admin.Controllers
                     Value = x.Id.ToString()
                 })
             };
+            
             return View(registerVM);
         }
         
@@ -100,16 +103,64 @@ namespace UMS.Areas.Admin.Controllers
                         var department = await _unitOfWork.Department.FirstOrDefaultAsync(x => x.Id.Equals(model.DepartmentSelected));                       
                         if(model.DepartmentSelected!=null)
                         {
-                            UserDetails userDetails = new UserDetails();
-                            userDetails.UserId = user.Id;
-                            userDetails.DepartmentId = model.DepartmentSelected.Value;
-                            await _unitOfWork.UserDetials.AddAsync(userDetails);
-                            await _unitOfWork.SaveAsync();
+                            var role = await _roleManager.Roles.FirstOrDefaultAsync();
+                            foreach (var roleName in model.RoleSelected)
+                            {
+                                role = await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == roleName.ToString());
+                                if(role.Name=="Student")
+                                {
+                                    var semesterObj = await _unitOfWork.Semester.FirstOrDefaultAsync(x => x.IsActive == true);
+                                    var StudentIdObj = await _unitOfWork.UserDetials
+                                        .FirstOrDefaultAsync(orderBy: x => x.OrderByDescending(x => x.StudentId));
+                                    StudentDetails userDetails = new StudentDetails();
+                                    userDetails.UserId = user.Id;
+                                    userDetails.DepartmentId = model.DepartmentSelected.Value;
+                                    userDetails.SemesterId = semesterObj.Id;
+                                    var studentId = 2021100000;
+                                    if (StudentIdObj!=null)
+                                    {
+                                        studentId= StudentIdObj.StudentId.Value;
+                                    }
+                                    userDetails.StudentId = studentId + 1;
+                                    await _unitOfWork.UserDetials.AddAsync(userDetails);
+                                }
+                                else
+                                {
+                                    var employeeObj = await _unitOfWork.EmployeeDetials.FirstOrDefaultAsync(x => x.UserId == user.Id);
+                                    if(employeeObj==null)
+                                    {
+                                        EmployeeDetials employeeDetials = new EmployeeDetials();
+                                        employeeDetials.UserId = user.Id;
+                                        employeeDetials.DepartmentId = model.DepartmentSelected.Value;
+                                        var employeeDetialObj = await _unitOfWork.EmployeeDetials
+                                            .FirstOrDefaultAsync(orderBy: x => x.OrderByDescending(x => x.EmployeeId));
+                                        employeeDetials.JoiningDate = DateTime.Now;
+                                        employeeDetials.LeavingDate = model.EmployeeDetials.LeavingDate;
+                                        employeeDetials.Salary = model.EmployeeDetials.Salary;
+                                        int employeeId = 1000000;
+                                        if (employeeDetialObj != null)
+                                        {
+                                            employeeId = employeeDetialObj.EmployeeId.Value;
+                                        }
+                                        employeeDetials.EmployeeId = employeeId + 1;
+                                        await _unitOfWork.EmployeeDetials.AddAsync(employeeDetials);
+                                    }
+                                    
+                                }                              
+                                await _unitOfWork.SaveAsync();
+                            }
+
+                            
                         }
                       
                     }
                     TempData["success"] = "Account Created Successfully";
-                    return RedirectToAction("Index","Home",new { area="Student"});
+                    var url = Url.Action("Login", "Account","Admin", protocol: HttpContext.Request.Scheme);
+                    await _emailSender.SendEmailAsync(model.Email, "University Management System",
+                       "Your are successfully registed as a Studetnt." +
+                       "Your password is:"+model.Password+".Use this email and password for login." +
+                       "For login click here: <a href=\"" + url + "\">link</a>");
+                    return RedirectToAction("Index","User",new { area="Admin"});
                 }
                 foreach(var errorMessage in result.Errors)
                 {
@@ -141,7 +192,7 @@ namespace UMS.Areas.Admin.Controllers
         public async Task<IActionResult>Login()
         {
             return View();
-        }
+        }    
         [Route("")]
         [Route("Login")]   
         [HttpPost]
@@ -153,7 +204,7 @@ namespace UMS.Areas.Admin.Controllers
             returnurl = returnurl ?? Url.Content("~");
             if(ModelState.IsValid)
             {            
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: true);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe=false, lockoutOnFailure: true);
                 if(result.Succeeded)
                 {
                     if (!String.IsNullOrEmpty(returnurl))
@@ -184,6 +235,7 @@ namespace UMS.Areas.Admin.Controllers
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
+            
             TempData["LogoutSuccess"] = "Successfully Logout";
             return RedirectToAction(nameof(Login));
         }
@@ -266,7 +318,7 @@ namespace UMS.Areas.Admin.Controllers
                     
                     var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                     var callbackurl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    await _emailSender.SendEmailAsync(model.Email, "Reset Password - Identity Manager",
+                    await _emailSender.SendEmailAsync(model.Email, "University Management System",
                         "Please reset your password by clicking here: <a href=\"" + callbackurl + "\">link</a>");
                     model.IsSuccess = true;
                     return View(model);

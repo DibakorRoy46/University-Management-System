@@ -2,57 +2,80 @@
     <div class="container py-5" id="main-container">
         <h1 class="text-info">Register</h1>
         <form asp-controller="Account" asp-action="Register" method="post" role="form">
-            <h4>Create a new User</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Email" class="col-md-2"></label>
-                <div class="col-md-10">
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+            <div class="row">
+                <div class="col-lg-7 col-md-7 col-sm-12">
+                    <h4>Create a new User</h4>
+                    <hr />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="col-md-2"></label>
+                        <div class="col-md-10">
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="col-md-2"></label>
+                        <div class="col-md-10">
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="col-md-2"></label>
+                        <div class="col-md-10">
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword" class="col-md-2"></label>
+                        <div class="col-md-10">
+                            <input asp-for="ConfirmPassword" class="form-control" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="RoleSelected" class="col-md-2"></label>
+                        <div class="col-md-10">
+                            <select asp-for="RoleSelected" id="roleSelect" asp-items="@Model.RoleList" class="form-control" multiple>
+                                <option disabled selected>--Select Role--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DepartmentSelected" class="col-md-2"></label>
+                        <div class="col-md-10">
+                            <select asp-for="DepartmentSelected" asp-items="@Model.DepartmentList" class="form-control">
+                                <option disabled selected>--Select Department--</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-5 col-sm-12 mt-5 " hidden id="employeeDetails">
+                   
+                    <div class="form-group">
+                        <label asp-for="EmployeeDetials.LeavingDate" class="col-md-2"></label>
+                        <div class="col-md-10">
+                            <input asp-for="EmployeeDetials.LeavingDate"  class="form-control" />
+                            <span asp-validation-for="EmployeeDetials.LeavingDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="EmployeeDetials.Salary" class="col-md-2"></label>
+                        <div class="col-md-10">
+                            <input asp-for="EmployeeDetials.Salary"  required class="form-control" />
+                            <span asp-validation-for="EmployeeDetials.Salary" class="text-danger"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Name" class="col-md-2"></label>
-                <div class="col-md-10">
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="col-md-2"></label>
-                <div class="col-md-10">
-                    <input asp-for="Password" class="form-control" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="ConfirmPassword" class="col-md-2"></label>
-                <div class="col-md-10">
-                    <input asp-for="ConfirmPassword" class="form-control" />
-                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="RoleSelected" class="col-md-2"></label>
-                <div class="col-md-10">
-                    <select asp-for="RoleSelected" asp-items="@Model.RoleList" class="form-control" multiple>
-                        <option disabled selected>--Select Role--</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="DepartmentSelected" class="col-md-2"></label>
-                <div class="col-md-10">
-                    <select asp-for="DepartmentSelected" asp-items="@Model.DepartmentList" class="form-control" >
-                        <option disabled selected>--Select Department--</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-success form-control">Register</button>
-                </div>
+            <div class="row text-center">
+                
+                    <div class="col-lg-6 col-lg-6 col-sm-12">
+                        <button type="submit" class="btn btn-success form-control">Register</button>
+                    </div>
+                
             </div>
         </form>
     </div>
@@ -64,5 +87,17 @@
                 $(".loader").fadeOut(1000);
                 $(".wrapper").fadeIn(1000)
             });
+            $(document).ready(function () {
+                $("#roleSelect").change(function () {
+                    var roleName = $(this).find("option:selected").text();
+
+                    if (roleName != "Student") {
+                        $("#employeeDetails").removeAttr("hidden");
+                    }
+                    else {
+                        $("#employeeDetails").attr("hidden", true);
+                    }
+                });
+            })
         </script>
     }

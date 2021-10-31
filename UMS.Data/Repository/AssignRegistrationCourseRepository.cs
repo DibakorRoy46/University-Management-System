@@ -191,7 +191,7 @@ namespace UMS.Data.Repository
                 if(departmentId!=Guid.Empty)
                 {
                      return await (from users in _db.ApplicationUsers join
-                                        userDetails in _db.UserDetails on users.Id equals userDetails.UserId
+                                        userDetails in _db.EmployeeDetials on users.Id equals userDetails.UserId
                                          join aspnetUserRoles in _db.UserRoles on users.Id equals aspnetUserRoles.UserId
                                          join roles in _db.Roles on aspnetUserRoles.RoleId equals roles.Id where
                                          roles.Name == "Faculty" && userDetails.DepartmentId == departmentId 
@@ -201,7 +201,7 @@ namespace UMS.Data.Repository
                 else
                 {
                      return await (from users in _db.ApplicationUsers join
-                                        userDetails in _db.UserDetails on users.Id equals userDetails.UserId
+                                        userDetails in _db.EmployeeDetials on users.Id equals userDetails.UserId
                                          join aspnetUserRoles in _db.UserRoles on users.Id equals aspnetUserRoles.UserId
                                          join roles in _db.Roles on aspnetUserRoles.RoleId equals roles.Id where
                                          roles.Name == "Faculty" && users.Id != assignCourseObj.TeacherId
@@ -214,7 +214,7 @@ namespace UMS.Data.Repository
                 if(departmentId!=Guid.Empty)
                 {
                      return await (from users in _db.ApplicationUsers join
-                                        userDetails in _db.UserDetails on users.Id equals userDetails.UserId
+                                        userDetails in _db.EmployeeDetials on users.Id equals userDetails.UserId
                                          join aspnetUserRoles in _db.UserRoles on users.Id equals aspnetUserRoles.UserId
                                          join roles in _db.Roles on aspnetUserRoles.RoleId equals roles.Id where
                                          roles.Name == "Faculty" && userDetails.DepartmentId == departmentId 
@@ -223,7 +223,7 @@ namespace UMS.Data.Repository
                 else
                 {
                      return await (from users in _db.ApplicationUsers join
-                                        userDetails in _db.UserDetails on users.Id equals userDetails.UserId
+                                        userDetails in _db.EmployeeDetials on users.Id equals userDetails.UserId
                                          join aspnetUserRoles in _db.UserRoles on users.Id equals aspnetUserRoles.UserId
                                          join roles in _db.Roles on aspnetUserRoles.RoleId equals roles.Id where
                                          roles.Name == "Faculty"

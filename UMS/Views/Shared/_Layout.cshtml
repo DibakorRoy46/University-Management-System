@@ -252,7 +252,7 @@
             @if (User.IsInRole("Student"))
             {
                 var RegistrationClass = ViewContext.RouteData.Values["Controller"].ToString() == "Registration"
-
+                     && ViewContext.RouteData.Values["Action"].ToString() == "Index"
                 ? "sidebar-active" : String.Empty;
                 <li class="sidebar-nav-item @RegistrationClass">
                     <a asp-action="Index" asp-controller="Registration" asp-area="Student" class="sidebar-nav-link ">
@@ -265,6 +265,23 @@
 
                     </a>
                 </li>
+
+                var registrationFromClass = ViewContext.RouteData.Values["Controller"].ToString() == "Registration"
+                    && ViewContext.RouteData.Values["Action"].ToString() == "RegistrationForm"
+                ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @registrationFromClass">
+                    <a asp-action="RegistrationForm" asp-controller="Registration" asp-area="Student" class="sidebar-nav-link ">
+                        <div>
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <span>
+                            Registration Form
+                        </span>
+
+                    </a>
+                </li>
+
+
                 var gradeClass = ViewContext.RouteData.Values["Controller"].ToString() == "Grade"
 
                 ? "sidebar-active" : String.Empty;
@@ -283,7 +300,7 @@
             @if (User.IsInRole("Faculty"))
             {
                 var courseAdviseClass = ViewContext.RouteData.Values["Controller"].ToString() == "TeacherCourse"
-                    && (ViewContext.RouteData.Values["Action"].ToString() == "CourseList"||
+                    && (ViewContext.RouteData.Values["Action"].ToString() == "CourseList" ||
                      ViewContext.RouteData.Values["Action"].ToString() == "StudentList")
                     ? "sidebar-active" : String.Empty;
                 <li class="sidebar-nav-item @courseAdviseClass">
@@ -298,7 +315,7 @@
                     </a>
                 </li>
                 var courseAdvisePriClass = ViewContext.RouteData.Values["Controller"].ToString() == "TeacherCourse"
-                    && (ViewContext.RouteData.Values["Action"].ToString() == "PreviousCourseList"||
+                    && (ViewContext.RouteData.Values["Action"].ToString() == "PreviousCourseList" ||
                     ViewContext.RouteData.Values["Action"].ToString() == "PreviousStudentList")
                     ? "sidebar-active" : String.Empty;
                 <li class="sidebar-nav-item @courseAdvisePriClass">
@@ -313,40 +330,35 @@
                     </a>
                 </li>
             }
+            <li class="sidebar-nav-item ">
+                <a href="#" class="sidebar-nav-link ">
+                    <div>
+                        <i class=""></i>
+                    </div>
+                    <span>
+                        
+                    </span>
 
-            <li class="nav-item has-submenu sidebar-nav-item">
-                <a class="sidebar-nav-link" href="#">
-                    <div>
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <span>Dropdown</span>
-                    <div>
-                        <i class="fas fa-caret-down"></i>
-                    </div>
-                </a>
-                <ul class="submenu collapse">
-                    <li><a class="submenu-link" href="#">Submenu item 4 </a></li>
-                    <li><a class="submenu-link" href="#">Submenu item 5 </a></li>
-                    <li><a class="submenu-link" href="#">Submenu item 6 </a></li>
-                    <li><a class="submenu-link" href="#">Submenu item 7 </a></li>
-                </ul>
-            </li>
-            <li class="sidebar-nav-item">
-                <a href="#" class="sidebar-nav-link">
-                    <div>
-                        <i class="fas fa-adjust"></i>
-                    </div>
-                    <span>Morbi</span>
                 </a>
             </li>
-            <li class="sidebar-nav-item">
-                <a href="#" class="sidebar-nav-link">
-                    <div>
-                        <i class="fab fa-algolia"></i>
-                    </div>
-                    <span>Praesent</span>
-                </a>
-            </li>
+
+            @*<li class="nav-item has-submenu sidebar-nav-item">
+            <a class="sidebar-nav-link" href="#">
+                <div>
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <span>Dropdown</span>
+                <div>
+                    <i class="fas fa-caret-down"></i>
+                </div>
+            </a>
+            <ul class="submenu collapse">
+                <li><a class="submenu-link" href="#">Submenu item 4 </a></li>
+                <li><a class="submenu-link" href="#">Submenu item 5 </a></li>
+                <li><a class="submenu-link" href="#">Submenu item 6 </a></li>
+                <li><a class="submenu-link" href="#">Submenu item 7 </a></li>
+            </ul>
+        </li>*@
 
 
         </ul>

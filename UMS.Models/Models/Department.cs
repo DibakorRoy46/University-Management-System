@@ -23,8 +23,9 @@ namespace UMS.Models.Models
         [Required]
         [Range(1,100)]
         public int RequireCourseToComplete { get; set; }
+        public int PricePerCredit { get; set; }
         public IEnumerable<Course> Courses { get; set; }
-        public IEnumerable<UserDetails> UserDetails { get; set; }
+        public IEnumerable<StudentDetails> UserDetails { get; set; }
        
       
        

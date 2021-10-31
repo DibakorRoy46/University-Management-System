@@ -59,6 +59,18 @@
 
                     </div>
                 </div>
+
+                <div class="row form-group my-3">
+                    <div class="col-3">
+                        <label>Per Credit Price</label>
+                    </div>
+                    <div class="col-8">
+                        <input class="form-control" asp-for="PricePerCredit" autocomplete="off" />
+                        <span asp-validation-for="PricePerCredit" class="text-danger"></span>
+
+                    </div>
+                </div>
+
                 <div class="row form-group offset-3 my-3">
                     <div class="col-6">
                         @if (!Model.Id.Equals(Guid.Empty))

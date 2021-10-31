@@ -42,19 +42,12 @@ namespace UMS
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddAuthorization();
            
-            services.ConfigureApplicationCookie(config =>
-            {
-                config.LoginPath = new PathString("/Login"); 
-                config.LogoutPath =new PathString("/Logout");
-                config.AccessDeniedPath = new PathString("/AccessDenied"); 
-                
-
-            });
-          
+            
             services.Configure<IdentityOptions>(option =>
             {
                 option.Lockout.MaxFailedAccessAttempts = 3;
-                option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                
                
             });
             services.Configure<DataProtectionTokenProviderOptions>(option =>
@@ -62,14 +55,25 @@ namespace UMS
                 option.TokenLifespan = TimeSpan.FromMinutes(5);
             });
             
-            services.AddControllersWithViews(o =>
+            services.AddControllersWithViews(filter =>
             {
-                o.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build()));
+                filter.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build()));
             }).AddRazorRuntimeCompilation();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
            
             services.AddHttpContextAccessor();
             services.AddTransient<IEmailSender, EmailSender>();
+            services.ConfigureApplicationCookie(config =>
+            {
+                config.LoginPath = new PathString("/Login");
+                config.LogoutPath = new PathString("/Logout");
+                config.AccessDeniedPath = new PathString("/AccessDenied");
+                config.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                config.SlidingExpiration = true; // the cookie would be re-issued on any request half way through the ExpireTimeSpan
+                                                 //options.Cookie.Expiration = TimeSpan.FromDays(5);
+
+            });
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("AdminOrRegisterClaim",
@@ -114,8 +118,7 @@ namespace UMS
             {              
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{area=Admin}/{controller=Account}/{action=Login}/{id?}");
-               
+                    pattern: "{area=Admin}/{controller=Account}/{action=Login}/{id?}");             
                 endpoints.MapRazorPages();
             });
         }

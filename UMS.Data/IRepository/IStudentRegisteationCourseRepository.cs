@@ -12,8 +12,10 @@ namespace UMS.Data.IRepository
         Task UpdateAsync(StudentRegisteationCourse studentRegisteationCourse);
         Task<IEnumerable<StudentRegisteationCourse>> GetAllCourses(string userId);
         Task<int> CreditCompleted(string userId);
+        Task<Guid> GetSemester(Guid courseId);
         Task<int> CreditAtempeted(string userId);
-        Task<int> GetCourseBySemester(string userId, Guid semesterId);
+        Task<IEnumerable<StudentRegisteationCourse>> GetCourseBySemester(string userId, Guid semesterId);
+        Task<int> GetSemesterCredits(string userId, Guid semesterId);
         Task<IEnumerable<string>> GetSemesterList(string userId);
         Task<bool> GetPrerequisiteCourseChecker(string userId, Guid courseId);
         Task<double> GetCompletedCGPA(string userId);

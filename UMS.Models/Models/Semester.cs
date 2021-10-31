@@ -15,7 +15,11 @@ namespace UMS.Models.Models
         [RegularExpression(@"^[a-zA-Z0-9 ]+$")]
         public string Name { get; set; }
         public bool IsActive { get; set; }
+        public int Batch { get; set; }
         public IEnumerable<PreregistrationCourses> PreregistrationCourses { get; set; }
         public IEnumerable<AssignRegistrationCourse> AssignRegistrationCourses { get; set; }
+        public IEnumerable<StudentDetails> StudentDetails { get; set; }
+        
+        
     }
 }

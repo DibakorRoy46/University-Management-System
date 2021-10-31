@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UMS.Models.Models;
 
 namespace UMS.Models.ViewModels
 {
@@ -30,6 +31,8 @@ namespace UMS.Models.ViewModels
         public IEnumerable<string> RoleSelected { get; set; }
         public IEnumerable<SelectListItem> DepartmentList { get; set; }
         public Guid? DepartmentSelected { get; set; }
+        public StudentDetails StudentDetails { get; set; }
+        public EmployeeDetials EmployeeDetials { get; set; }
         
     }
 }

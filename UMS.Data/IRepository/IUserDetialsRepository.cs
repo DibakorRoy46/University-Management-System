@@ -7,7 +7,7 @@ using UMS.Models.Models;
 
 namespace UMS.Data.IRepository
 {
-    public interface IUserDetialsRepository:IRepository<UserDetails>
+    public interface IUserDetialsRepository:IRepository<StudentDetails>
     {
     }
 }

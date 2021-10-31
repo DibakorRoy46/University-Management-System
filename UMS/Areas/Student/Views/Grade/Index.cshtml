@@ -30,12 +30,7 @@
             <h4 class="text-white text-center">See detailed course grade information</h4>
         </div>
         <div id="grade-detials " class="table-responsive">
-            @{
-                int i = 0;int j = 0; var courseObj = Guid.Empty;
-                int count = Model.CourseCount.ElementAt(i);
-                int courseCount = Model.courseList.Count();
-                double semesterCGPA = Model.SemesterGPA.ElementAt(j);
-                }
+           
             <table class="table table-bordered">
                 <tr class="table-secondary"> 
                     <th>Semester</th>
@@ -46,20 +41,30 @@
                     <th>Course Type</th>
                     <th> Letter  Point</th>
                     <th>Grade Point</th>
+                    <th>Credits</th>
                     <th>GPA</th>
                     <th>CGPA</th>
                 </tr>
-                @foreach (var course in Model.courseList)
+                @if(Model.courseList.Count()>0)
                 {
-                    if (course.AssignRegistrationCourse.SemesterId == courseObj)
+                    int i = 0; int j = 0;int z = 0; var courseObj = Guid.Empty;
+                    int count = Model.CourseCount.ElementAt(i);
+                    int courseCount = Model.courseList.Count();
+                    double semesterCGPA = Model.SemesterGPA.ElementAt(j);
+                    int creditCount = Model.Credits.ElementAt(z);
+
+                    @foreach (var course in Model.courseList)
                     {
-                        count = 0;
-                    }
-                    else
-                    {
-                        count = Model.CourseCount.ElementAt(i++);
-                        semesterCGPA = Model.SemesterGPA.ElementAt(j++);
-                    }
+                        if (course.AssignRegistrationCourse.SemesterId == courseObj)
+                        {
+                            count = 0;
+                        }
+                        else
+                        {
+                            count = Model.CourseCount.ElementAt(i++);
+                            semesterCGPA = Model.SemesterGPA.ElementAt(j++);
+                            creditCount = Model.Credits.ElementAt(z++);
+                        }
             <tr>
                 @if (count > 0)
                 {
@@ -71,6 +76,7 @@
                     <td>@course.AssignRegistrationCourse.Courses.CourseType.Name</td>
                     <td>@course.Grade</td>
                     <td>@course.GPA</td>
+                    <td rowspan="@count" class="text-center">@creditCount </td>
                     <td rowspan="@count" class="text-center">@semesterCGPA </td>
                     @if (courseCount > 0)
                     {
@@ -78,6 +84,7 @@
                     }
                     count = 0;
                     courseCount = 0;
+                    creditCount = 0;
                     courseObj = course.AssignRegistrationCourse.SemesterId;
                 }
                 else
@@ -93,8 +100,26 @@
                 }
 
             </tr>
-
                 }
+                }
+            else
+            {
+            <tr>
+
+
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>No Course Found</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            }
+
             </table>
         </div>
     </div>

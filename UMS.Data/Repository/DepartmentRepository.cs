@@ -58,6 +58,7 @@ namespace UMS.Data.Repository
                 departmentObj.Initial = department.Initial;
                 departmentObj.RequiredCreditToComplete = department.RequiredCreditToComplete;
                 departmentObj.RequireCourseToComplete = department.RequireCourseToComplete;
+                departmentObj.PricePerCredit = department.PricePerCredit;
             }
         }
     }

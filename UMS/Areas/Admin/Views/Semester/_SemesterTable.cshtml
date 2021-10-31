@@ -6,6 +6,7 @@
             <tr>
                 <th>#</th>
                 <th>Name</th>          
+                <th>Batch</th>          
                 <th>IsActive</th>          
                 <th>Actions</th>
             </tr>
@@ -21,6 +22,7 @@
                     <tr>
                         <td>@(i)</td>
                         <td>@semester.Name</td>
+                        <td>@semester.Batch</td>
                         <td>
                             @if (semester.IsActive == true)
                             {

@@ -1,7 +1,7 @@
 ﻿@model UMS.Models.ViewModels.CourseVM
 
 <div class="table-responsive">
-    <table class="table table-hover">
+    <table class="table table-hover table-bordered">
         <thead class="table-secondary ">
             <tr class="table-head">
                 <th>#</th>
@@ -9,8 +9,9 @@
                 <th>Initial</th>
                 <th>Department</th>
                 <th class="text-center">Prerequisites</th>
-                <th></th>
+  
                 <th>Actions</th>
+
             </tr>
         </thead>
         <tbody class="table-body">
@@ -36,11 +37,11 @@
                                     <span>,</span>
                                 }
                             }
+                        </td>
                         <td>
-                        <td>
-                            <a class="btn btn-primary" asp-action="ManagePrerequisite" asp-route-id="@course.Id">Prerequisite</a>
-                            <a class="btn btn-primary" asp-action="Upsert" asp-route-id="@course.Id"><i class="fas fa-edit"></i></a>
-                            <button class="btn btn-danger deleteBtn" data-id="@course.Id"><i class="fas fa-trash-alt"></i></button>
+                            <a class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Prerequisite" asp-action="ManagePrerequisite" asp-route-id="@course.Id"><i class="fas fa-book-open"></i></a>
+                            <a class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Edit" asp-action="Upsert" asp-route-id="@course.Id"><i class="fas fa-edit"></i></a>
+                            <button class="btn btn-danger deleteBtn" data-toggle="tooltip" data-placement="top" title="Delete" data-id="@course.Id"><i class="fas fa-trash-alt"></i></button>
                         </td>
                     </tr>
                 }

@@ -76,8 +76,15 @@ namespace UMS.Areas.Admin.Controllers
             {
                 if(ModelState.IsValid)
                 {
+                    var batchObj = await _unitOfWork.Semester.FirstOrDefaultAsync(orderBy:x=>x.OrderByDescending(x=>x.Batch));
+                    var batch = 0;
+                    if(batchObj!=null)
+                    {
+                        batch = batchObj.Batch;
+                    }
                     if(semester.Id.Equals(Guid.Empty))
                     {
+                        semester.Batch = batch + 1;
                         await _unitOfWork.Semester.AddAsync(semester);
                         TempData["message"] = "Successfully Created";
                     }

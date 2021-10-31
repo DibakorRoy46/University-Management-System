@@ -21,3 +21,4 @@ E:\Project\New folder\UMS\UMS.Utility\obj\Debug\net5.0\UMS.Utility.csproj.CoreCo
 E:\Project\New folder\UMS\UMS.Utility\obj\Debug\net5.0\UMS.Utility.dll
 E:\Project\New folder\UMS\UMS.Utility\obj\Debug\net5.0\ref\UMS.Utility.dll
 E:\Project\New folder\UMS\UMS.Utility\obj\Debug\net5.0\UMS.Utility.pdb
+E:\Project\New folder\UMS\UMS.Utility\obj\Debug\net5.0\UMS.Utility.csproj.AssemblyReference.cache

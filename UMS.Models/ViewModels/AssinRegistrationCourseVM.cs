@@ -11,7 +11,7 @@ namespace UMS.Models.ViewModels
     {
         public IEnumerable<SelectListItem> SemesterList { get; set; }
         public IEnumerable<SelectListItem> DepartmentList { get; set; }
-        public IEnumerable<SelectListItem> YearList { get; set; }
+        
         
     }
 

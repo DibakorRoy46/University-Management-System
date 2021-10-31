@@ -9,6 +9,7 @@
                 <th>Initail</th>
                 <th>Require Credit to Complete</th>
                 <th>Require Course to Complete</th>
+                <th>Per Credit Price</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -25,6 +26,7 @@
                         <td>@department.Initial</td>
                         <td>@department.RequiredCreditToComplete</td>
                         <td>@department.RequireCourseToComplete</td>
+                        <td>@department.PricePerCredit</td>
                         <td>
                             <a class="btn btn-primary" asp-action="Upsert" asp-route-id="@department.Id"><i class="fas fa-edit"></i></a>
                             <button class="btn btn-danger deleteBtn" data-id="@department.Id"><i class="fas fa-trash-alt"></i></button>
@@ -39,6 +41,7 @@
                     <td></td>
                     <td class="text-danger">No Department Available</td>
                     <td class="text-danger"></td>
+                    <td></td>
                     <td></td>
                 </tr>
             }

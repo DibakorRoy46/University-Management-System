@@ -147,7 +147,7 @@ namespace UMS.Data.Repository
             if (applicationUserObj != null)
             {
                 applicationUserObj.Name = applicationUser.Name;
-                applicationUserObj.PhoneNumber = applicationUser.PhoneNumber;
+                applicationUserObj.PhoneNumber = applicationUser.PhoneNumber;              
             }
 
         }

@@ -38,11 +38,13 @@ namespace UMS.Areas.Student.Controllers
             foreach (var semester in semsterList)
             {
                 var courseListBysemester = await _unitOfWork.StudentRegisteationCourse.GetCourseBySemester(userId, semester.Id);
+                var semesterCredit = await _unitOfWork.StudentRegisteationCourse.GetSemesterCredits(userId, semester.Id);
                 var semesterGPA = await _unitOfWork.StudentRegisteationCourse.GetSemesterGPA(userId, semester.Id);
-                gradeVM.CourseCount.Add(courseListBysemester);
+                gradeVM.CourseCount.Add(courseListBysemester.Count());
                 gradeVM.SemesterGPA.Add(semesterGPA);
-            }      
-            return View(gradeVM) ;
+                gradeVM.Credits.Add(semesterCredit);
+            }
+            return View(gradeVM);
         }
     }
 }

@@ -9,7 +9,7 @@ using UMS.Models.Models;
 
 namespace UMS.Data.Repository
 {
-    public class UserDetialsRepository:Repository<UserDetails>,IUserDetialsRepository
+    public class UserDetialsRepository:Repository<StudentDetails>,IUserDetialsRepository
     {
         private readonly ApplicationDbContext _db;
         public UserDetialsRepository(ApplicationDbContext db):base(db)

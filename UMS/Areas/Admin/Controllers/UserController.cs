@@ -17,7 +17,7 @@ using UMS.Utility;
 namespace UMS.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Super Admin,Admin,Program Officer")]
+    
     public class UserController : Controller
     {
       
@@ -37,11 +37,13 @@ namespace UMS.Areas.Admin.Controllers
         }
         #region Index
         [Route("User")]
+        [Authorize(Roles = "Super Admin,Admin,Program Officer")]
         public async Task<IActionResult> Index()
         {
             ViewBag.RoleList = await _db.Roles.ToListAsync();
             return View();
         }
+        [Authorize(Roles = "Super Admin,Admin,Program Officer")]
         public async Task<IActionResult>UserTable(string searchValue,string roleId,int pageNo,int pageSize)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -61,22 +63,23 @@ namespace UMS.Areas.Admin.Controllers
 
         #region Edit 
         [Route("User/Edit")]
-        
+        [Authorize]
         public async Task<IActionResult> Edit(string Id)
         {
             try
             {
-                ApplicationUser user = new ApplicationUser();
+                UserUpdateVM userUpdateVM = new UserUpdateVM();          
                 if(!String.IsNullOrEmpty(Id))
                 {
-                    user = await _unitOfWork.User.FirstOrDefaultAsync(x => x.Id == Id);
-                    if(user==null)
+                    userUpdateVM.ApplicationUser = await _unitOfWork.User.FirstOrDefaultAsync(x => x.Id == Id);
+                    userUpdateVM.EmployeeDetials = await _unitOfWork.EmployeeDetials.FirstOrDefaultAsync(x => x.UserId == Id);
+                    if(userUpdateVM.ApplicationUser==null)
                     {
                         return NotFound();
                     }
-                    return View(user);
+                    return View(userUpdateVM);
                 }
-                return View(user);
+                return View(userUpdateVM);
             }
             catch(Exception ex)
             {
@@ -86,18 +89,29 @@ namespace UMS.Areas.Admin.Controllers
         [Route("User/Edit")]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult>Edit(ApplicationUser user)
+        [Authorize]
+        public async Task<IActionResult>Edit(UserUpdateVM userUpdate)
         {
             try
             {
                 if(ModelState.IsValid)
                 {
-                    if(!String.IsNullOrEmpty(user.Id))
+                    if(!String.IsNullOrEmpty(userUpdate.ApplicationUser.Id))
                     {
-                        await _unitOfWork.User.UpdateAsync(user);
+                        var userObj = await _unitOfWork.ApplicationUser.FirstOrDefaultAsync(x => x.Id == userUpdate.ApplicationUser.Id);            
+                        userObj.Name = userUpdate.ApplicationUser.Name;
+                        userObj.PhoneNumber = userUpdate.ApplicationUser.PhoneNumber;
+                        await _unitOfWork.User.UpdateAsync(userObj);
+                        if(User.IsInRole("Super Admin")||User.IsInRole("Admin"))
+                        {
+                            EmployeeDetials employeeDetials = await _unitOfWork.EmployeeDetials.FirstOrDefaultAsync(x => x.UserId == userUpdate.EmployeeDetials.UserId);
+                            employeeDetials.LeavingDate = userUpdate.EmployeeDetials.LeavingDate;
+                            employeeDetials.Salary = userUpdate.EmployeeDetials.Salary;
+                            await _unitOfWork.EmployeeDetials.UpdateAsync(employeeDetials);
+                        }                      
                         TempData["UserUpdate"] = "Successfully Updated";
-                    }
-                    await _unitOfWork.SaveAsync();
+                        await _unitOfWork.SaveAsync();
+                    }                  
                     if(User.IsInRole("Super Admin"))
                     {
                         return RedirectToAction(nameof(Index));
@@ -105,10 +119,10 @@ namespace UMS.Areas.Admin.Controllers
                     else
                     {
                         ViewBag.Success = "Successfully Updated Profile";
-                        return View(user);
+                        return View(userUpdate);
                     }
                 }
-                return View(user);
+                return View(userUpdate);
             }
             catch(Exception ex)
             {
@@ -166,7 +180,7 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
 
         #region LockUnLock
-
+        [Authorize(Roles = "Super Admin,Admin,Program Officer")]
         public async Task<IActionResult>LockUnLock(string id,int pageNo,string searchValue,string roleId)
         {
             try

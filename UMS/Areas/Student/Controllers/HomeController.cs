@@ -15,7 +15,6 @@ namespace UMS.Controllers
 {
     [Area("Student")]
     [Authorize]
-
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -27,8 +26,8 @@ namespace UMS.Controllers
             _logger = logger;
             _unitOfWork = unitOfWork;
         }
-        [Route("Dashboard")]
-       
+        
+        [Route("Dashboard")]   
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

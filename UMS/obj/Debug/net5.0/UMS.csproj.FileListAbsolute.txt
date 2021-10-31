@@ -1124,3 +1124,5 @@ E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\Teacher
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\TeacherCourse\PreviousStudentList.cshtml.g.cs
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\TeacherCourse\PreviousDetials.cshtml.g.cs
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Views\Shared\AccessDenied.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Student\Views\Registration\RegistrationForm.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Student\Views\Registration\_RegistrationFormTable.cshtml.g.cs

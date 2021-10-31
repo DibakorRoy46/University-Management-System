@@ -1,0 +1,119 @@
+﻿@model UMS.Models.ViewModels.RegistrationFormTableVM
+<div class="table-responsive">
+    <table class="table table-hover table-bordered">
+        <thead class="table-secondary">
+            <tr>
+                <th>#</th>
+                <th>Course</th>
+                <th>Code</th>
+                <th>Credits</th>
+                <th>Amount</th>                           
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.RegistrationCourse.Count() > 0)
+            {
+                int i = 0;
+                foreach (var course in Model.RegistrationCourse)
+                {
+                    i++;
+
+                    <tr>
+                        <td>@(i)</td>
+                        <td>@course.AssignRegistrationCourse.Courses.Name</td>
+                        <td>@course.AssignRegistrationCourse.Courses.Initial</td>
+                        <td>@course.AssignRegistrationCourse.Courses.CourseProtoType.Credit</td>
+                        <td>@(course.AssignRegistrationCourse.Courses.CourseProtoType.Credit*@course.AssignRegistrationCourse.Courses.Department.PricePerCredit)</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="text-danger">No Course  Founds</td>
+                    <td></td>
+                    <td></td>
+                    
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="col-12">
+        <div class="row">
+            <div class="col-8 border-bottom">
+
+            </div>
+            <div class="col-4 row border-bottom ">
+                <div class="col-4 border-bottom">
+                    <p class="font-weight-bolder ml-4">Activity Fees: </p>
+                </div>
+                <div class="col-6 border-bottom">
+                    <p class="font-weight-bolder ml-5 pl-4">@Model.ActivityFee </p>
+                </div>
+                <div class="col-4 border-bottom">
+                    <p class="font-weight-bolder ml-4">Laboratory Fees: </p>
+                </div>
+                <div class="col-6 border-bottom">
+                    <p class="font-weight-bolder ml-5 pl-4">@Model.LaboratoryFee </p>
+                </div>
+               
+            </div>
+            <div class="col-12 row">
+                <div class="col-8 row">
+                    <div class="col-12 float-end">
+                        <p class="font-weight-bolder ml-5">Credits:&nbsp;@Model.Credits </p>
+                    </div>
+                </div>
+                <div class="col-4 row">
+                    <div class="col-6 ">
+                        <p class="font-weight-bolder ml-4 pl-5">Grand Total: </p>
+                    </div>
+                    <div class="col-6 ">
+                        <p class="font-weight-bolder ml-5 pl-4">@(Model.ActivityFee+Model.LaboratoryFee+Model.TotalFee) </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-12 bg-primary ">
+        <h4 class="text-center py-3 text-white">Payment Detials</h4>       
+    </div>
+    <div class="row col-12">
+        @{
+            var total = Model.ActivityFee + Model.LaboratoryFee + Model.TotalFee;
+            var percentOf40 = (total * 40) / 100;
+            var percentOf30 = (total * 30)/100;
+        }
+        <div class="col-11 border-bottom">
+            <p>*** Amount need to pay as 1st Installment  40% of total fees -</p>
+        </div>
+        <div class="col-1 border-bottom">
+            <p>@percentOf40</p>
+        </div>
+        <div class="col-11 border-bottom">
+            <p>*** Amount need to pay as 2nd Installment  30% of total fees -</p>
+        </div>
+        <div class="col-1 border-bottom">
+            <p>@percentOf30</p>
+        </div>
+        <div class="col-11 border-bottom">
+            <p>*** Amount need to pay as 3rd Installment  30% of total fees -</p>
+        </div>
+        <div class="col-1 border-bottom">
+            <p>@percentOf30</p>
+        </div>
+    </div>
+    <div class="col-12 text-center py-4">
+        <button class="btn btn-primary">Download Registration Form</button>
+
+    </div>
+</div>
+
+
+
+

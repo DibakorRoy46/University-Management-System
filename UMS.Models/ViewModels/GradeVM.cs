@@ -14,7 +14,8 @@ namespace UMS.Models.ViewModels
         public int CreditCompletd { get; set; }
         public int CreditAttempted { get; set; }
         public IEnumerable<string> SemesterList { get; set; }
-        public IEnumerable<int> YearList { get; set; }
+        public List<int> Credits = new List<int>();
+       
         public List<int> CourseCount = new List<int>();
         public double AttempedCGPA { get; set; }
         public double CompletedCGPA { get; set; }

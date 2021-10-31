@@ -18,6 +18,7 @@ namespace UMS.Data.IRepository
             bool isAsNoTracking = false);
         Task<T> FirstOrDefaultAsync(
             Expression<Func<T, bool>> filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             string includeProperties = null,
             bool isAsNoTracking = false);
         Task<IEnumerable<T>> GetAllAsyncPages(
@@ -27,6 +28,7 @@ namespace UMS.Data.IRepository
            bool isAsNoTracking = false,
            int pageNo = 1,
            int pageSize = 10);
+        
         Task<int> GetAllCount(
             Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,

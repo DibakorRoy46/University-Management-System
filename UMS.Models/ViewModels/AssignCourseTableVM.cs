@@ -14,7 +14,7 @@ namespace UMS.Models.ViewModels
         public string Search { get; set; }
         public Guid DepartmentId { get; set; }
         public Guid SemesterId { get; set; }
-        public int Year { get; set; }
+       
         public Pager Pager { get; set; }
     }
 }
