@@ -157,7 +157,7 @@ namespace UMS.Areas.Admin.Controllers
                     TempData["success"] = "Account Created Successfully";
                     var url = Url.Action("Login", "Account","Admin", protocol: HttpContext.Request.Scheme);
                     await _emailSender.SendEmailAsync(model.Email, "University Management System",
-                       "Your are successfully registed as a Studetnt." +
+                       "Your are successfully registed as a Student." +
                        "Your password is:"+model.Password+".Use this email and password for login." +
                        "For login click here: <a href=\"" + url + "\">link</a>");
                     return RedirectToAction("Index","User",new { area="Admin"});
