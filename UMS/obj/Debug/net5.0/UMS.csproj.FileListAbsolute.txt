@@ -1111,7 +1111,6 @@ E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\UMS.dll
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\ref\UMS.dll
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\UMS.pdb
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\UMS.genruntimeconfig.cache
-E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\CourseContent\Index.cshtml.g.cs
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\TeacherCourse\CourseList.cshtml.g.cs
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\TeacherCourse\StudentList.cshtml.g.cs
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\TeacherCourse\_StudentListPartial.cshtml.g.cs
@@ -1126,3 +1125,8 @@ E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Teacher\Views\Teacher
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Views\Shared\AccessDenied.cshtml.g.cs
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Student\Views\Registration\RegistrationForm.cshtml.g.cs
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Student\Views\Registration\_RegistrationFormTable.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\User\StudentGrade.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\User\FacultyCourseList.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\User\FacultyPreviousCourseList.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\User\FacultyStudentList.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\User\_FacultyStudentListPartial.cshtml.g.cs

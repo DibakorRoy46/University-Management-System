@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UMS.Data.Data;
+using UMS.Data.Initializer;
 using UMS.Data.IRepository;
 using UMS.Data.Repository;
 using UMS.Utility.Services;
@@ -59,6 +60,7 @@ namespace UMS
             {
                 filter.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build()));
             }).AddRazorRuntimeCompilation();
+            services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
            
             services.AddHttpContextAccessor();
@@ -93,7 +95,7 @@ namespace UMS
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -113,7 +115,7 @@ namespace UMS
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            dbInitializer.Initialize();
             app.UseEndpoints(endpoints =>
             {              
                 endpoints.MapControllerRoute(

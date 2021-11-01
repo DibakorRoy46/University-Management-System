@@ -1,6 +1,6 @@
 ﻿@model UMS.Models.ViewModels.UserVM
 @using Microsoft.AspNetCore.Identity
-<div class="table-responsive">
+<div class="table-responsive table-bordered">
     <table class="table table-hover">
         <thead class="table-secondary ">
             <tr class="table-head">
@@ -16,9 +16,12 @@
             @if (Model.UserList.Count() > 0)
             {
                 var i = 0;
+                var isStudent = false;
+                var isFaculty = false;
                 foreach (var user in Model.UserList)
                 {
                     i++;
+
                     <tr>
                         <td>@i</td>
 
@@ -28,7 +31,18 @@
                         <td>
                             @foreach (var role in user.Role)
                             {
+                                
                                 <p>@role,</p>
+                                if(role=="Student")
+                                {
+                                    isStudent = true;
+
+                                }
+                                if(role=="Faculty")
+                                {
+                                    isFaculty = true;
+                                }
+
                             }
                         </td>
                         <td>
@@ -40,18 +54,29 @@
                             {
                                 <button class="btn btn-danger activity" data-id="@user.Id"> <i class="fas fa-thumbs-down">&nbsp; Lock</i></button>
                             }
-
                         </td>
                         <td>
                             @if (User.IsInRole("Admin") || User.IsInRole("Super Admin"))
                             {
-                                <a class="btn btn-success" asp-action="ManageRole" asp-route-Id="@user.Id">Roles</a>
-                                <a class="btn btn-info" asp-action="AssignClaimToUser" asp-route-Id="@user.Id">Claims</a>
+                                <a class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Roles" asp-action="ManageRole" asp-route-Id="@user.Id">Roles</a>
+                                <a class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Claims" asp-action="AssignClaimToUser" asp-route-Id="@user.Id">Claims</a>
                             }
-                            <a class="btn btn-primary" asp-action="Edit" asp-route-Id="@user.Id"><i class="fas fa-edit"></i></a>
+
+                            @if (isStudent == true)
+                            {
+                                <a class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Grade" asp-action="StudentGrade" asp-route-userId="@user.Id">Grade</a>
+                                isStudent = false;
+                            }
+                            @if (isFaculty == true)
+                            {
+                                <a class="btn btn-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Advise Course" asp-action="FacultyCourseList" asp-route-userId="@user.Id"><i class="fas fa-book"></i></a>
+                                <a class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Previous Advise Course" asp-action="FacultyPreviousCourseList" asp-route-userId="@user.Id"><i class="fas fa-book-reader"></i></a>
+                                isFaculty = false;
+                            }                           
+                            <a class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit" asp-action="Edit" asp-route-Id="@user.Id"><i class="fas fa-edit"></i></a>
                             @if (User.IsInRole("Admin") || User.IsInRole("Super Admin"))
                             {
-                                <button class="btn btn-danger deleteBtn" data-id="@user.Id"><i class="fas fa-trash-alt"></i></button>
+                                <button class="btn btn-danger deleteBtn" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete" data-id="@user.Id"><i class="fas fa-trash-alt"></i></button>
                             }
                         </td>
                     </tr>
@@ -61,8 +86,7 @@
             {
                 <tr>
                     <td></td>
-                    <td></td>
-                   
+                    <td></td>             
                     <td class="text-danger">No User  Available</td>
                     <td></td>
                     <td></td>

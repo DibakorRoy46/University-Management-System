@@ -91,14 +91,17 @@ namespace UMS.Areas.Admin.Controllers
                     RegisterDate = DateTime.Now
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
-                if(result.Succeeded)
+                List<string> userRoleList = new List<string>();
+                if (result.Succeeded)
                 {
                     if(model.RoleSelected!=null )
                     {
+                        
                         foreach (var roleName in model.RoleSelected)
                         {
                             var role = await _roleManager.Roles.FirstOrDefaultAsync(x => x.Id == roleName.ToString());
                             await _userManager.AddToRoleAsync(user, role.Name);
+                            userRoleList.Add(role.Name);
                         }                      
                         var department = await _unitOfWork.Department.FirstOrDefaultAsync(x => x.Id.Equals(model.DepartmentSelected));                       
                         if(model.DepartmentSelected!=null)
@@ -148,17 +151,17 @@ namespace UMS.Areas.Admin.Controllers
                                     
                                 }                              
                                 await _unitOfWork.SaveAsync();
-                            }
-
-                            
-                        }
-                      
+                            }                           
+                        }                    
                     }
+                    var count = userRoleList.Count();
+                   
+                    
                     TempData["success"] = "Account Created Successfully";
                     var url = Url.Action("Login", "Account","Admin", protocol: HttpContext.Request.Scheme);
                     await _emailSender.SendEmailAsync(model.Email, "University Management System",
-                       "Your are successfully registed as a Student." +
-                       "Your password is:"+model.Password+".Use this email and password for login." +
+                       "Your are successfully registed as a " + userRoleList.ElementAt(0) +"" +
+                       ".Your password is:"+model.Password+".Use this email and password for login." +
                        "For login click here: <a href=\"" + url + "\">link</a>");
                     return RedirectToAction("Index","User",new { area="Admin"});
                 }

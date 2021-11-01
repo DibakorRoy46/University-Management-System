@@ -1,6 +1,5 @@
 ﻿@model UMS.Models.ViewModels.StudentListofCourseVM
 @using Microsoft.AspNetCore.Identity
-@using Microsoft.AspNetCore.Authorization;
 
 <div class="table-responsive">
     <table class="table table-hover table-bordered">
@@ -13,7 +12,6 @@
                 <th>Mid-Term(30)</th>
                 <th>Final(40)</th>
                 <th>Grade</th>
-                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -32,16 +30,6 @@
                         <td>@student.MidTermMark</td>
                         <td>@student.FinalTermMark</td>
                         <td>@student.Grade</td>
-                      
-                        
-                            <td>
-                            <a class="btn btn-primary" href="~/Teacher/TeacherCourse/PreviousDetials?studentId=@student.StudentId
-                               &courseId=@student.AssignRegiCourseId">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                        </td>
-                       
-                        
 
 
                     </tr>
@@ -57,7 +45,7 @@
                     <td class="text-danger">No Student Registered</td>
                     <td></td>
                     <td></td>
-                    <td></td>
+                   
                 </tr>
             }
         </tbody>

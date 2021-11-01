@@ -11,7 +11,7 @@ using UMS.Models.ViewModels;
 namespace UMS.Areas.Student.Controllers
 {
     [Area("Student")]
-    [Authorize(Roles ="Student")]
+    [Authorize(Roles="Student,Super Admin")]
     public class GradeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -19,6 +19,7 @@ namespace UMS.Areas.Student.Controllers
         {
             _unitOfWork = unitOfWork;
         }
+        [Route("Grade")]
         public  async Task< IActionResult> Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

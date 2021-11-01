@@ -25,7 +25,8 @@
                                 <h5>(@course.Semester.Name)</h5>
                             </div>
                             <hr />
-                            <a href="PreviousStudentList/@course.Id">See All Students </a>
+                            <a asp-action="PreviousStudentList" asp-controller="TeacherCourse" asp-area="Teacher" asp-route-id="@course.Id">See All Students</a>
+
                         </div>
                     </div>
                 </div>

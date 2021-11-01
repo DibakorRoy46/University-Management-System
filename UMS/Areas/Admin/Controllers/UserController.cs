@@ -16,11 +16,9 @@ using UMS.Utility;
 
 namespace UMS.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    
+    [Area("Admin")]  
     public class UserController : Controller
-    {
-      
+    {    
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ApplicationDbContext _db;
@@ -105,9 +103,12 @@ namespace UMS.Areas.Admin.Controllers
                         if(User.IsInRole("Super Admin")||User.IsInRole("Admin"))
                         {
                             EmployeeDetials employeeDetials = await _unitOfWork.EmployeeDetials.FirstOrDefaultAsync(x => x.UserId == userUpdate.EmployeeDetials.UserId);
-                            employeeDetials.LeavingDate = userUpdate.EmployeeDetials.LeavingDate;
-                            employeeDetials.Salary = userUpdate.EmployeeDetials.Salary;
-                            await _unitOfWork.EmployeeDetials.UpdateAsync(employeeDetials);
+                            if(employeeDetials!=null)
+                            {
+                                employeeDetials.LeavingDate = userUpdate.EmployeeDetials.LeavingDate;
+                                employeeDetials.Salary = userUpdate.EmployeeDetials.Salary;
+                                await _unitOfWork.EmployeeDetials.UpdateAsync(employeeDetials);
+                            }                         
                         }                      
                         TempData["UserUpdate"] = "Successfully Updated";
                         await _unitOfWork.SaveAsync();
@@ -148,12 +149,16 @@ namespace UMS.Areas.Admin.Controllers
                         return NotFound();
                     }
                     var userDetails = await _unitOfWork.UserDetials.FirstOrDefaultAsync(x => x.UserId == id);
+                    var employeeDetials = await _unitOfWork.EmployeeDetials.FirstOrDefaultAsync(x => x.UserId == id);
                     if(userDetails!=null)
                     {
                         await _unitOfWork.UserDetials.RemoveAsync(userDetails);
-                        await _unitOfWork.SaveAsync();
+                        
                     }
-                    
+                    else
+                    {
+                        await _unitOfWork.EmployeeDetials.RemoveAsync(employeeDetials);
+                    }                 
                     await  _unitOfWork.User.RemoveAsync(userObj);
                     await _unitOfWork.SaveAsync();
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -453,6 +458,75 @@ namespace UMS.Areas.Admin.Controllers
             }
             return BadRequest();
         }
+        #endregion
+
+        #region StudentDetails
+        public async Task<IActionResult>StudentGrade(string userId)
+        {
+            GradeVM gradeVM = new GradeVM()
+            {
+                courseList = await _unitOfWork.StudentRegisteationCourse.GetAllCourses(userId),
+                UserId = userId,
+                CreditAttempted = await _unitOfWork.StudentRegisteationCourse.CreditAtempeted(userId),
+                CreditCompletd = await _unitOfWork.StudentRegisteationCourse.CreditCompleted(userId),
+                SemesterList = await _unitOfWork.StudentRegisteationCourse.GetSemesterList(userId),
+                AttempedCGPA = await _unitOfWork.StudentRegisteationCourse.GetAttempedCGPA(userId),
+                CompletedCGPA = await _unitOfWork.StudentRegisteationCourse.GetCompletedCGPA(userId)
+            };
+            var semsterList = await _unitOfWork.Semester.GetStudentRegisterSemester(userId);
+
+            foreach (var semester in semsterList)
+            {
+                var courseListBysemester = await _unitOfWork.StudentRegisteationCourse.GetCourseBySemester(userId, semester.Id);
+                var semesterCredit = await _unitOfWork.StudentRegisteationCourse.GetSemesterCredits(userId, semester.Id);
+                var semesterGPA = await _unitOfWork.StudentRegisteationCourse.GetSemesterGPA(userId, semester.Id);
+                gradeVM.CourseCount.Add(courseListBysemester.Count());
+                gradeVM.SemesterGPA.Add(semesterGPA);
+                gradeVM.Credits.Add(semesterCredit);
+            }
+            return View(gradeVM);
+        }
+        public async Task<IActionResult>FacultyCourseList(string userId)
+        {
+            ViewBag.UserId = userId;
+            var semesterObj = await _unitOfWork.Semester.FirstOrDefaultAsync(x => x.IsActive == true);
+            FacultyCourseVM facultyCourseVM = new FacultyCourseVM()
+            {
+                CourseList = await _unitOfWork.AssignRegistrationCourse.GetAllAsync(x => x.TeacherId == userId && x.SemesterId==semesterObj.Id,
+                                includeProperties:"Courses,Section,Semester")
+            };
+            return View(facultyCourseVM);
+        }
+        public async Task<IActionResult> FacultyPreviousCourseList(string userId)
+        {
+            ViewBag.UserId = userId;
+            var semesterObj = await _unitOfWork.Semester.FirstOrDefaultAsync(x => x.IsActive == true);
+            FacultyCourseVM facultyCourseVM = new FacultyCourseVM()
+            {
+                PreviousCourseList = await _unitOfWork.AssignRegistrationCourse.GetAllAsync(x => x.TeacherId == userId && x.SemesterId!=semesterObj.Id,
+                                includeProperties: "Courses,Section,Semester")
+            };
+            return View(facultyCourseVM);
+        }
+        public async Task<IActionResult>FacultyStudentList(Guid Id,string userId)
+        {
+            ViewBag.CouseId = Id;
+            ViewBag.UserId = userId;
+            return View();
+        }
+        public async Task<IActionResult>FacultyStudentListPartial(string searchValue, Guid courseId,string userId)
+        {
+            if (courseId != Guid.Empty)
+            {
+                StudentListofCourseVM studentList = new StudentListofCourseVM()
+                {
+                    StudentList = await _unitOfWork.TeacherCourse.StudentList(searchValue,userId, courseId)
+                };
+                return PartialView("_FacultyStudentListPartial", studentList);
+            }
+            return NotFound();
+        }
+        
         #endregion
     }
 }

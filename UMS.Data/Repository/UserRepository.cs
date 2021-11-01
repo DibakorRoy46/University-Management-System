@@ -149,7 +149,7 @@ namespace UMS.Data.Repository
                 applicationUserObj.Name = applicationUser.Name;
                 applicationUserObj.PhoneNumber = applicationUser.PhoneNumber;              
             }
-
         }
+        
     }
 }

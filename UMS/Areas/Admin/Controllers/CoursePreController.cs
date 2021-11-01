@@ -16,10 +16,7 @@ namespace UMS.Areas.Admin.Controllers
     [Authorize(Roles ="Admin, Super Admin")]
     public class CoursePreController : Controller
     {
-
-        private readonly IUnitOfWork _unitOfWork;
-
-        
+        private readonly IUnitOfWork _unitOfWork;       
         public CoursePreController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;

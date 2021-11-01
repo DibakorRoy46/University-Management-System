@@ -21,6 +21,7 @@ namespace UMS.Areas.Teacher.Controllers
             _unitOfWork = unitOfWork;
 
         }
+        [Route("AdviseCourse")]
         public async Task<IActionResult>CourseList()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -32,6 +33,7 @@ namespace UMS.Areas.Teacher.Controllers
             };
             return View(facultyCourseVM);
         }
+        [Route("PreviousAdviseCourse")]
         public async Task<IActionResult> PreviousCourseList()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -43,6 +45,7 @@ namespace UMS.Areas.Teacher.Controllers
             };
             return View(facultyCourseVM);
         }
+        [Route("AdviseCourse/StudentList")]
         public async Task<IActionResult>StudentList(Guid Id)
         {
             ViewBag.CouseId = Id;
@@ -61,7 +64,7 @@ namespace UMS.Areas.Teacher.Controllers
             }
             return NotFound();
         }
-
+        [Route("PreviousAdviseCourse/StudentList")]
         public async Task<IActionResult> PreviousStudentList(Guid Id)
         {
             ViewBag.CouseId = Id;
@@ -81,7 +84,7 @@ namespace UMS.Areas.Teacher.Controllers
             return NotFound();
         }
 
-
+      
         public async Task<IActionResult> Detials(string studentId, Guid courseId)
         {
             var studentCourseObj = await _unitOfWork.RegistrationCourse.FirstOrDefaultAsync(x => x.AssignRegiCourseId == courseId &&
@@ -90,6 +93,7 @@ namespace UMS.Areas.Teacher.Controllers
             
         }
         [Authorize(Policy = "PriviousCourseEdit")]
+        
         public async Task<IActionResult> PreviousDetials(string studentId, Guid courseId)
         {
             var studentCourseObj = await _unitOfWork.RegistrationCourse.FirstOrDefaultAsync(x => x.AssignRegiCourseId == courseId &&
@@ -97,7 +101,8 @@ namespace UMS.Areas.Teacher.Controllers
             return View(studentCourseObj);
 
         }
-        
+
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult>Detials(StudentRegisteationCourse studentRegisteationCourse)
@@ -173,7 +178,7 @@ namespace UMS.Areas.Teacher.Controllers
                 return BadRequest();
             }
         }
-
+        
         [Authorize(Policy = "PriviousCourseEdit")]
         [HttpPost]
         [ValidateAntiForgeryToken]

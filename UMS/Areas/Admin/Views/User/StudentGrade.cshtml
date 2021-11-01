@@ -1,0 +1,133 @@
+﻿@model UMS.Models.ViewModels.GradeVM
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container" id="main-container">
+    <h2 class="text-primary text-center">Grades</h2>
+    <div id="grade-head" class="bg-primary pt-2">
+        <h4 class="text-white">Grade Summary</h4>
+    </div>
+    <div id="grade" class="row">
+        <div class="col-12">
+            <p>Credits Completed<span>        &nbsp; &nbsp; &nbsp;   @Model.CreditCompletd </span></p>
+        </div>
+        <div class="col-12">
+            <p>Credits Attempted<span>        &nbsp; &nbsp; &nbsp;   @Model.CreditAttempted</span></p>
+        </div>
+        <div class="col-12">
+            <p>CGPA (By Credit Completed)<span>        &nbsp; &nbsp; &nbsp;   @Model.CompletedCGPA </span></p>
+        </div>
+        <div class="col-12">
+            <p>CGPA (By Credit Attempted)<span>        &nbsp; &nbsp; &nbsp;   @Model.AttempedCGPA </span></p>
+        </div>
+
+
+    </div>
+
+    <div class="container ">
+        <div class="bg-primary py-2">
+            <h4 class="text-white text-center">See detailed course grade information</h4>
+        </div>
+        <div id="grade-detials " class="table-responsive">
+
+            <table class="table table-bordered">
+                <tr class="table-secondary">
+                    <th>Semester</th>
+                    <th>Course</th>
+                    <th>Initial</th>
+                    <th>Course Prototype</th>
+                    <th>Credit</th>
+                    <th>Course Type</th>
+                    <th> Letter  Point</th>
+                    <th>Grade Point</th>
+                    <th>Credits</th>
+                    <th>GPA</th>
+                    <th>CGPA</th>
+                </tr>
+                @if (Model.courseList.Count() > 0)
+                {
+                    int i = 0; int j = 0; int z = 0; var courseObj = Guid.Empty;
+                    int count = Model.CourseCount.ElementAt(i);
+                    int courseCount = Model.courseList.Count();
+                    double semesterCGPA = Model.SemesterGPA.ElementAt(j);
+                    int creditCount = Model.Credits.ElementAt(z);
+
+                    @foreach (var course in Model.courseList)
+                    {
+                        if (course.AssignRegistrationCourse.SemesterId == courseObj)
+                        {
+                            count = 0;
+                        }
+                        else
+                        {
+                            count = Model.CourseCount.ElementAt(i++);
+                            semesterCGPA = Model.SemesterGPA.ElementAt(j++);
+                            creditCount = Model.Credits.ElementAt(z++);
+                        }
+                        <tr>
+                            @if (count > 0)
+                            {
+                                <td rowspan="@count" class="text-center">@course.AssignRegistrationCourse.Semester.Name </td>
+                                <td>@course.AssignRegistrationCourse.Courses.Name</td>
+                                <td>@course.AssignRegistrationCourse.Courses.Initial</td>
+                                <td>@course.AssignRegistrationCourse.Courses.CourseProtoType.Name</td>
+                                <td>@course.AssignRegistrationCourse.Courses.CourseProtoType.Credit</td>
+                                <td>@course.AssignRegistrationCourse.Courses.CourseType.Name</td>
+                                <td>@course.Grade</td>
+                                <td>@course.GPA</td>
+                                <td rowspan="@count" class="text-center">@creditCount </td>
+                                <td rowspan="@count" class="text-center">@semesterCGPA </td>
+                                @if (courseCount > 0)
+                                {
+                                    <td rowspan="@courseCount" class="text-center">@Model.CompletedCGPA </td>
+                                }
+                                count = 0;
+                                courseCount = 0;
+                                creditCount = 0;
+                                courseObj = course.AssignRegistrationCourse.SemesterId;
+                            }
+                            else
+                            {
+                                <td>@course.AssignRegistrationCourse.Courses.Name</td>
+                                <td>@course.AssignRegistrationCourse.Courses.Initial</td>
+                                <td>@course.AssignRegistrationCourse.Courses.CourseProtoType.Name</td>
+                                <td>@course.AssignRegistrationCourse.Courses.CourseProtoType.Credit</td>
+                                <td>@course.AssignRegistrationCourse.Courses.CourseType.Name</td>
+                                <td>@course.Grade</td>
+                                <td>@course.GPA</td>
+                                courseObj = course.AssignRegistrationCourse.SemesterId;
+                            }
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+
+
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>No Course Found</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+    </script>
+}
