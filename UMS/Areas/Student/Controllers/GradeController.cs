@@ -34,8 +34,7 @@ namespace UMS.Areas.Student.Controllers
                 AttempedCGPA=await _unitOfWork.StudentRegisteationCourse.GetAttempedCGPA(userId),
                 CompletedCGPA=await _unitOfWork.StudentRegisteationCourse.GetCompletedCGPA(userId)
             };
-            var semsterList = await _unitOfWork.Semester.GetStudentRegisterSemester(userId);
-                     
+            var semsterList = await _unitOfWork.Semester.GetStudentRegisterSemester(userId);                
             foreach (var semester in semsterList)
             {
                 var courseListBysemester = await _unitOfWork.StudentRegisteationCourse.GetCourseBySemester(userId, semester.Id);

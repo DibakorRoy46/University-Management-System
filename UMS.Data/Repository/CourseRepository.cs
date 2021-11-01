@@ -103,6 +103,10 @@ namespace UMS.Data.Repository
                     couseList = couseList.Where(x => x.DepartmentId.Equals(depaertmentId)).ToList();
                 }
             }
+            if(pageNo==0&&pageSize==0)
+            {
+                return couseList;
+            }
             return  couseList.Skip((pageNo - 1) * pageSize).Take(pageSize).ToList();
         }
 

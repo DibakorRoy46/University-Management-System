@@ -286,6 +286,21 @@
 
                     </a>
                 </li>
+                var curriculamClass = ViewContext.RouteData.Values["Controller"].ToString() == "Curriculam"
+
+                ? "sidebar-active" : String.Empty;
+                <li class="sidebar-nav-item @curriculamClass">
+                    <a asp-action="Index" asp-controller="Curriculam" asp-area="Student" class="sidebar-nav-link ">
+                        <div>
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <span>
+                           Curriculam Analysis
+                        </span>
+
+                    </a>
+                </li>
+
             }
             @if (User.IsInRole("Faculty"))
             {

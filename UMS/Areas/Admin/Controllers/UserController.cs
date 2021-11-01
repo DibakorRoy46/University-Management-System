@@ -461,6 +461,7 @@ namespace UMS.Areas.Admin.Controllers
         #endregion
 
         #region StudentDetails
+        [Route("Student/Grade")]
         public async Task<IActionResult>StudentGrade(string userId)
         {
             GradeVM gradeVM = new GradeVM()
@@ -486,6 +487,7 @@ namespace UMS.Areas.Admin.Controllers
             }
             return View(gradeVM);
         }
+        [Route("Faculty/CourseList")]
         public async Task<IActionResult>FacultyCourseList(string userId)
         {
             ViewBag.UserId = userId;
@@ -497,6 +499,7 @@ namespace UMS.Areas.Admin.Controllers
             };
             return View(facultyCourseVM);
         }
+        [Route("Faculty/PreviousCourseList")]
         public async Task<IActionResult> FacultyPreviousCourseList(string userId)
         {
             ViewBag.UserId = userId;
@@ -508,6 +511,7 @@ namespace UMS.Areas.Admin.Controllers
             };
             return View(facultyCourseVM);
         }
+        
         public async Task<IActionResult>FacultyStudentList(Guid Id,string userId)
         {
             ViewBag.CouseId = Id;

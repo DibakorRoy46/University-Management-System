@@ -29,7 +29,7 @@ namespace UMS.Areas.Teacher.Controllers
             FacultyCourseVM facultyCourseVM = new FacultyCourseVM()
             {
                 CourseList = await _unitOfWork.AssignRegistrationCourse.GetAllAsync(x => x.TeacherId == userId && x.SemesterId==semesterObj.Id,
-                                includeProperties:"Courses,Section")
+                                includeProperties:"Courses,Section,Semester")
             };
             return View(facultyCourseVM);
         }
@@ -41,7 +41,7 @@ namespace UMS.Areas.Teacher.Controllers
             FacultyCourseVM facultyCourseVM = new FacultyCourseVM()
             {
                 PreviousCourseList = await _unitOfWork.AssignRegistrationCourse.GetAllAsync(x => x.TeacherId == userId && x.SemesterId!=semesterObj.Id,
-                                includeProperties: "Courses,Section")
+                                includeProperties: "Courses,Section,Semester")
             };
             return View(facultyCourseVM);
         }

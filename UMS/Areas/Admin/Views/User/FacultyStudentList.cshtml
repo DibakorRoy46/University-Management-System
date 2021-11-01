@@ -62,7 +62,7 @@
                 data: {
                     searchValue: searchValue,
                     courseId: '@ViewBag.CouseId',
-                    userId:'@ViewBag.UserId'
+                    userId:'@ViewBag.UserId',
                 }
             }).done(function (response) {
                 $(".loader").fadeOut(1000);
@@ -82,7 +82,11 @@
             if (searchValue != "") {
                 $.ajax({
                     url: '@Url.Action("FacultyStudentListPartial", "User")',
-                    type: "GET"
+                    type: "GET",
+                    data: {
+                         courseId: '@ViewBag.CouseId',
+                         userId:'@ViewBag.UserId'
+                    }
                 }).done(function (response) {
                     $(".loader").fadeOut(1000);
                     $(".wrapper").fadeIn(1000);

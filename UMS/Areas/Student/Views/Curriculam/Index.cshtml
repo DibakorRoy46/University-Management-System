@@ -1,0 +1,193 @@
+﻿@model UMS.Models.ViewModels.CurriculamAnalysisVM
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid" id="main-container">
+    <div class="row ">
+        <div class="col-12 p-4 bg-primary">
+            <h3 class="text-white text-center">Curriculam Analysis</h3>
+        </div>
+        <div class="col-8 col-md-6 col-lg-5 row   mt-5  " style="margin:auto;">
+            <div class="col-12 bg-primary py-2 rounded">
+                <h4 class="text-center text-white">Summary</h4>
+            </div>                
+            <div class=" col-12 border">
+                <div class="row ">
+                    <div class="col-6 border-bottom py-2">
+                        <p class="font-weight-bolder">Program</p>
+                    </div>
+                    <div class="col-6 border-bottom py-2">
+                        <p class="font-weight-bolder">@Model.Department.Name</p>
+                    </div>
+                    <div class="col-6 border-bottom py-2">
+                        <p class="font-weight-bolder">Batch</p>
+                    </div>
+                    <div class="col-6 border-bottom py-2">
+                        <p class="font-weight-bolder">@Model.Batch</p>
+                    </div>
+                </div>
+            </div>
+        </div>      
+    </div>
+
+    <div class="row">
+        <div class="col-8 col-md-6 col-lg-5 row   mt-5  " style="margin:auto;">
+            <div class="col-12 bg-primary py-2 rounded">
+                <h4 class="text-center text-white">Total Requirements for Degree </h4>
+            </div>
+            <div class=" col-12 border">
+                <div class="row ">
+                    <div class="col-2 py-2 border-bottom">
+
+                    </div>
+                    <div class="col-5 border-bottom py-2">
+                        <p class="font-weight-bolder">Requires</p>
+                    </div>
+                    <div class="col-5 border-bottom py-2">
+                        <p class="font-weight-bolder">You Have</p>
+                    </div>
+                    <div class="col-2 py-2 border-bottom">
+                        <p>Years:</p>
+                    </div>
+                    <div class="col-5 border-bottom py-2">
+                        <p>Min: 4 years and Max: 6 years</p>
+                    </div>
+                    <div class="col-5 border-bottom py-2">
+                        <p>@{ 
+                            var totalDays = Model.AdmissionTIme.TotalDays;
+                            var totalYears = Math.Truncate(totalDays / 365);
+                            var totalMonths = Math.Truncate((totalDays % 365) / 30);
+                            
+                            }
+                            @totalYears Years and @totalMonths Months 
+                        </p>
+                    </div>
+                    <div class="col-2 py-2 border-bottom">
+                        <p>Courses:</p>
+                    </div>
+                    <div class="col-5 border-bottom py-2">
+                        <p>@Model.Department.RequireCourseToComplete</p>
+                    </div>
+                    <div class="col-5 border-bottom py-2">
+                        <p>@Model.courseList.Count()</p>
+                    </div>
+                    <div class="col-2 py-2 border-bottom">
+                        <p>Credits:</p>
+                    </div>
+                    <div class="col-5 border-bottom py-2">
+                        <p>@Model.Department.RequiredCreditToComplete</p>
+                    </div>
+                    <div class="col-5 border-bottom py-2">
+                        <p>@Model.CreditCompletd</p>
+                    </div>
+                    <div class="col-2 py-2 border-bottom">
+                        <p>CGPA:</p>
+                    </div>
+                    <div class="col-5 border-bottom py-2">
+                        <p>2.50</p>
+                    </div>
+                    <div class="col-5 border-bottom py-2">
+                        <p>@Model.CompletedCGPA</p>
+                    </div>
+                    <div class="col-12 py-2 border-bottom">
+                        @if (Model.Department.RequiredCreditToComplete <= Model.CreditCompletd &&
+                         Model.Department.RequireCourseToComplete <= Model.courseList.Count())
+                        {
+                            <p class="text-center text-primary">You are  eligible to get your certificate yet.</p>
+                        }
+                        else
+                        {
+                            <p class="text-center text-danger">You are not eligible to get your certificate yet.</p>
+
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid rounded-1 bg-primary py-2">       
+            <h4 class="text-center text-white">Curriculum Details</h4>   
+    </div>
+    <div class="row">
+        <div class="col-12 table-responsive">
+            <table class="table table-bordered">
+                <tr class="table-secondary">
+                    <th>#</th>
+                    <th>Code</th>
+                    <th>Course Name</th>
+                    <th>Credits</th>
+                    <th>Type</th>
+                    <th>Prototype</th>
+                    <th>Prerequisite</th>
+                    <th>Grade</th>
+                </tr>
+                @if (Model.courseList.Count() > 0)
+                {
+                    int i = 0;
+                    @foreach (var course in Model.courseList)
+                    {
+                        i++;
+                        <tr>
+                            <td>@(i)</td>
+                            
+                                @if (course.IsTaken == true)
+                                {
+                                    <td class="text-primary">@course.Initial</td>
+                                }
+                                else
+                                {
+                                    <td class="text-danger">@course.Initial</td>
+                                }                           
+                                @if (course.IsTaken == true)
+                                {
+                                    <td class="text-primary">@course.Name</td>
+                                }
+                                else
+                                {
+                                    <td class="text-danger">@course.Name</td>
+                                }
+                            <td>@course.CourseProtoType.Credit</td>
+                            <td>@course.CourseType.Name</td>
+                            <td>@course.CourseProtoType.Name</td>
+                            <td>
+                                @foreach (var coursePre in course.CourseToCoursePrerequisites)
+                                {
+                                    @(coursePre.CoursePrerequisite.InitialName)
+                                    if (course.CourseToCoursePrerequisites.Count() > 1)
+                                    {
+                                        <span>,</span>
+                                    }
+                                }
+                            </td>
+                            <td>@course.Grade</td>
+                        </tr>
+                    }
+                }
+                else
+                {                  
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>No Course Founds</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>                  
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+                    $(".loader").fadeOut(1000);
+                    $(".wrapper").fadeIn(1000);
+    </script>
+}

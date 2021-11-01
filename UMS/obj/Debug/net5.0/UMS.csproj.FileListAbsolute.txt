@@ -1130,3 +1130,4 @@ E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\User\Facu
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\User\FacultyPreviousCourseList.cshtml.g.cs
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\User\FacultyStudentList.cshtml.g.cs
 E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Admin\Views\User\_FacultyStudentListPartial.cshtml.g.cs
+E:\Project\New folder\UMS\UMS\obj\Debug\net5.0\Razor\Areas\Student\Views\Curriculam\Index.cshtml.g.cs

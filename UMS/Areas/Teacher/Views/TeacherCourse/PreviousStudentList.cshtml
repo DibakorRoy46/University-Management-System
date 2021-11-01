@@ -79,7 +79,11 @@
             if (searchValue != "") {
                 $.ajax({
                     url: '@Url.Action("PreviousStudentListPartial", "TeacherCourse")',
-                    type: "GET"
+                    type: "GET",
+                    data: {
+                        
+                        courseId: '@ViewBag.CouseId'
+                    }
                 }).done(function (response) {
                     $(".loader").fadeOut(1000);
                     $(".wrapper").fadeIn(1000);

@@ -35,7 +35,10 @@ namespace UMS.Models.Models
         public bool IsTaken { get; set; }
         [NotMapped]
         public int Count { get; set; }
+        [NotMapped]
+        public string Grade { get; set; }
         public IEnumerable<PreregistrationCourses> PreregistrationCourses { get; set; }
         public IEnumerable<AssignRegistrationCourse> AssignRegistrationCourses { get; set; }
+        
     }
 }
