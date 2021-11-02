@@ -15,20 +15,3 @@ E:\Project\UMS\UMS.Data\obj\Debug\net5.0\UMS.Data.csproj.CopyComplete
 E:\Project\UMS\UMS.Data\obj\Debug\net5.0\UMS.Data.dll
 E:\Project\UMS\UMS.Data\obj\Debug\net5.0\ref\UMS.Data.dll
 E:\Project\UMS\UMS.Data\obj\Debug\net5.0\UMS.Data.pdb
-E:\Project\New folder\UMS\UMS.Data\bin\Debug\net5.0\UMS.Data.deps.json
-E:\Project\New folder\UMS\UMS.Data\bin\Debug\net5.0\UMS.Data.dll
-E:\Project\New folder\UMS\UMS.Data\bin\Debug\net5.0\ref\UMS.Data.dll
-E:\Project\New folder\UMS\UMS.Data\bin\Debug\net5.0\UMS.Data.pdb
-E:\Project\New folder\UMS\UMS.Data\bin\Debug\net5.0\UMS.Models.dll
-E:\Project\New folder\UMS\UMS.Data\bin\Debug\net5.0\UMS.Utility.dll
-E:\Project\New folder\UMS\UMS.Data\bin\Debug\net5.0\UMS.Models.pdb
-E:\Project\New folder\UMS\UMS.Data\bin\Debug\net5.0\UMS.Utility.pdb
-E:\Project\New folder\UMS\UMS.Data\obj\Debug\net5.0\UMS.Data.csproj.AssemblyReference.cache
-E:\Project\New folder\UMS\UMS.Data\obj\Debug\net5.0\UMS.Data.GeneratedMSBuildEditorConfig.editorconfig
-E:\Project\New folder\UMS\UMS.Data\obj\Debug\net5.0\UMS.Data.AssemblyInfoInputs.cache
-E:\Project\New folder\UMS\UMS.Data\obj\Debug\net5.0\UMS.Data.AssemblyInfo.cs
-E:\Project\New folder\UMS\UMS.Data\obj\Debug\net5.0\UMS.Data.csproj.CoreCompileInputs.cache
-E:\Project\New folder\UMS\UMS.Data\obj\Debug\net5.0\UMS.Data.csproj.CopyComplete
-E:\Project\New folder\UMS\UMS.Data\obj\Debug\net5.0\UMS.Data.dll
-E:\Project\New folder\UMS\UMS.Data\obj\Debug\net5.0\ref\UMS.Data.dll
-E:\Project\New folder\UMS\UMS.Data\obj\Debug\net5.0\UMS.Data.pdb
