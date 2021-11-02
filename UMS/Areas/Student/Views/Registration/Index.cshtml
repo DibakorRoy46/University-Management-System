@@ -12,7 +12,7 @@
         @if (User.IsInRole("Student"))
         {
         <div class="col-12 row border mb-4 py-3">
-            @if (Model.StartDate <= DateTime.Now && DateTime.Now <= Model.EndDate && Model.IsActive == true)
+            @if (Model.StartDate <= DateTime.Now.AddHours(6) && DateTime.Now.AddHours(6) <= Model.EndDate && Model.IsActive == true)
             {
                 <div class="col-12">
                     <h2 class="ml-2">Registration Course</h2>
@@ -78,7 +78,7 @@
     <script>
 
         @{ 
-            bool isTrue = (Model.StartDate <= DateTime.Now && DateTime.Now <= Model.EndDate && Model.IsActive == true);
+            bool isTrue = (Model.StartDate <= DateTime.Now.AddHours(6) && DateTime.Now.AddHours(6) <= Model.EndDate && Model.IsActive == true);
         }
         
         var execute ='@isTrue';

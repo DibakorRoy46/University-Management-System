@@ -88,7 +88,7 @@ namespace UMS.Areas.Admin.Controllers
                     Name = model.Name,
                     UserName = model.Email,
                     Email = model.Email,
-                    RegisterDate = DateTime.Now
+                    RegisterDate = DateTime.Now.AddHours(6)
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 List<string> userRoleList = new List<string>();
@@ -137,7 +137,7 @@ namespace UMS.Areas.Admin.Controllers
                                         employeeDetials.DepartmentId = model.DepartmentSelected.Value;
                                         var employeeDetialObj = await _unitOfWork.EmployeeDetials
                                             .FirstOrDefaultAsync(orderBy: x => x.OrderByDescending(x => x.EmployeeId));
-                                        employeeDetials.JoiningDate = DateTime.Now;
+                                        employeeDetials.JoiningDate = DateTime.Now.AddHours(6);
                                         employeeDetials.LeavingDate = model.EmployeeDetials.LeavingDate;
                                         employeeDetials.Salary = model.EmployeeDetials.Salary;
                                         int employeeId = 1000000;

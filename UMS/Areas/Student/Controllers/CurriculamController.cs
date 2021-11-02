@@ -33,7 +33,7 @@ namespace UMS.Areas.Student.Controllers
                 CompletedCGPA = await _unitOfWork.StudentRegisteationCourse.GetCompletedCGPA(userId),
                 Department = await _unitOfWork.Department.FirstOrDefaultAsync(x => x.Id == userDetails.DepartmentId),
                 Batch = batchObj.Batch,
-                AdmissionTIme=DateTime.Now-userObj.RegisterDate
+                AdmissionTIme=DateTime.Now.AddHours(6)-userObj.RegisterDate
             };
             var completedCourseIdList = await _unitOfWork.StudentRegisteationCourse.GetCompleteCourseId(userId);
             var courseList = await _unitOfWork.Course.SearchAsync(null, userDetails.DepartmentId,0,0);

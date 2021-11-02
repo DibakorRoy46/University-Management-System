@@ -23,5 +23,6 @@ namespace UMS.Data.IRepository
         Task<double> GetCompletedCGPA(string userId);
         Task<double> GetAttempedCGPA(string userId);
         Task<double> GetSemesterGPA(string userId, Guid semesterId);
+        Task<IEnumerable<StudentRegisteationCourse>> GetRegisterCourseBySemester(string userId, Guid semesterId);
     }
 }

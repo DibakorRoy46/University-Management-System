@@ -12,7 +12,7 @@
         @if (User.IsInRole("Student"))
         {
         <div class="col-12 row border mb-4 py-3">
-            @if (Model.StartDate <= DateTime.Now && DateTime.Now <= Model.EndDate && Model.IsActive == true)
+            @if (Model.StartDate <= DateTime.Now.AddHours(6) && DateTime.Now.AddHours(6) <= Model.EndDate && Model.IsActive == true)
             {
                 <div class="col-12">
                     <h2 class="ml-2">Preregistration Course</h2>
@@ -27,7 +27,7 @@
                     <select class="form-control text-center" id="semester">
                         <option disabled selected value="">---Select Semester---</option>
                         @foreach (var item in ViewBag.SemesterList)
-                        {
+                        { 
                             <option value="@item.Value">@item.Text</option>
                         }
                     </select>
@@ -41,7 +41,7 @@
             </div>
         </div>
             <div class="col-12 border py-5">
-                @if (Model.StartDate <=DateTime.Now && DateTime.Now <= Model.EndDate && Model.IsActive == true)
+                @if (Model.StartDate <=DateTime.Now.AddHours(6) && DateTime.Now.AddHours(6) <= Model.EndDate && Model.IsActive == true)
                 {
                     <div class="col-6">
                         <div class="input-group">

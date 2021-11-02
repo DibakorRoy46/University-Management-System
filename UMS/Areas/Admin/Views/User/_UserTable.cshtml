@@ -46,7 +46,7 @@
                             }
                         </td>
                         <td>
-                            @if (user.LockoutEnd == null || user.LockoutEnd <= DateTime.Now)
+                            @if (user.LockoutEnd == null || user.LockoutEnd <= DateTime.Now.AddHours(6))
                             {
                                 <button class="btn btn-primary activity" data-id="@user.Id"> <i class="fas fa-thumbs-up text-white"></i> &nbsp; Unlock</button>
                             }

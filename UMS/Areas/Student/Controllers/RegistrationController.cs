@@ -80,7 +80,7 @@ namespace UMS.Areas.Student.Controllers
             var semesterObj = await _unitOfWork.Semester.FirstOrDefaultAsync(x => x.IsActive == true);
             var activityObj = await _unitOfWork.Activity.FirstOrDefaultAsync(x => x.Name == "Registration");
 
-            if (activityObj.StartDate <= DateTime.Now && DateTime.Now <= activityObj.EndDate && activityObj.IsActive == true)
+            if (activityObj.StartDate <= DateTime.Now.AddHours(6) && DateTime.Now.AddHours(6) <= activityObj.EndDate && activityObj.IsActive == true)
             {
                 SelectRegistrationCourseVM regisCourseVM = new SelectRegistrationCourseVM()
                 {
@@ -99,7 +99,7 @@ namespace UMS.Areas.Student.Controllers
             {
                 var activity = await _unitOfWork.Activity.FirstOrDefaultAsync(x => x.Name == "Registration");
                 var semesterObj = await _unitOfWork.Semester.FirstOrDefaultAsync(x => x.IsActive == true);
-                if ((activity.StartDate <= DateTime.Now && DateTime.Now <= activity.EndDate))
+                if ((activity.StartDate <= DateTime.Now.AddHours(6) && DateTime.Now.AddHours(6) <= activity.EndDate))
                 {
                     if (activity.IsActive == true)
                     {
@@ -133,8 +133,7 @@ namespace UMS.Areas.Student.Controllers
                                 if (semesterPriceObj!=null)
                                 {
                                     totalPrice = semesterPriceObj.TotalPrice;
-                                }
-                                
+                                }                               
                                 studentSemesterFee.TotalPrice =totalPrice + (departmentObj.PricePerCredit * courseProtoTypeObj.Credit);
                                 if(semesterPriceObj!=null)
                                 {
@@ -189,22 +188,32 @@ namespace UMS.Areas.Student.Controllers
             try
             {
                 var activity = await _unitOfWork.Activity.FirstOrDefaultAsync(x => x.Name == "Registration");
-                if ((activity.StartDate <= DateTime.Now && DateTime.Now <= activity.EndDate))
+                if ((activity.StartDate <= DateTime.Now.AddHours(6) && DateTime.Now.AddHours(6) <= activity.EndDate))
                 {
                     if (activity.IsActive == true)
                     {
                         if (!String.IsNullOrEmpty(userId) && courseId != Guid.Empty)
                         {
                             var semesterObj = await _unitOfWork.Semester.FirstOrDefaultAsync(x => x.IsActive == true);
-
-
                             var selectCourseObj = await _unitOfWork.RegistrationCourse.
-                                FirstOrDefaultAsync(x => x.AssignRegiCourseId == courseId && x.StudentId == userId);
+                                FirstOrDefaultAsync(x => x.AssignRegiCourseId == courseId && x.StudentId == userId,
+                                includeProperties: "AssignRegistrationCourse");
                             if (selectCourseObj == null)
                             {
                                 return NotFound();
                             }
                             await _unitOfWork.RegistrationCourse.RemoveAsync(selectCourseObj);
+                            var studentSemesterFeeObj = await _unitOfWork.StudentSemeterFee.
+                                FirstOrDefaultAsync(x => x.StudentId == userId && x.SemesterId == semesterObj.Id);
+                            if(studentSemesterFeeObj!=null)
+                            {
+                                var userDetailsObj = await _unitOfWork.UserDetials.FirstOrDefaultAsync(x => x.UserId == userId);
+                                var departmentObj = await _unitOfWork.Department.FirstOrDefaultAsync(x => x.Id == userDetailsObj.DepartmentId);
+                                var courseObj = await _unitOfWork.Course.FirstOrDefaultAsync(x => x.Id == selectCourseObj.AssignRegistrationCourse.CourseId) ;
+                                var courseProtoTypeObj = await _unitOfWork.CourseProtoType.FirstOrDefaultAsync(x => x.Id == courseObj.CourseProtoTypeId);
+                                var coursePrice = departmentObj.PricePerCredit * courseProtoTypeObj.Credit;
+                                studentSemesterFeeObj.TotalPrice = studentSemesterFeeObj.TotalPrice - coursePrice;
+                            }                   
                             await _unitOfWork.SaveAsync();
                             SelectRegistrationCourseVM regisCourseVM = new SelectRegistrationCourseVM()
                             {
@@ -257,7 +266,7 @@ namespace UMS.Areas.Student.Controllers
             }
             RegistrationFormTableVM registrationFormVM = new RegistrationFormTableVM()
             {
-                RegistrationCourse = await _unitOfWork.StudentRegisteationCourse.GetCourseBySemester(userId, semesterId),
+                RegistrationCourse = await _unitOfWork.StudentRegisteationCourse.GetRegisterCourseBySemester(userId, semesterId),
                 Credits=await _unitOfWork.StudentRegisteationCourse.GetSemesterCredits(userId,semesterId),
                 TotalFee=totolrPrice,
             };

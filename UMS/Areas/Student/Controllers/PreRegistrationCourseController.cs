@@ -121,7 +121,7 @@ namespace UMS.Areas.Student.Controllers
             var semesterObj = await _unitOfWork.Semester.FirstOrDefaultAsync(x => x.IsActive == true);
             var activityObj = await _unitOfWork.Activity.FirstOrDefaultAsync(x => x.Name == "Preregistration");
             
-            if(activityObj.StartDate<=DateTime.Now &&activityObj.EndDate>=DateTime.Now&&activityObj.IsActive==true)
+            if(activityObj.StartDate<=DateTime.Now.AddHours(6) &&activityObj.EndDate>=DateTime.Now.AddHours(6)&&activityObj.IsActive==true)
             {
                 PreCourseVM preCourseVM = new PreCourseVM()
                 {
@@ -151,7 +151,7 @@ namespace UMS.Areas.Student.Controllers
             {
                 var activity = await _unitOfWork.Activity.FirstOrDefaultAsync(x => x.Name == "Preregistration");
                 var semesterObj = await _unitOfWork.Semester.FirstOrDefaultAsync(x => x.IsActive == true);
-                if ((activity.StartDate <= DateTime.Now && DateTime.Now <= activity.EndDate))
+                if ((activity.StartDate <= DateTime.Now.AddHours(6) && DateTime.Now.AddHours(6) <= activity.EndDate))
                 {
                     if (activity.IsActive == true)
                     {
@@ -218,7 +218,7 @@ namespace UMS.Areas.Student.Controllers
             try
             {
                 var activity = await _unitOfWork.Activity.FirstOrDefaultAsync(x => x.Name == "Preregistration");
-                if ((activity.StartDate <= DateTime.Now && DateTime.Now <= activity.EndDate))
+                if ((activity.StartDate <= DateTime.Now.AddHours(6) && DateTime.Now.AddHours(6) <= activity.EndDate))
                 {
                     if (activity.IsActive == true)
                     {

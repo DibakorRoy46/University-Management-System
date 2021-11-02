@@ -95,6 +95,17 @@ namespace UMS.Data.Repository
                 Distinct().ToListAsync();
             return courseList;
         }
+        public async Task<IEnumerable<StudentRegisteationCourse>> GetRegisterCourseBySemester(string userId, Guid semesterId)
+        {
+            var courseList = await _db.StudentRegisteationCourses.Include(x => x.ApplicationUser).
+                Include(x => x.AssignRegistrationCourse).ThenInclude(x => x.Semester).
+                Include(x => x.AssignRegistrationCourse).ThenInclude(x => x.Courses).ThenInclude(x => x.CourseProtoType).
+                Include(x => x.AssignRegistrationCourse).ThenInclude(x => x.Courses).ThenInclude(x => x.CourseType).
+                Include(x => x.AssignRegistrationCourse).ThenInclude(x => x.Courses).ThenInclude(x => x.Department).
+                Where(x => x.StudentId == userId && x.AssignRegistrationCourse.SemesterId == semesterId).
+                Distinct().ToListAsync();
+            return courseList;
+        }
         public async Task<int>CreditCompleted(string userId)
         {
             var courseStudentList = await _db.StudentRegisteationCourses.Include(x => x.AssignRegistrationCourse).
@@ -194,6 +205,7 @@ namespace UMS.Data.Repository
             }
             return creditCompleted;
         }
+
 
         public async Task<Guid>GetSemester(Guid courseId)
         {

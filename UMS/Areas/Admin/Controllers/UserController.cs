@@ -12,6 +12,7 @@ using UMS.Data.Data;
 using UMS.Data.IRepository;
 using UMS.Models.Models;
 using UMS.Models.ViewModels;
+using UMS.Models.ViewModels;
 using UMS.Utility;
 
 namespace UMS.Areas.Admin.Controllers
@@ -197,9 +198,9 @@ namespace UMS.Areas.Admin.Controllers
                     {
                         return NotFound();
                     }
-                    if(user.LockoutEnd>DateTime.Now)
+                    if(user.LockoutEnd>DateTime.Now.AddHours(6))
                     {
-                        user.LockoutEnd = DateTime.Now;
+                        user.LockoutEnd = DateTime.Now.AddHours(6);
                     }
                     else
                     {

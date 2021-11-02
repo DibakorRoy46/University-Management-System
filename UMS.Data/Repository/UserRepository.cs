@@ -16,6 +16,7 @@ namespace UMS.Data.Repository
     public class UserRepository : Repository<ApplicationUser>, IUserRepository
     {
         private readonly ApplicationDbContext _db;
+     
 
         public UserRepository(ApplicationDbContext db) : base(db)
         {
